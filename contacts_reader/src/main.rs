@@ -1,13 +1,4 @@
-use std::{error::Error, io, process};
-
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-struct Record {
-    name: String,
-    phone: usize,
-}
-
+use std::{env, error::Error, io, process};
 
 fn main() {
     if let Err(err) = run() {
@@ -17,10 +8,18 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
+    let query = match env::args().nth(1) {
+        None => return Err(From::from("expected 1 argument, but got none")),
+        Some(query) => query,
+    };
+
     let mut rdr = csv::Reader::from_reader(io::stdin());
-    for result in rdr.deserialize() {
-        let record: Record = result?;
-        println!("{:?}", record);
+
+    for result in rdr.records() {
+        let record = result?;
+        if record.iter().any(|field| field.to_lowercase().contains(&query.to_lowercase())) {
+            println!("{:?}", record);
+        }
     }
     Ok(())
 }

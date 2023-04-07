@@ -14,9 +14,9 @@ fn run() -> Result<(), Box<dyn Error>> {
     };
 
     let mut rdr = csv::Reader::from_reader(io::stdin());
+    let mut record = csv::StringRecord::new();
 
-    for result in rdr.records() {
-        let record = result?;
+    while rdr.read_record(&mut record)? {
         if record.iter().any(|field| field.to_lowercase().contains(&query.to_lowercase())) {
             println!("{:?}", record);
         }

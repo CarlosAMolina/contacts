@@ -1,3 +1,9 @@
+## Run
+
+```bash
+make run
+```
+
 ## Resources
 
 Tutorial:

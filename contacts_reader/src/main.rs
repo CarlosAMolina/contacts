@@ -88,8 +88,16 @@ fn run() -> Result<(), Box<dyn Error>> {
                 &record[10],
                 &record[11],
                 &record[12],
-                );
-            println!("{:?} {:?} - {:?} {:?} {:?} {:?}", contact.phone, contact.phone_description, contact.name, contact.surname, contact.nickname, contact.category);
+            );
+            println!(
+                "{:?} {:?} - {:?} {:?} {:?} {:?}",
+                contact.phone,
+                contact.phone_description,
+                contact.name,
+                contact.surname,
+                contact.nickname,
+                contact.category
+            );
         }
     }
     Ok(())

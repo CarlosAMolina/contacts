@@ -66,7 +66,14 @@ fn run() -> Result<(), Box<dyn Error>> {
         Some(query) => query,
     };
 
+    // Read from input. Example: cargo run carlos < /tmp/contacts.csv
     let mut rdr = csv::Reader::from_reader(io::stdin());
+
+    // Read from file
+    //let filename = "contacts.csv";
+    //let f = std::fs::File::open(filename)?;
+    //let mut rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
+
     let mut record = csv::StringRecord::new();
 
     while rdr.read_record(&mut record)? {

@@ -66,13 +66,8 @@ fn run() -> Result<(), Box<dyn Error>> {
         Some(query) => query,
     };
 
-    // Read from input. Example: cargo run carlos < /tmp/contacts.csv
-    let mut rdr = csv::Reader::from_reader(io::stdin());
-
-    // Read from file
-    //let filename = "contacts.csv";
-    //let f = std::fs::File::open(filename)?;
-    //let mut rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
+    let mut rdr = get_reader_from_io();
+    //let mut rdr = get_reader_from_file()?;
 
     let mut record = csv::StringRecord::new();
 
@@ -109,3 +104,18 @@ fn run() -> Result<(), Box<dyn Error>> {
     }
     Ok(())
 }
+
+
+// Example: cargo run carlos < /tmp/contacts.csv
+fn get_reader_from_io() -> csv::Reader<io::Stdin> {
+    csv::Reader::from_reader(io::stdin())
+}
+
+
+fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>>{
+    let filename = "contacts.csv";
+    let f = std::fs::File::open(filename)?;
+    let rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
+    Ok(rdr)
+}
+

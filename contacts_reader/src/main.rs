@@ -97,7 +97,7 @@ fn run() -> Result<(), Box<dyn Error>> {
                 &record[12],
             );
             println!(
-                "{:?} {:?} - {:?} {:?} {:?} {:?}",
+                "{} {} - {} {} {} {}",
                 contact.phone,
                 contact.phone_description,
                 contact.name,

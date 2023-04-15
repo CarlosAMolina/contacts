@@ -1,5 +1,7 @@
 ## Run
 
+The file `contacts.csv` must exist in the path from where the program is executed.
+
 ```bash
 make run
 ```

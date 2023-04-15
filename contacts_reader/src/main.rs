@@ -19,6 +19,7 @@ struct Contact {
     note: String,
 }
 
+// TODO phone as optional
 impl Contact {
     fn new(
         id: &str,
@@ -61,14 +62,46 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let query = match env::args().nth(1) {
-        None => return Err(From::from("expected 1 argument, but got none")),
-        Some(query) => query,
-    };
-    let rdr = get_reader_from_io();
-    //let mut rdr = get_reader_from_file()?;
-    search_and_show(query, rdr)?;
+    //let mut rdr = get_reader_from_io(); # TODO remove
+    if env::args().len() == 1 {
+        println!("Init interactive mode");
+        loop {
+            let mut rdr = get_reader_from_file()?;
+            let query = get_user_input();
+            search_and_show(query, &mut rdr)?;
+        }
+    }
+    else {
+        let mut rdr = get_reader_from_file()?;
+        let query = match env::args().nth(1) {
+            None => return Err(From::from("expected 1 argument, but got none")),
+            Some(query) => query,
+        };
+        search_and_show(query, &mut rdr)?;
+    }
     Ok(())
+}
+
+fn get_user_input() -> String {
+    let mut input = String::new();
+    println!("Type a search term and press Enter");
+    loop {
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Error reading line");
+        input = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Error reading user input");
+                continue;
+            }
+        };
+        if input.is_empty() {
+            continue;
+        }
+        break;
+    }
+    input
 }
 
 
@@ -85,7 +118,8 @@ fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Err
     Ok(rdr)
 }
 
-fn search_and_show(query: String, mut rdr: csv::Reader<io::Stdin>) -> Result<(), Box<dyn Error>> {
+fn search_and_show(query: String, rdr: &mut csv::Reader<Box<std::fs::File>>) -> Result<(), Box<dyn Error>> {
+    println!("Results of `{:?}`:", query);
     let mut record = csv::StringRecord::new();
     while rdr.read_record(&mut record)? {
         if record

@@ -65,12 +65,28 @@ fn run() -> Result<(), Box<dyn Error>> {
         None => return Err(From::from("expected 1 argument, but got none")),
         Some(query) => query,
     };
-
-    let mut rdr = get_reader_from_io();
+    let rdr = get_reader_from_io();
     //let mut rdr = get_reader_from_file()?;
+    search_and_show(query, rdr)?;
+    Ok(())
+}
 
+
+// Example: cargo run carlos < /tmp/contacts.csv
+fn get_reader_from_io() -> csv::Reader<io::Stdin> {
+    csv::Reader::from_reader(io::stdin())
+}
+
+
+fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>>{
+    let filename = "contacts.csv";
+    let f = std::fs::File::open(filename)?;
+    let rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
+    Ok(rdr)
+}
+
+fn search_and_show(query: String, mut rdr: csv::Reader<io::Stdin>) -> Result<(), Box<dyn Error>> {
     let mut record = csv::StringRecord::new();
-
     while rdr.read_record(&mut record)? {
         if record
             .iter()
@@ -103,19 +119,5 @@ fn run() -> Result<(), Box<dyn Error>> {
         }
     }
     Ok(())
-}
-
-
-// Example: cargo run carlos < /tmp/contacts.csv
-fn get_reader_from_io() -> csv::Reader<io::Stdin> {
-    csv::Reader::from_reader(io::stdin())
-}
-
-
-fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>>{
-    let filename = "contacts.csv";
-    let f = std::fs::File::open(filename)?;
-    let rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
-    Ok(rdr)
 }
 

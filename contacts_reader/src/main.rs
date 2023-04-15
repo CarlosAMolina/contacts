@@ -121,7 +121,7 @@ fn search_and_show(
     query: String,
     rdr: &mut csv::Reader<Box<std::fs::File>>,
 ) -> Result<(), Box<dyn Error>> {
-    println!("Results of `{:?}`:", query);
+    println!("Results of `{}`:", query);
     let mut record = csv::StringRecord::new();
     while rdr.read_record(&mut record)? {
         if record

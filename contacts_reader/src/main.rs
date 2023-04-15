@@ -62,7 +62,6 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    //let mut rdr = get_reader_from_io(); # TODO remove
     if env::args().len() == 1 {
         println!("Init interactive mode");
         loop {
@@ -101,11 +100,6 @@ fn get_user_input() -> String {
         break;
     }
     input
-}
-
-// Example: cargo run carlos < /tmp/contacts.csv
-fn get_reader_from_io() -> csv::Reader<io::Stdin> {
-    csv::Reader::from_reader(io::stdin())
 }
 
 fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>> {

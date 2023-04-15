@@ -70,8 +70,7 @@ fn run() -> Result<(), Box<dyn Error>> {
             let query = get_user_input();
             search_and_show(query, &mut rdr)?;
         }
-    }
-    else {
+    } else {
         let mut rdr = get_reader_from_file()?;
         let query = match env::args().nth(1) {
             None => return Err(From::from("expected 1 argument, but got none")),
@@ -104,21 +103,24 @@ fn get_user_input() -> String {
     input
 }
 
-
 // Example: cargo run carlos < /tmp/contacts.csv
 fn get_reader_from_io() -> csv::Reader<io::Stdin> {
     csv::Reader::from_reader(io::stdin())
 }
 
-
-fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>>{
+fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>> {
     let filename = "contacts.csv";
     let f = std::fs::File::open(filename)?;
-    let rdr = csv::ReaderBuilder::new().delimiter(b',').from_reader(Box::new(f));
+    let rdr = csv::ReaderBuilder::new()
+        .delimiter(b',')
+        .from_reader(Box::new(f));
     Ok(rdr)
 }
 
-fn search_and_show(query: String, rdr: &mut csv::Reader<Box<std::fs::File>>) -> Result<(), Box<dyn Error>> {
+fn search_and_show(
+    query: String,
+    rdr: &mut csv::Reader<Box<std::fs::File>>,
+) -> Result<(), Box<dyn Error>> {
     println!("Results of `{:?}`:", query);
     let mut record = csv::StringRecord::new();
     while rdr.read_record(&mut record)? {
@@ -154,4 +156,3 @@ fn search_and_show(query: String, rdr: &mut csv::Reader<Box<std::fs::File>>) -> 
     }
     Ok(())
 }
-

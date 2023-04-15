@@ -19,7 +19,6 @@ struct Contact {
     note: String,
 }
 
-// TODO phone as optional
 impl Contact {
     fn new(
         id: &str,

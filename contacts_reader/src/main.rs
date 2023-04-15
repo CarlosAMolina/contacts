@@ -8,7 +8,7 @@ struct Contact {
     name: String,
     surname: String,
     nickname: String,
-    phone: usize,
+    phone: Option<usize>,
     phone_description: String,
     category: String,
     address: String,
@@ -36,12 +36,19 @@ impl Contact {
         twitter_handle: &str,
         note: &str,
     ) -> Self {
+        let phone_str = phone.to_string();
+        let phone: Option<usize>;
+        if phone_str.is_empty() {
+            phone = None;
+        } else {
+            phone = Some(phone_str.parse::<usize>().unwrap());
+        }
         Contact {
             id: id.to_string().parse::<usize>().unwrap(),
             name: name.to_string(),
             surname: surname.to_string(),
             nickname: nickname.to_string(),
-            phone: phone.to_string().parse::<usize>().unwrap(),
+            phone,
             phone_description: phone_description.to_string(),
             category: category.to_string(),
             address: address.to_string(),
@@ -137,9 +144,13 @@ fn search_and_show(
                 &record[11],
                 &record[12],
             );
+            let phone = match contact.phone {
+                Some(phone) => phone.to_string(),
+                None => "".to_string(),
+            };
             println!(
                 "{} {} - {} {} {} {}",
-                contact.phone,
+                phone,
                 contact.phone_description,
                 contact.name,
                 contact.surname,

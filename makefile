@@ -1,9 +1,10 @@
 ROOT_PATHNAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-APP_PATHNAME=$(ROOT_PATHNAME)/contacts_reader
+APP_FOLDER_NAME=contacts
+APP_PATHNAME=$(ROOT_PATHNAME)/$(APP_FOLDER_NAME)
 
 run:
-	cd contacts_reader && cargo run carlos
+	cd $(APP_PATHNAME) && cargo run carlos
 
 build_for_debian:
-	cd contacts_reader && docker run --rm -v $(APP_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
+	cd $(APP_PATHNAME) && docker run --rm -v $(APP_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 

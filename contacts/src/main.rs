@@ -91,10 +91,21 @@ fn main() {
 
 fn run() -> Result<(), Box<dyn Error>> {
     if env::args().len() == 3 {
-        let id = env::args().nth(2).unwrap().parse::<usize>().unwrap();
-        println!("Init export contact ID {}", id);
-        let mut rdr = get_reader_from_file()?;
-        search_id_and_export(id, &mut rdr)?;
+        let arg_1 = env::args().nth(1).unwrap().to_lowercase();
+        if arg_1 == "export" {
+            let id = env::args().nth(2).unwrap().parse::<usize>().unwrap();
+            println!("Init export contact ID {}", id);
+            let rdr = get_reader_from_file()?;
+            match search_id(id, rdr)? {
+                Some(contact) => {
+                    let html = get_html(contact);
+                    write_to_file(html)?;
+                }
+                None => println!("Contact not found"),
+            };
+        } else {
+            println!("Invalid argument `{}`", arg_1);
+        }
     } else if env::args().len() == 2 {
         let mut rdr = get_reader_from_file()?;
         let query = env::args().nth(1).unwrap();
@@ -174,19 +185,17 @@ fn search_and_show(
     Ok(())
 }
 
-fn search_id_and_export(
+fn search_id(
     id: usize,
-    rdr: &mut csv::Reader<Box<std::fs::File>>,
-) -> Result<(), Box<dyn Error>> {
+    mut rdr: csv::Reader<Box<std::fs::File>>,
+) -> Result<Option<Contact>, Box<dyn Error>> {
     for record in rdr.deserialize() {
         let contact: Contact = record?;
         if contact.id == id {
-            let html = get_html(contact);
-            write_to_file(html)?;
+            return Ok(Some(contact));
         }
-        break;
     }
-    Ok(())
+    Ok(None)
 }
 
 fn get_html(contact: Contact) -> String {
@@ -238,6 +247,7 @@ fn get_html_tag_ul(string: String) -> String {
 
 fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {
     let file_path_name = "/tmp/contact.html";
+    println!("Init export to {}", file_path_name);
     let path = Path::new(&file_path_name);
     let mut file = File::create(path)?;
     file.write_all(text_to_write_all.as_bytes())?;

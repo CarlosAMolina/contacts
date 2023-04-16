@@ -1,4 +1,7 @@
 use std::{env, error::Error, io, process};
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 
 use serde::Deserialize;
 
@@ -148,15 +151,65 @@ fn search_and_show(
                 None => "".to_string(),
             };
             println!(
-                "{} {} - {} {} {} {}",
+                "{} {} - {} {} {} {}. ID {}",
                 phone,
                 contact.phone_description,
                 contact.name,
                 contact.surname,
                 contact.nickname,
-                contact.category
+                contact.category,
+                contact.id
             );
+            let html = get_html(contact);
+            write_to_file(html)?;
         }
     }
     Ok(())
 }
+
+fn get_html(contact: Contact) -> String {
+    let mut result = String::new();
+    let phone = match contact.phone {
+        Some(phone) => phone.to_string(),
+        None => "".to_string(),
+    };
+    result.push_str(&get_html_tag_ul(format!("ID: {}", contact.id)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Name: {}", contact.name)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Surname: {}", contact.surname)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Nickname: {}", contact.nickname)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Category: {}", contact.category)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Phone: {}", phone)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Phone description: {}", contact.phone_description)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Address: {}", contact.address)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Email: {}", contact.email)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Url: {}", contact.url)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Facebook: {}", contact.facebook_url)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Twitter: {}", contact.twitter_handle)));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_ul(format!("Note: {}", contact.note)));
+    result
+}
+
+fn get_html_tag_ul(string: String) -> String {
+    format!("<ul>{}</ul>", string)
+}
+
+fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {
+    let file_path_name = "/tmp/contact.html";
+    let path = Path::new(&file_path_name);
+    let mut file = File::create(path)?;
+    file.write_all(text_to_write_all.as_bytes())?;
+    Ok(())
+}
+

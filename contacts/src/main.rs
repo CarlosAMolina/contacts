@@ -277,7 +277,7 @@ fn get_html_tag_p(string: String) -> String {
 }
 
 fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {
-    let file_path_name = "/tmp/contact.html";
+    let file_path_name = "contact.html";
     println!("Init export to {}", file_path_name);
     let path = Path::new(&file_path_name);
     let mut file = File::create(path)?;

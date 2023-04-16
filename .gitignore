@@ -1,5 +1,6 @@
 # Files
 contacts.csv
+contacts/images/*.jpg
 
 # Rust
 target/

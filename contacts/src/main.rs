@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
@@ -204,13 +205,17 @@ fn get_html(contact: Contact) -> String {
         Some(phone) => phone.to_string(),
         None => "".to_string(),
     };
-    result.push_str(&format!(
-        "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
-        "/tmp/image.jpg".to_string(),
-        "Profile photo".to_string(),
-        200,
-        200
-    ));
+    match get_image_path_name(contact.id) {
+        Some(image_path_name) => result.push_str(&format!(
+            "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
+            image_path_name,
+            "Profile photo".to_string(),
+            200,
+            200
+        )),
+        None => println!("No image found"),
+    };
+    result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("ID: {}", contact.id)));
     result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("Name: {}", contact.name)));
@@ -246,6 +251,25 @@ fn get_html(contact: Contact) -> String {
     result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("Note: {}", contact.note)));
     result
+}
+
+fn get_image_path_name(contact_id: usize) -> Option<String> {
+    let images_path = Path::new("images");
+    if let Ok(entries) = fs::read_dir(images_path) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let contact_path_name = images_path
+                    .join(format!("{}-", contact_id))
+                    .to_string_lossy()
+                    .to_string();
+                let entry_path_name = entry.path().to_string_lossy().to_string();
+                if entry_path_name.starts_with(&contact_path_name) {
+                    return Some(entry_path_name);
+                }
+            }
+        }
+    }
+    None
 }
 
 fn get_html_tag_p(string: String) -> String {

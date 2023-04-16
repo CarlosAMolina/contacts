@@ -204,45 +204,52 @@ fn get_html(contact: Contact) -> String {
         Some(phone) => phone.to_string(),
         None => "".to_string(),
     };
-    result.push_str(&get_html_tag_ul(format!("ID: {}", contact.id)));
+    result.push_str(&format!(
+        "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
+        "/tmp/image.jpg".to_string(),
+        "Profile photo".to_string(),
+        200,
+        200
+    ));
+    result.push_str(&get_html_tag_p(format!("ID: {}", contact.id)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Name: {}", contact.name)));
+    result.push_str(&get_html_tag_p(format!("Name: {}", contact.name)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Surname: {}", contact.surname)));
+    result.push_str(&get_html_tag_p(format!("Surname: {}", contact.surname)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Nickname: {}", contact.nickname)));
+    result.push_str(&get_html_tag_p(format!("Nickname: {}", contact.nickname)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Category: {}", contact.category)));
+    result.push_str(&get_html_tag_p(format!("Category: {}", contact.category)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Phone: {}", phone)));
+    result.push_str(&get_html_tag_p(format!("Phone: {}", phone)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!(
+    result.push_str(&get_html_tag_p(format!(
         "Phone description: {}",
         contact.phone_description
     )));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Address: {}", contact.address)));
+    result.push_str(&get_html_tag_p(format!("Address: {}", contact.address)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Email: {}", contact.email)));
+    result.push_str(&get_html_tag_p(format!("Email: {}", contact.email)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Url: {}", contact.url)));
+    result.push_str(&get_html_tag_p(format!("Url: {}", contact.url)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!(
+    result.push_str(&get_html_tag_p(format!(
         "Facebook: {}",
         contact.facebook_url
     )));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!(
+    result.push_str(&get_html_tag_p(format!(
         "Twitter: {}",
         contact.twitter_handle
     )));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Note: {}", contact.note)));
+    result.push_str(&get_html_tag_p(format!("Note: {}", contact.note)));
     result
 }
 
-fn get_html_tag_ul(string: String) -> String {
-    format!("<ul>{}</ul>", string)
+fn get_html_tag_p(string: String) -> String {
+    format!("<p>{}</p>", string)
 }
 
 fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {

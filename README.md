@@ -13,8 +13,16 @@ make build_for_debian
 
 The file `contacts.csv` must exist in the path from where the program is executed.
 
+### Search term
+
 ```bash
-make run
+make search_term
+```
+
+### Generate html
+
+```bash
+make export
 ```
 
 ## Resources

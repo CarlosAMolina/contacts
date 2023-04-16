@@ -1,8 +1,9 @@
-use std::{env, error::Error, io, process};
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+use std::{env, error::Error, io, process};
 
+use csv::StringRecord;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -61,6 +62,24 @@ impl Contact {
             note: note.to_string(),
         }
     }
+
+    fn new_from_csv_record(record: &StringRecord) -> Contact {
+        Contact::new(
+            &record[0],
+            &record[1],
+            &record[2],
+            &record[3],
+            &record[4],
+            &record[5],
+            &record[6],
+            &record[7],
+            &record[8],
+            &record[9],
+            &record[10],
+            &record[11],
+            &record[12],
+        )
+    }
 }
 
 fn main() {
@@ -71,7 +90,16 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    if env::args().len() == 1 {
+    if env::args().len() == 3 {
+        let id = env::args().nth(2).unwrap().parse::<usize>().unwrap();
+        println!("Init export contact ID {}", id);
+        let mut rdr = get_reader_from_file()?;
+        search_id_and_export(id, &mut rdr)?;
+    } else if env::args().len() == 2 {
+        let mut rdr = get_reader_from_file()?;
+        let query = env::args().nth(1).unwrap();
+        search_and_show(query, &mut rdr)?;
+    } else if env::args().len() == 1 {
         println!("Init interactive mode");
         loop {
             let mut rdr = get_reader_from_file()?;
@@ -79,12 +107,7 @@ fn run() -> Result<(), Box<dyn Error>> {
             search_and_show(query, &mut rdr)?;
         }
     } else {
-        let mut rdr = get_reader_from_file()?;
-        let query = match env::args().nth(1) {
-            None => return Err(From::from("expected 1 argument, but got none")),
-            Some(query) => query,
-        };
-        search_and_show(query, &mut rdr)?;
+        println!("Invalid number of arguments");
     }
     Ok(())
 }
@@ -131,21 +154,7 @@ fn search_and_show(
             .iter()
             .any(|field| field.to_lowercase().contains(&query.to_lowercase()))
         {
-            let contact = Contact::new(
-                &record[0],
-                &record[1],
-                &record[2],
-                &record[3],
-                &record[4],
-                &record[5],
-                &record[6],
-                &record[7],
-                &record[8],
-                &record[9],
-                &record[10],
-                &record[11],
-                &record[12],
-            );
+            let contact = Contact::new_from_csv_record(&record);
             let phone = match contact.phone {
                 Some(phone) => phone.to_string(),
                 None => "".to_string(),
@@ -160,9 +169,22 @@ fn search_and_show(
                 contact.category,
                 contact.id
             );
+        }
+    }
+    Ok(())
+}
+
+fn search_id_and_export(
+    id: usize,
+    rdr: &mut csv::Reader<Box<std::fs::File>>,
+) -> Result<(), Box<dyn Error>> {
+    for record in rdr.deserialize() {
+        let contact: Contact = record?;
+        if contact.id == id {
             let html = get_html(contact);
             write_to_file(html)?;
         }
+        break;
     }
     Ok(())
 }
@@ -185,7 +207,10 @@ fn get_html(contact: Contact) -> String {
     result.push_str("\n");
     result.push_str(&get_html_tag_ul(format!("Phone: {}", phone)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Phone description: {}", contact.phone_description)));
+    result.push_str(&get_html_tag_ul(format!(
+        "Phone description: {}",
+        contact.phone_description
+    )));
     result.push_str("\n");
     result.push_str(&get_html_tag_ul(format!("Address: {}", contact.address)));
     result.push_str("\n");
@@ -193,9 +218,15 @@ fn get_html(contact: Contact) -> String {
     result.push_str("\n");
     result.push_str(&get_html_tag_ul(format!("Url: {}", contact.url)));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Facebook: {}", contact.facebook_url)));
+    result.push_str(&get_html_tag_ul(format!(
+        "Facebook: {}",
+        contact.facebook_url
+    )));
     result.push_str("\n");
-    result.push_str(&get_html_tag_ul(format!("Twitter: {}", contact.twitter_handle)));
+    result.push_str(&get_html_tag_ul(format!(
+        "Twitter: {}",
+        contact.twitter_handle
+    )));
     result.push_str("\n");
     result.push_str(&get_html_tag_ul(format!("Note: {}", contact.note)));
     result
@@ -212,4 +243,3 @@ fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {
     file.write_all(text_to_write_all.as_bytes())?;
     Ok(())
 }
-

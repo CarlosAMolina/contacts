@@ -9,6 +9,8 @@ docker pull rust
 make build_for_debian
 ```
 
+The executable file can be found at `contacts/target/release/`.
+
 ## Configuration
 
 Environment variables:

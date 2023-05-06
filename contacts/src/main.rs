@@ -237,57 +237,31 @@ fn get_html(contact: Contact) -> String {
         )),
         None => println!("No image found"),
     };
-    result.push_str(&get_html_title_tag_p("ID"));
+    result.push_str(&get_html_for_value(contact.id.to_string(), "ID"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.id.to_string()));
+    result.push_str(&get_html_for_value(contact.name, "Name"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Name"));
+    result.push_str(&get_html_for_value(contact.surname, "Surname"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.name));
+    result.push_str(&get_html_for_value(contact.nickname, "Nickname"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Surname"));
+    result.push_str(&get_html_for_value(contact.category, "Category"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.surname));
+    result.push_str(&get_html_for_value(phone, "Phone"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Nickname"));
+    result.push_str(&get_html_for_value(contact.phone_description, "Phone description"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.nickname));
+    result.push_str(&get_html_for_value(contact.address, "Address"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Category"));
+    result.push_str(&get_html_for_value(contact.email, "Email"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.category));
+    result.push_str(&get_html_for_value(contact.url, "Url"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Phone"));
+    result.push_str(&get_html_for_value(contact.facebook_url, "Facebook"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(phone));
+    result.push_str(&get_html_for_value(contact.twitter_handle, "Twitter"));
     result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Phone description"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.phone_description));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Address"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.address));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Email"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.email));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Url"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.url));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Facebook"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.facebook_url));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Twitter"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.twitter_handle));
-    result.push_str("\n");
-    result.push_str(&get_html_title_tag_p("Note"));
-    result.push_str("\n");
-    result.push_str(&get_html_tag_p(contact.note));
+    result.push_str(&get_html_for_value(contact.note, "Note"));
     result.push_str("
   </body>
 </html>");
@@ -311,6 +285,14 @@ fn get_image_path_name(contact_id: usize) -> Option<String> {
         }
     }
     None
+}
+
+fn get_html_for_value(value: String, title: &str) -> String {
+    let mut result = String::new();
+    result.push_str(&get_html_title_tag_p(title));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(value));
+    result
 }
 
 fn get_html_title_tag_p(string: &str) -> String {

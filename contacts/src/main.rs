@@ -211,6 +211,19 @@ fn get_html(contact: Contact) -> String {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+        }
+        .title   {
+            color: #ce8989;
+            font-size: 12px;
+        }
+        p    {
+            color: #ffffff;
+            font-size: 16px;
+        }
+    </style>
   </head>
   <body>
 "#);
@@ -224,40 +237,57 @@ fn get_html(contact: Contact) -> String {
         )),
         None => println!("No image found"),
     };
-    result.push_str(&get_html_tag_p(format!("ID: {}", contact.id)));
+    result.push_str(&get_html_title_tag_p("ID"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Name: {}", contact.name)));
+    result.push_str(&get_html_tag_p(contact.id.to_string()));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Surname: {}", contact.surname)));
+    result.push_str(&get_html_title_tag_p("Name"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Nickname: {}", contact.nickname)));
+    result.push_str(&get_html_tag_p(contact.name));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Category: {}", contact.category)));
+    result.push_str(&get_html_title_tag_p("Surname"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Phone: {}", phone)));
+    result.push_str(&get_html_tag_p(contact.surname));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!(
-        "Phone description: {}",
-        contact.phone_description
-    )));
+    result.push_str(&get_html_title_tag_p("Nickname"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Address: {}", contact.address)));
+    result.push_str(&get_html_tag_p(contact.nickname));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Email: {}", contact.email)));
+    result.push_str(&get_html_title_tag_p("Category"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Url: {}", contact.url)));
+    result.push_str(&get_html_tag_p(contact.category));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!(
-        "Facebook: {}",
-        contact.facebook_url
-    )));
+    result.push_str(&get_html_title_tag_p("Phone"));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!(
-        "Twitter: {}",
-        contact.twitter_handle
-    )));
+    result.push_str(&get_html_tag_p(phone));
     result.push_str("\n");
-    result.push_str(&get_html_tag_p(format!("Note: {}", contact.note)));
+    result.push_str(&get_html_title_tag_p("Phone description"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.phone_description));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Address"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.address));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Email"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.email));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Url"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.url));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Facebook"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.facebook_url));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Twitter"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.twitter_handle));
+    result.push_str("\n");
+    result.push_str(&get_html_title_tag_p("Note"));
+    result.push_str("\n");
+    result.push_str(&get_html_tag_p(contact.note));
     result.push_str("
   </body>
 </html>");
@@ -281,6 +311,10 @@ fn get_image_path_name(contact_id: usize) -> Option<String> {
         }
     }
     None
+}
+
+fn get_html_title_tag_p(string: &str) -> String {
+    format!(r#"<p class="title">{}</p>"#, string)
 }
 
 fn get_html_tag_p(string: String) -> String {

@@ -205,7 +205,8 @@ fn get_html(contact: Contact) -> String {
         Some(phone) => phone.to_string(),
         None => "".to_string(),
     };
-    result.push_str(r#"<!DOCTYPE html>
+    result.push_str(
+        r#"<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -225,8 +226,8 @@ fn get_html(contact: Contact) -> String {
         }
     </style>
   </head>
-  <body>
-"#);
+  <body>"#,
+    );
     match get_image_path_name(contact.id) {
         Some(image_path_name) => result.push_str(&format!(
             "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
@@ -250,9 +251,11 @@ fn get_html(contact: Contact) -> String {
     set_value_to_html(&mut result, contact.facebook_url, "Facebook");
     set_value_to_html(&mut result, contact.twitter_handle, "Twitter");
     set_value_to_html(&mut result, contact.note, "Note");
-    result.push_str("
+    result.push_str(
+        "
   </body>
-</html>");
+</html>",
+    );
     result
 }
 

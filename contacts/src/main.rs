@@ -237,31 +237,19 @@ fn get_html(contact: Contact) -> String {
         )),
         None => println!("No image found"),
     };
-    result.push_str(&get_html_for_value(contact.id.to_string(), "ID"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.name, "Name"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.surname, "Surname"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.nickname, "Nickname"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.category, "Category"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(phone, "Phone"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.phone_description, "Phone description"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.address, "Address"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.email, "Email"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.url, "Url"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.facebook_url, "Facebook"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.twitter_handle, "Twitter"));
-    result.push_str("\n");
-    result.push_str(&get_html_for_value(contact.note, "Note"));
+    set_value_to_html(&mut result, contact.id.to_string(), "ID");
+    set_value_to_html(&mut result, contact.name, "Name");
+    set_value_to_html(&mut result, contact.surname, "Surname");
+    set_value_to_html(&mut result, contact.nickname, "Nickname");
+    set_value_to_html(&mut result, contact.category, "Category");
+    set_value_to_html(&mut result, phone, "Phone");
+    set_value_to_html(&mut result, contact.phone_description, "Phone description");
+    set_value_to_html(&mut result, contact.address, "Address");
+    set_value_to_html(&mut result, contact.email, "Email");
+    set_value_to_html(&mut result, contact.url, "Url");
+    set_value_to_html(&mut result, contact.facebook_url, "Facebook");
+    set_value_to_html(&mut result, contact.twitter_handle, "Twitter");
+    set_value_to_html(&mut result, contact.note, "Note");
     result.push_str("
   </body>
 </html>");
@@ -285,6 +273,11 @@ fn get_image_path_name(contact_id: usize) -> Option<String> {
         }
     }
     None
+}
+
+fn set_value_to_html(html: &mut String, value: String, title: &str) {
+    html.push_str("\n");
+    html.push_str(&get_html_for_value(value, title));
 }
 
 fn get_html_for_value(value: String, title: &str) -> String {

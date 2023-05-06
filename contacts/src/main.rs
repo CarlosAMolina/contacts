@@ -276,8 +276,10 @@ fn get_image_path_name(contact_id: usize) -> Option<String> {
 }
 
 fn set_value_to_html(html: &mut String, value: String, title: &str) {
-    html.push_str("\n");
-    html.push_str(&get_html_for_value(value, title));
+    if !value.is_empty() {
+        html.push_str("\n");
+        html.push_str(&get_html_for_value(value, title));
+    }
 }
 
 fn get_html_for_value(value: String, title: &str) -> String {

@@ -205,6 +205,15 @@ fn get_html(contact: Contact) -> String {
         Some(phone) => phone.to_string(),
         None => "".to_string(),
     };
+    result.push_str(r#"<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact</title>
+  </head>
+  <body>
+"#);
     match get_image_path_name(contact.id) {
         Some(image_path_name) => result.push_str(&format!(
             "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
@@ -215,7 +224,6 @@ fn get_html(contact: Contact) -> String {
         )),
         None => println!("No image found"),
     };
-    result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("ID: {}", contact.id)));
     result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("Name: {}", contact.name)));
@@ -250,6 +258,9 @@ fn get_html(contact: Contact) -> String {
     )));
     result.push_str("\n");
     result.push_str(&get_html_tag_p(format!("Note: {}", contact.note)));
+    result.push_str("
+  </body>
+</html>");
     result
 }
 

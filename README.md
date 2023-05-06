@@ -9,6 +9,15 @@ docker pull rust
 make build_for_debian
 ```
 
+## Configuration
+
+Environment variables:
+
+```bash
+# Absolute path to export the contact in HTML format.
+export CONTACT_HTML_PATH_NAME=/home/foo/html
+```
+
 ## Run
 
 The file `contacts.csv` must exist in the path from where the program is executed.

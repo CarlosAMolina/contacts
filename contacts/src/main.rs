@@ -277,10 +277,11 @@ fn get_html_tag_p(string: String) -> String {
 }
 
 fn write_to_file(text_to_write_all: String) -> Result<(), Box<dyn Error>> {
-    let file_path_name = "contact.html";
-    println!("Init export to {}", file_path_name);
-    let path = Path::new(&file_path_name);
-    let mut file = File::create(path)?;
+    let path_name = env::var("CONTACT_HTML_PATH_NAME").unwrap_or("/tmp".to_string());
+    let file_name = "contact.html";
+    let file_path = Path::new(&path_name).join(file_name);
+    println!("Init export to {}", file_path.display());
+    let mut file = File::create(file_path)?;
     file.write_all(text_to_write_all.as_bytes())?;
     Ok(())
 }

@@ -38,10 +38,7 @@ pub fn get_html(contact: contact::Contact) -> String {
     match get_image_path_name(contact.id) {
         Some(image_path_name) => result.push_str(&format!(
             "<img src=\"{}\" alt=\"{}\" width=\"{}\" height=\"{}\">",
-            image_path_name,
-            "Profile photo".to_string(),
-            200,
-            200
+            image_path_name, "Profile photo", 200, 200
         )),
         None => println!("No image found"),
     };
@@ -69,16 +66,14 @@ pub fn get_html(contact: contact::Contact) -> String {
 fn get_image_path_name(contact_id: usize) -> Option<String> {
     let images_path = Path::new("images");
     if let Ok(entries) = fs::read_dir(images_path) {
-        for entry in entries {
-            if let Ok(entry) = entry {
-                let contact_path_name = images_path
-                    .join(format!("{}-", contact_id))
-                    .to_string_lossy()
-                    .to_string();
-                let entry_path_name = entry.path().to_string_lossy().to_string();
-                if entry_path_name.starts_with(&contact_path_name) {
-                    return Some(entry_path_name);
-                }
+        for entry in entries.flatten() {
+            let contact_path_name = images_path
+                .join(format!("{}-", contact_id))
+                .to_string_lossy()
+                .to_string();
+            let entry_path_name = entry.path().to_string_lossy().to_string();
+            if entry_path_name.starts_with(&contact_path_name) {
+                return Some(entry_path_name);
             }
         }
     }
@@ -87,7 +82,7 @@ fn get_image_path_name(contact_id: usize) -> Option<String> {
 
 fn set_value_to_html(html: &mut String, value: String, title: &str) {
     if !value.is_empty() {
-        html.push_str("\n");
+        html.push('\n');
         html.push_str(&get_html_for_value(value, title));
     }
 }
@@ -95,7 +90,7 @@ fn set_value_to_html(html: &mut String, value: String, title: &str) {
 fn get_html_for_value(value: String, title: &str) -> String {
     let mut result = String::new();
     result.push_str(&get_html_title_tag_p(title));
-    result.push_str("\n");
+    result.push('\n');
     result.push_str(&get_html_tag_p(value));
     result
 }

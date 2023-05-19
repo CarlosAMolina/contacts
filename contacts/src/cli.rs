@@ -58,4 +58,3 @@ fn get_user_input() -> String {
     }
     input
 }
-

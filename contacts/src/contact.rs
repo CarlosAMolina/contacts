@@ -36,12 +36,11 @@ impl Contact {
         note: &str,
     ) -> Self {
         let phone_str = phone.to_string();
-        let phone: Option<usize>;
-        if phone_str.is_empty() {
-            phone = None;
+        let phone: Option<usize> = if phone_str.is_empty() {
+            None
         } else {
-            phone = Some(phone_str.parse::<usize>().unwrap());
-        }
+            Some(phone_str.parse::<usize>().unwrap())
+        };
         Contact {
             id: id.to_string().parse::<usize>().unwrap(),
             name: name.to_string(),

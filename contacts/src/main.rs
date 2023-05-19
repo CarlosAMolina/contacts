@@ -4,84 +4,7 @@ use std::io::Write;
 use std::path::Path;
 use std::{env, error::Error, io, process};
 
-use csv::StringRecord;
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-struct Contact {
-    id: usize,
-    name: String,
-    surname: String,
-    nickname: String,
-    phone: Option<usize>,
-    phone_description: String,
-    category: String,
-    address: String,
-    email: String,
-    url: String,
-    facebook_url: String,
-    twitter_handle: String,
-    note: String,
-}
-
-impl Contact {
-    fn new(
-        id: &str,
-        name: &str,
-        surname: &str,
-        nickname: &str,
-        phone: &str,
-        phone_description: &str,
-        category: &str,
-        address: &str,
-        email: &str,
-        url: &str,
-        facebook_url: &str,
-        twitter_handle: &str,
-        note: &str,
-    ) -> Self {
-        let phone_str = phone.to_string();
-        let phone: Option<usize>;
-        if phone_str.is_empty() {
-            phone = None;
-        } else {
-            phone = Some(phone_str.parse::<usize>().unwrap());
-        }
-        Contact {
-            id: id.to_string().parse::<usize>().unwrap(),
-            name: name.to_string(),
-            surname: surname.to_string(),
-            nickname: nickname.to_string(),
-            phone,
-            phone_description: phone_description.to_string(),
-            category: category.to_string(),
-            address: address.to_string(),
-            email: email.to_string(),
-            url: url.to_string(),
-            facebook_url: facebook_url.to_string(),
-            twitter_handle: twitter_handle.to_string(),
-            note: note.to_string(),
-        }
-    }
-
-    fn new_from_csv_record(record: &StringRecord) -> Contact {
-        Contact::new(
-            &record[0],
-            &record[1],
-            &record[2],
-            &record[3],
-            &record[4],
-            &record[5],
-            &record[6],
-            &record[7],
-            &record[8],
-            &record[9],
-            &record[10],
-            &record[11],
-            &record[12],
-        )
-    }
-}
+mod contact;
 
 fn main() {
     if let Err(err) = run() {
@@ -166,7 +89,7 @@ fn search_and_show(
             .iter()
             .any(|field| field.to_lowercase().contains(&query.to_lowercase()))
         {
-            let contact = Contact::new_from_csv_record(&record);
+            let contact = contact::Contact::new_from_csv_record(&record);
             let phone = match contact.phone {
                 Some(phone) => phone.to_string(),
                 None => "".to_string(),
@@ -189,9 +112,9 @@ fn search_and_show(
 fn search_id(
     id: usize,
     mut rdr: csv::Reader<Box<std::fs::File>>,
-) -> Result<Option<Contact>, Box<dyn Error>> {
+) -> Result<Option<contact::Contact>, Box<dyn Error>> {
     for record in rdr.deserialize() {
-        let contact: Contact = record?;
+        let contact: contact::Contact = record?;
         if contact.id == id {
             return Ok(Some(contact));
         }
@@ -199,7 +122,7 @@ fn search_id(
     Ok(None)
 }
 
-fn get_html(contact: Contact) -> String {
+fn get_html(contact: contact::Contact) -> String {
     let mut result = String::new();
     let phone = match contact.phone {
         Some(phone) => phone.to_string(),

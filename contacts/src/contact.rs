@@ -1,25 +1,8 @@
 use csv::StringRecord;
 
-use serde::Deserialize;
+use crate::types::contact;
 
-#[derive(Debug, Deserialize)]
-pub struct Contact {
-    pub id: usize,
-    pub name: String,
-    pub surname: String,
-    pub nickname: String,
-    pub phone: Option<usize>,
-    pub phone_description: String,
-    pub category: String,
-    pub address: String,
-    pub email: String,
-    pub url: String,
-    pub facebook_url: String,
-    pub twitter_handle: String,
-    pub note: String,
-}
-
-impl Contact {
+impl contact::Contact {
     pub fn new(
         id: &str,
         name: &str,
@@ -41,7 +24,7 @@ impl Contact {
         } else {
             Some(phone_str.parse::<usize>().unwrap())
         };
-        Contact {
+        contact::Contact {
             id: id.to_string().parse::<usize>().unwrap(),
             name: name.to_string(),
             surname: surname.to_string(),
@@ -58,8 +41,8 @@ impl Contact {
         }
     }
 
-    pub fn new_from_csv_record(record: &StringRecord) -> Contact {
-        Contact::new(
+    pub fn new_from_csv_record(record: &StringRecord) -> contact::Contact {
+        contact::Contact::new(
             &record[0],
             &record[1],
             &record[2],

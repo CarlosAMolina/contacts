@@ -1,6 +1,6 @@
 document.getElementById("search-button").onclick = function () { 
     const searchTerm = document.getElementById("search-input").value
-    const urlPrefix = "http://localhost:3030/contacts/";
+    const urlPrefix = "http://localhost:3030/contacts?query=";
     const url = urlPrefix.concat(searchTerm);
     fetch(url)
       .then((response) => response.json())

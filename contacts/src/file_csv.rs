@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::contact;
+use crate::types::contact;
 
 pub fn get_reader_from_file() -> Result<csv::Reader<Box<std::fs::File>>, Box<dyn Error>> {
     let filename = "contacts.csv";

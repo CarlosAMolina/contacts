@@ -11,15 +11,6 @@ make build_for_debian
 
 The executable file can be found at `contacts/target/release/`.
 
-## Configuration
-
-Environment variables:
-
-```bash
-# Absolute path to export the contact in HTML format.
-export CONTACT_HTML_PATH_NAME=/home/foo/html
-```
-
 ## Run
 
 The file `contacts.csv` must exist in the path from where the program is executed.
@@ -28,12 +19,6 @@ The file `contacts.csv` must exist in the path from where the program is execute
 
 ```bash
 make search_term
-```
-
-### Generate html
-
-```bash
-make export
 ```
 
 ## Resources

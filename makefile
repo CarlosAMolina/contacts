@@ -31,7 +31,7 @@ call-return-error:
 get-contact-by-id:
 	curl "localhost:3030/contacts/0"
 
-get-contacts:
+get-contacts-all:
 	curl "localhost:3030/contacts"
 
 get-contacts-paginated:

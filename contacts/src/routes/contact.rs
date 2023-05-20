@@ -22,12 +22,11 @@ pub async fn get_contacts_all(
 ) -> Result<impl warp::Reply, warp::Rejection> {
     log::info!("{} Start querying contacts", id);
     println!("{:?}", params);
+    let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect();
     if params.is_empty() {
         log::info!("{} No pagination used", id);
-        let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect();
         Ok(warp::reply::json(&res))
     } else {
-        let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect();
         let pagination = extract_pagination(params, res.len())?;
         log::info!("{} Pagination set {:?}", id, &pagination);
         let res = &res[pagination.start..pagination.end];

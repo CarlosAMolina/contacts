@@ -34,23 +34,23 @@ async fn main() {
         .allow_header("content-type")
         .allow_methods(&[Method::PUT, Method::DELETE, Method::GET, Method::POST]);
 
-    let get_contacts = warp::get()
+    let get_contacts_all = warp::get()
         .and(warp::path("contacts"))
         .and(warp::path::end())
         .and(warp::query())
         .and(store_filter.clone())
         .and(id_filter)
-        .and_then(routes::contact::get_contacts);
+        .and_then(routes::contact::get_contacts_all);
 
-    let get_contact = warp::get()
+    let get_contact_by_id = warp::get()
         .and(warp::path("contacts"))
         .and(warp::path::param::<String>())
         .and(warp::path::end())
         .and(store_filter.clone())
-        .and_then(routes::contact::get_contact);
+        .and_then(routes::contact::get_contact_by_id);
 
-    let routes = get_contacts
-        .or(get_contact)
+    let routes = get_contacts_all
+        .or(get_contact_by_id)
         .with(cors)
         .with(log)
         .recover(return_error);

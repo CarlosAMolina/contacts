@@ -5,14 +5,17 @@ use crate::store::Store;
 use crate::types::contact::{Contact, ContactId};
 use crate::types::pagination::extract_pagination;
 
-pub async fn get_contact(id: String, store: Store) -> Result<impl warp::Reply, warp::Rejection> {
+pub async fn get_contact_by_id(
+    id: String,
+    store: Store,
+) -> Result<impl warp::Reply, warp::Rejection> {
     match store.contacts.read().await.get(&ContactId(id)) {
         Some(contact) => Ok(warp::reply::json(&contact)),
         None => Err(warp::reject::custom(Error::ContactNotFound)),
     }
 }
 
-pub async fn get_contacts(
+pub async fn get_contacts_all(
     params: HashMap<String, String>,
     store: Store,
     id: String,

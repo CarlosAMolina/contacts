@@ -15,7 +15,7 @@ doc:
 	cd $(APP_PATHNAME) && cargo doc && cargo doc --open
 
 start-server:
-	cd $(APP_PATHNAME) && ./target/debug/contacts &
+	cd $(APP_PATHNAME) && cargo run &
 
 stop-server:
 	pkill contacts

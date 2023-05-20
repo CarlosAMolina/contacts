@@ -9,6 +9,12 @@ call-return-error:
 		-H "Origin: https://not-origin.io" \
 		-verbose
 
+start-server:
+	./target/debug/contacts &
+
+stop-server:
+	pkill contacts
+
 get-contact:
 	curl "localhost:3030/contacts/0"
 

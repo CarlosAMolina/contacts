@@ -6,6 +6,7 @@ use std::{env, error::Error};
 
 use crate::contact;
 
+// TODO use
 fn get_image_path_name(contact_id: usize) -> Option<String> {
     let images_path = Path::new("images");
     if let Ok(entries) = fs::read_dir(images_path) {

@@ -2,7 +2,6 @@ use handle_errors::Error;
 use std::collections::HashMap;
 use std::println;
 
-use crate::file_csv;
 use crate::store::Store;
 use crate::types::contact::{Contact, ContactId};
 use crate::types::pagination::extract_pagination;

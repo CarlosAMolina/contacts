@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::error::Error;
 
 use crate::types::contact;
@@ -40,6 +41,16 @@ pub fn search_and_show(
         }
     }
     Ok(())
+}
+
+pub fn get_all_contacts() -> Result<HashMap<contact::ContactId, contact::Contact>, Box<dyn Error>> {
+    let mut result: HashMap<contact::ContactId, contact::Contact> = HashMap::new();
+    let mut rdr = get_reader_from_file()?;
+    for record in rdr.deserialize() {
+        let contact_: contact::Contact = record?;
+        result.insert(contact::ContactId(contact_.id.to_string()), contact_);
+    }
+    Ok(result)
 }
 
 pub fn search_id(

@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
+use crate::file_csv;
 use crate::types::contact::{Contact, ContactId};
 
 #[derive(Clone)]
@@ -16,7 +17,6 @@ impl Store {
         }
     }
     fn init() -> HashMap<ContactId, Contact> {
-        let file = include_str!("../contacts.json");
-        serde_json::from_str(file).expect("can't read questions.json")
+        file_csv::get_all_contacts().unwrap()
     }
 }

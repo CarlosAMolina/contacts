@@ -22,6 +22,7 @@ pub async fn get_contacts_all(
     store: Store,
     id: String,
 ) -> Result<impl warp::Reply, warp::Rejection> {
+    // TODO log::info does not work, I use println instead
     log::info!("{} Start querying contacts", id);
     println!("{:?}", params);
     if params.is_empty() {
@@ -29,14 +30,16 @@ pub async fn get_contacts_all(
         log::info!("{} No pagination used", id);
         Ok(warp::reply::json(&res))
     } else if params.contains_key("query") {
-        let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect(); // TODO rm
-        println!("Start searching");
         let query = params.get("query").unwrap();
         println!("Start searching {}", query);
-        // TODO use await
-        let mut rdr = file_csv::get_reader_from_file().unwrap();
-        file_csv::search_and_show(query.to_string(), &mut rdr).unwrap();
-        Ok(warp::reply::json(&res)) // TODO rm
+        let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect();
+        // TODO use await?
+        let result: Vec<Contact> = res
+            .iter()
+            .filter(|contact| contact.contains(query))
+            .cloned()
+            .collect();
+        Ok(warp::reply::json(&result))
     } else {
         let res: Vec<Contact> = store.contacts.read().await.values().cloned().collect();
         let pagination = extract_pagination(params, res.len())?;

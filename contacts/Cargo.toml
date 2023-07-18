@@ -11,7 +11,6 @@ log = "0.4.17"
 log4rs = "1.2.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-sqlx = {version = "0.6.3", features = [ "postgres", "runtime-tokio-rustls" ]}
 tokio = { version = "1.2", features = ["full"] }
 uuid = { version = "0.8", features = ["v4"] }
 warp = "0.3"

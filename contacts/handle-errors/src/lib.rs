@@ -1,3 +1,4 @@
+use sqlx;
 use warp::{
     filters::{body::BodyDeserializeError, cors::CorsForbidden},
     http::StatusCode,
@@ -12,6 +13,7 @@ pub enum Error {
     ParseError(std::num::ParseIntError),
     ContactNotFound,
     StartGreaterThanEnd,
+    DatabaseQueryError(sqlx::Error),
 }
 
 impl std::fmt::Display for Error {
@@ -23,6 +25,8 @@ impl std::fmt::Display for Error {
                 write!(f, "Cannot parse parameter: {}", err)
             }
             Error::StartGreaterThanEnd => write!(f, "The start is greater than the end"),
+
+            Error::DatabaseQueryError(_) => write!(f, "Cannot update, invalid data"),
         }
     }
 }
@@ -31,7 +35,12 @@ impl Reject for Error {}
 
 pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
     println!("{:?}", r);
-    if let Some(error) = r.find::<Error>() {
+    if let Some(crate::Error::DatabaseQueryError(e)) = r.find() {
+        Ok(warp::reply::with_status(
+            e.to_string(),
+            StatusCode::UNPROCESSABLE_ENTITY,
+        ))
+    } else if let Some(error) = r.find::<Error>() {
         Ok(warp::reply::with_status(
             error.to_string(),
             StatusCode::RANGE_NOT_SATISFIABLE,

@@ -35,11 +35,42 @@ async fn main() {
     }
     let contacts = response.json::<Vec<Contact>>().await.unwrap();
     for contact in contacts {
-        print_contact(contact);
+        print_contact_short(contact);
     }
 }
 
-fn print_contact(contact: Contact) {
+fn print_contact_short(contact: Contact) {
+    println!(
+        "{} {} - {} {} {} {}. ID {}",
+        match contact.phone {
+            Some(value) => value.to_string(),
+            None => "".to_string(),
+        },
+        match contact.phone_description {
+            Some(value) => value,
+            None => "".to_string(),
+        },
+        match contact.user_name {
+            Some(value) => value,
+            None => "".to_string(),
+        },
+        match contact.user_surname {
+            Some(value) => value,
+            None => "".to_string(),
+        },
+        match contact.nickname {
+            Some(value) => value,
+            None => "".to_string(),
+        },
+        match contact.category {
+            Some(value) => value,
+            None => "".to_string(),
+        },
+        contact.user_id.to_string()
+    );
+}
+
+fn print_contact_all(contact: Contact) {
     println!("## User ID {}", contact.user_id);
     print_option_if_has_value_from_string(contact.user_name, "name".to_string());
     print_option_if_has_value_from_string(contact.user_surname, "surname".to_string());

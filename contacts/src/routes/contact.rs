@@ -25,7 +25,13 @@ pub async fn get_contacts(
     println!("Params: {:?}", params);
     if params.is_empty() {
         log::info!("{} No pagination used", id);
-        Err(warp::reject::custom(Error::NotImplemented))
+        match store
+            .get_contacts_all()
+            .await
+        {
+            Ok(res) => Ok(warp::reply::json(&res)),
+            Err(e) => return Err(warp::reject::custom(e)),
+        }
     } else {
         let term_to_search = "carlos".to_string(); //TODO
         //TODO let pagination = extract_pagination(params, res.len())?;

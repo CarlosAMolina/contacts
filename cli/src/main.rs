@@ -34,8 +34,14 @@ async fn main() {
         panic!("Unexpected error: {:?}", response);
     }
     let contacts = response.json::<Vec<Contact>>().await.unwrap();
-    for contact in contacts {
-        print_contact_short(contact);
+    if args.len() > 2 && args[2].clone() == "-l" {
+        for contact in contacts {
+            print_contact_all(contact);
+        }
+    } else {
+        for contact in contacts {
+            print_contact_short(contact);
+        }
     }
 }
 
@@ -68,32 +74,24 @@ fn print_contact_short(contact: Contact) {
 
 fn print_contact_all(contact: Contact) {
     println!("## User ID {}", contact.user_id);
-    print_option_if_has_value_from_string(contact.user_name, "name".to_string());
-    print_option_if_has_value_from_string(contact.user_surname, "surname".to_string());
-    print_option_if_has_value_from_string(contact.nickname, "nickname".to_string());
-    print_option_if_has_value_from_int(contact.phone, "phone".to_string());
-    print_option_if_has_value_from_string(
-        contact.phone_description,
-        "phone_description".to_string(),
-    );
-    print_option_if_has_value_from_string(contact.category, "category".to_string());
-    print_option_if_has_value_from_string(contact.address, "address".to_string());
-    print_option_if_has_value_from_string(contact.email, "email".to_string());
-    print_option_if_has_value_from_string(contact.url, "url".to_string());
-    print_option_if_has_value_from_string(contact.facebook_url, "facebook url".to_string());
-    print_option_if_has_value_from_string(contact.twitter_handle, "twitter handle".to_string());
-    print_option_if_has_value_from_string(contact.instagram_handle, "instagram handle".to_string());
-    print_option_if_has_value_from_string(contact.note, "note".to_string());
+    print_option_if_has_value(contact.user_name, "name".to_string());
+    print_option_if_has_value(contact.user_surname, "surname".to_string());
+    print_option_if_has_value(contact.nickname, "nickname".to_string());
+    print_option_if_has_value(contact.phone, "phone".to_string());
+    print_option_if_has_value(contact.phone_description, "phone_description".to_string());
+    print_option_if_has_value(contact.category, "category".to_string());
+    print_option_if_has_value(contact.address, "address".to_string());
+    print_option_if_has_value(contact.email, "email".to_string());
+    print_option_if_has_value(contact.url, "url".to_string());
+    print_option_if_has_value(contact.facebook_url, "facebook url".to_string());
+    print_option_if_has_value(contact.twitter_handle, "twitter handle".to_string());
+    print_option_if_has_value(contact.instagram_handle, "instagram handle".to_string());
+    print_option_if_has_value(contact.note, "note".to_string());
 }
 
-fn print_option_if_has_value_from_string(option: Option<String>, prefix_text: String) {
+fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
     if let Some(value) = option {
         println!("{}: {}", prefix_text, value);
     }
 }
 
-fn print_option_if_has_value_from_int(option: Option<i64>, prefix_text: String) {
-    if let Some(value) = option {
-        println!("{}: {}", prefix_text, value);
-    }
-}

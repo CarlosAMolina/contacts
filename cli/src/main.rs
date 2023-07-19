@@ -25,11 +25,11 @@ struct Contact {
 async fn main() {
     let args: Vec<String> = env::args().collect();
     let query = args[1].clone();
-    let url = format!("http://localhost:3030/contacts?query={query}", query=query);
-    let response = reqwest::get(url)
-        .await
-        .unwrap()
-        ;
+    let url = format!(
+        "http://localhost:3030/contacts?query={query}",
+        query = query
+    );
+    let response = reqwest::get(url).await.unwrap();
     if response.status() != reqwest::StatusCode::OK {
         panic!("Unexpected error: {:?}", response);
     }
@@ -76,7 +76,10 @@ fn print_contact_all(contact: Contact) {
     print_option_if_has_value_from_string(contact.user_surname, "surname".to_string());
     print_option_if_has_value_from_string(contact.nickname, "nickname".to_string());
     print_option_if_has_value_from_int(contact.phone, "phone".to_string());
-    print_option_if_has_value_from_string(contact.phone_description, "phone_description".to_string());
+    print_option_if_has_value_from_string(
+        contact.phone_description,
+        "phone_description".to_string(),
+    );
     print_option_if_has_value_from_string(contact.category, "category".to_string());
     print_option_if_has_value_from_string(contact.address, "address".to_string());
     print_option_if_has_value_from_string(contact.email, "email".to_string());

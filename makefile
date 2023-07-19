@@ -34,3 +34,6 @@ get-contacts-query:
 get-contacts-paginated:
 	curl "localhost:3030/contacts?start=0&end=1"
 
+run-db:
+	make -f $(ROOT_PATHNAME)/makefile-db run
+

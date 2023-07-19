@@ -1,8 +1,7 @@
 use serde::Serialize;
 
-// TODO rename to Contact
 #[derive(Debug, Serialize)]
-pub struct AllData {
+pub struct Contact {
     pub user_id: i32, // TODO move to struct user_id
     pub user_name: Option<String>,
     pub user_surname: Option<String>,

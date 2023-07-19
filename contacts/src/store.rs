@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
-use crate::types::contact::AllData;
+use crate::types::contact::Contact;
 use handle_errors::Error;
 use sqlx::postgres::{PgPool, PgPoolOptions, PgRow};
 use sqlx::{Postgres, Row};
@@ -23,10 +23,10 @@ impl Store {
         })
     }
 
-    pub async fn get_contacts_all(&self) -> Result<Vec<AllData>, Error> {
+    pub async fn get_contacts_all(&self) -> Result<Vec<Contact>, Error> {
         println!("Init get all data");
         match sqlx::query("SELECT * from contacts.all_data")
-        .map(|row: PgRow| AllData {
+        .map(|row: PgRow| Contact {
             user_id: row.get("id"),
             user_name: row.get("name"),
             user_surname: row.get("surname"),
@@ -53,7 +53,7 @@ impl Store {
         }
     }
 
-    pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<AllData>, Error> {
+    pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<Contact>, Error> {
         println!("Init get all data by query");
         let query= format!("%{}%", query.to_lowercase());
         match sqlx::query(
@@ -75,7 +75,7 @@ impl Store {
     ",
         )
         .bind(query)
-        .map(|row: PgRow| AllData {
+        .map(|row: PgRow| Contact {
             user_id: row.get("id"),
             user_name: row.get("name"),
             user_surname: row.get("surname"),

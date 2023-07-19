@@ -23,9 +23,9 @@ impl Store {
         })
     }
 
-    pub async fn get_contacts_all(&self, term_to_search: String) -> Result<Vec<AllData>, Error> {
+    pub async fn get_contacts_query(&self, query: String) -> Result<Vec<AllData>, Error> {
         println!("Init get all data");
-        let term_to_search = format!("%{}%", term_to_search.to_lowercase());
+        let query= format!("%{}%", query.to_lowercase());
         match sqlx::query(
             "SELECT * from contacts.all_data
     WHERE LOWER(name) LIKE $1
@@ -44,7 +44,7 @@ impl Store {
     ;
     ",
         )
-        .bind(term_to_search)
+        .bind(query)
         .map(|row: PgRow| AllData {
             user_id: row.get("id"),
             user_name: row.get("name"),

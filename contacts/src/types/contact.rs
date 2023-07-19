@@ -1,26 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-// TODO remov Contact or AllData
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Contact {
-    pub id: usize,
-    pub name: String,
-    pub surname: String,
-    pub nickname: String,
-    pub phone: Option<usize>,
-    pub phone_description: String,
-    pub category: String,
-    pub address: String,
-    pub email: String,
-    pub url: String,
-    pub facebook_url: String,
-    pub twitter_handle: String,
-    pub note: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-pub struct ContactId(pub String);
-
+// TODO rename to Contact
 #[derive(Debug, Serialize)]
 pub struct AllData {
     pub user_id: i32, // TODO move to struct user_id

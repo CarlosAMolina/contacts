@@ -2,8 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
-use crate::file_csv;
-use crate::types::contact::{AllData, Contact, ContactId};
+use crate::types::contact::AllData;
 use handle_errors::Error;
 use sqlx::postgres::{PgPool, PgPoolOptions, PgRow};
 use sqlx::{Postgres, Row};

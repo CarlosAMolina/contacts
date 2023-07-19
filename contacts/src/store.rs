@@ -53,7 +53,7 @@ impl Store {
         }
     }
 
-    pub async fn get_contacts_query(&self, query: String) -> Result<Vec<AllData>, Error> {
+    pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<AllData>, Error> {
         println!("Init get all data by query");
         let query= format!("%{}%", query.to_lowercase());
         match sqlx::query(

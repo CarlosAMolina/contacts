@@ -1,3 +1,5 @@
+use std::env;
+
 use reqwest;
 use serde::{Deserialize, Serialize};
 
@@ -21,7 +23,8 @@ struct Contact {
 
 #[tokio::main]
 async fn main() {
-    let query = "arlos";
+    let args: Vec<String> = env::args().collect();
+    let query = args[1].clone();
     let url = format!("http://localhost:3030/contacts?query={query}", query=query);
     let response = reqwest::get(url)
         .await

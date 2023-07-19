@@ -46,26 +46,11 @@ fn print_contact_short(contact: Contact) {
             Some(value) => value.to_string(),
             None => "".to_string(),
         },
-        match contact.phone_description {
-            Some(value) => value,
-            None => "".to_string(),
-        },
-        match contact.user_name {
-            Some(value) => value,
-            None => "".to_string(),
-        },
-        match contact.user_surname {
-            Some(value) => value,
-            None => "".to_string(),
-        },
-        match contact.nickname {
-            Some(value) => value,
-            None => "".to_string(),
-        },
-        match contact.category {
-            Some(value) => value,
-            None => "".to_string(),
-        },
+        contact.phone_description.unwrap_or("".to_string()),
+        contact.user_name.unwrap_or("".to_string()),
+        contact.user_surname.unwrap_or("".to_string()),
+        contact.nickname.unwrap_or("".to_string()),
+        contact.category.unwrap_or("".to_string()),
         contact.user_id.to_string()
     );
 }

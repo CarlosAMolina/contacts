@@ -14,6 +14,7 @@ pub enum Error {
     ContactNotFound,
     StartGreaterThanEnd,
     DatabaseQueryError(sqlx::Error),
+    NotImplemented,
 }
 
 impl std::fmt::Display for Error {
@@ -25,8 +26,8 @@ impl std::fmt::Display for Error {
                 write!(f, "Cannot parse parameter: {}", err)
             }
             Error::StartGreaterThanEnd => write!(f, "The start is greater than the end"),
-
             Error::DatabaseQueryError(_) => write!(f, "Cannot update, invalid data"),
+            Error::NotImplemented => write!(f, "Not implemented"),
         }
     }
 }

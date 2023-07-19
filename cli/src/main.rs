@@ -40,19 +40,30 @@ async fn main() {
 }
 
 fn print_contact_short(contact: Contact) {
-    println!(
-        "{} {} - {} {} {} {}. ID {}",
-        match contact.phone {
-            Some(value) => value.to_string(),
-            None => "".to_string(),
-        },
-        contact.phone_description.unwrap_or("".to_string()),
-        contact.user_name.unwrap_or("".to_string()),
-        contact.user_surname.unwrap_or("".to_string()),
-        contact.nickname.unwrap_or("".to_string()),
-        contact.category.unwrap_or("".to_string()),
-        contact.user_id.to_string()
-    );
+    let mut summary: String;
+    match contact.phone {
+        Some(value) => {
+            summary = value.to_string();
+        }
+        None => summary = "".to_string(),
+    };
+    if let Some(value) = contact.phone_description {
+        summary = format!("{} ({})", summary, value);
+    }
+    if let Some(value) = contact.user_name {
+        summary = format!("{} {}", summary, value);
+    }
+    if let Some(value) = contact.user_surname {
+        summary = format!("{} {}", summary, value);
+    }
+    if let Some(value) = contact.nickname {
+        summary = format!("{}. {}", summary, value);
+    }
+    if let Some(value) = contact.category {
+        summary = format!("{}. {}", summary, value);
+    }
+    summary = format!("{}. ID {}", summary, contact.user_id);
+    println!("{}", summary);
 }
 
 fn print_contact_all(contact: Contact) {

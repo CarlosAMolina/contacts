@@ -29,7 +29,8 @@ get-contacts-all:
 	curl "localhost:3030/contacts"
 
 get-contacts-query:
-	curl "localhost:3030/contacts?query=arlos"
+	#curl "localhost:3030/contacts?query=arlos"
+	cd cli && cargo run arlos
 
 get-contacts-paginated:
 	curl "localhost:3030/contacts?start=0&end=1"

@@ -1,5 +1,4 @@
-use std::env;
-
+use clap::{Parser, ValueEnum};
 use reqwest;
 use serde::{Deserialize, Serialize};
 
@@ -21,26 +20,60 @@ struct Contact {
     pub note: Option<String>,
 }
 
+#[derive(Parser)]
+#[command(arg_required_else_help = true, version)]
+struct Cli {
+    search_term: Option<Vec<String>>,
+
+    #[arg(short, long)]
+    id: Option<i32>,
+
+    #[arg(short, long, value_enum)]
+    format: Option<Format>,
+}
+
+#[derive(Clone, Debug, ValueEnum)]
+enum Format {
+    /// Show all contact info.
+    Long,
+    /// Show a summary of the contact info.
+    Short,
+}
+
 #[tokio::main]
 async fn main() {
-    let args: Vec<String> = env::args().collect();
-    let query = args[1].clone();
-    let url = format!(
-        "http://localhost:3030/contacts?query={query}",
-        query = query
-    );
-    let response = reqwest::get(url).await.unwrap();
-    if response.status() != reqwest::StatusCode::OK {
-        panic!("Unexpected error: {:?}", response);
-    }
-    let contacts = response.json::<Vec<Contact>>().await.unwrap();
-    if args.len() > 2 && args[2].clone() == "-l" {
-        for contact in contacts {
-            print_contact_all(contact);
-        }
+    let cli = Cli::parse();
+    let is_long_format: bool;
+    if let Some(id) = cli.id {
+        println!("Init id: {}", id);
+        is_long_format = true;
+        println!("Format: {}", is_long_format);
     } else {
-        for contact in contacts {
-            print_contact_short(contact);
+        if let Some(search_term_vector) = &cli.search_term {
+            let search_term = search_term_vector.join(" ");
+            println!("Init search term {}", search_term);
+            is_long_format = match cli.format {
+                Some(Format::Long) => true,
+                _ => false,
+            };
+            let url = format!(
+                "http://localhost:3030/contacts?query={query}",
+                query = search_term
+            );
+            let response = reqwest::get(url).await.unwrap();
+            if response.status() != reqwest::StatusCode::OK {
+                panic!("Unexpected error: {:?}", response);
+            }
+            let contacts = response.json::<Vec<Contact>>().await.unwrap();
+            if is_long_format {
+                for contact in contacts {
+                    print_contact_all(contact);
+                }
+            } else {
+                for contact in contacts {
+                    print_contact_short(contact);
+                }
+            }
         }
     }
 }
@@ -94,4 +127,3 @@ fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_tex
         println!("{}: {}", prefix_text, value);
     }
 }
-

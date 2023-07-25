@@ -24,14 +24,15 @@ call-return-error:
 		-verbose
 
 get-contact-by-id:
-	curl "localhost:$(API_PORT)/contacts/86"
+	#curl "localhost:$(API_PORT)/contacts/86"
+	cd cli && cargo run -- --id 86
 
 get-contacts-all:
 	curl "localhost:$(API_PORT)/contacts"
 
 get-contacts-query:
-	#curl "localhost:$(API_PORT)/contacts?query=arlos"
-	cd cli && cargo run arlos
+	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
+	cd cli && cargo run -- arlos a
 
 get-contacts-paginated:
 	curl "localhost:$(API_PORT)/contacts?start=0&end=1"

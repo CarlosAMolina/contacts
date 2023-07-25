@@ -43,16 +43,19 @@ enum Format {
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    let is_long_format: bool;
     if let Some(id) = cli.id {
-        println!("Init id: {}", id);
-        is_long_format = true;
-        println!("Format: {}", is_long_format);
+        let url = format!("http://localhost:3030/contacts/{id}", id = id);
+        let response = reqwest::get(url).await.unwrap();
+        if response.status() != reqwest::StatusCode::OK {
+            panic!("Unexpected error: {:?}", response);
+        }
+        let contact = response.json::<Contact>().await.unwrap();
+        print_contact_all(contact);
     } else {
         if let Some(search_term_vector) = &cli.search_term {
             let search_term = search_term_vector.join(" ");
             println!("Init search term {}", search_term);
-            is_long_format = match cli.format {
+            let is_long_format = match cli.format {
                 Some(Format::Long) => true,
                 _ => false,
             };

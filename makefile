@@ -9,7 +9,7 @@ build_for_debian:
 doc:
 	cd $(APP_PATHNAME) && cargo doc && cargo doc --open
 
-start-server:
+run-server:
 	cd $(APP_PATHNAME) && cargo run &
 
 stop-server:

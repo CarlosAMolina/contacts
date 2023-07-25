@@ -24,7 +24,7 @@ call-return-error:
 		-verbose
 
 get-contact-by-id:
-	curl "localhost:$(API_PORT)/contacts/0"
+	curl "localhost:$(API_PORT)/contacts/86"
 
 get-contacts-all:
 	curl "localhost:$(API_PORT)/contacts"

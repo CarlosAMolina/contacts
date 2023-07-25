@@ -26,24 +26,24 @@ impl Store {
     pub async fn get_contacts_all(&self) -> Result<Vec<Contact>, Error> {
         println!("Init get all data");
         match sqlx::query("SELECT * from contacts.all_data")
-        .map(|row: PgRow| Contact {
-            user_id: row.get("id"),
-            user_name: row.get("name"),
-            user_surname: row.get("surname"),
-            nickname: row.get("nickname"),
-            phone: row.get("phone"),
-            phone_description: row.get("phone_description"),
-            category: row.get("category"),
-            address: row.get("address"),
-            email: row.get("email"),
-            url: row.get("url"),
-            facebook_url: row.get("facebook_url"),
-            twitter_handle: row.get("twitter_handle"),
-            instagram_handle: row.get("instagram_handle"),
-            note: row.get("note"),
-        })
-        .fetch_all(&self.connection)
-        .await
+            .map(|row: PgRow| Contact {
+                user_id: row.get("id"),
+                user_name: row.get("name"),
+                user_surname: row.get("surname"),
+                nickname: row.get("nickname"),
+                phone: row.get("phone"),
+                phone_description: row.get("phone_description"),
+                category: row.get("category"),
+                address: row.get("address"),
+                email: row.get("email"),
+                url: row.get("url"),
+                facebook_url: row.get("facebook_url"),
+                twitter_handle: row.get("twitter_handle"),
+                instagram_handle: row.get("instagram_handle"),
+                note: row.get("note"),
+            })
+            .fetch_all(&self.connection)
+            .await
         {
             Ok(all_data) => Ok(all_data),
             Err(error) => {
@@ -55,7 +55,7 @@ impl Store {
 
     pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<Contact>, Error> {
         println!("Init get all data by query");
-        let query= format!("%{}%", query.to_lowercase());
+        let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
             "SELECT * from contacts.all_data
     WHERE LOWER(name) LIKE $1
@@ -93,6 +93,37 @@ impl Store {
         })
         .fetch_all(&self.connection)
         .await
+        {
+            Ok(all_data) => Ok(all_data),
+            Err(error) => {
+                // TODO tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
+    pub async fn get_contact_by_id(&self, id: i32) -> Result<Contact, Error> {
+        println!("Init get contact by ID");
+        match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
+            .bind(id)
+            .map(|row: PgRow| Contact {
+                user_id: row.get("id"),
+                user_name: row.get("name"),
+                user_surname: row.get("surname"),
+                nickname: row.get("nickname"),
+                phone: row.get("phone"),
+                phone_description: row.get("phone_description"),
+                category: row.get("category"),
+                address: row.get("address"),
+                email: row.get("email"),
+                url: row.get("url"),
+                facebook_url: row.get("facebook_url"),
+                twitter_handle: row.get("twitter_handle"),
+                instagram_handle: row.get("instagram_handle"),
+                note: row.get("note"),
+            })
+            .fetch_one(&self.connection)
+            .await
         {
             Ok(all_data) => Ok(all_data),
             Err(error) => {

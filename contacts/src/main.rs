@@ -71,15 +71,15 @@ async fn main() {
         .and(id_filter)
         .and_then(routes::contact::get_contacts);
 
-    // TODO let get_contact_by_id = warp::get()
-    // TODO     .and(warp::path("contacts"))
-    // TODO     .and(warp::path::param::<String>())
-    // TODO     .and(warp::path::end())
-    // TODO     .and(store_filter.clone())
-    // TODO     .and_then(routes::contact::get_contact_by_id);
+    let get_contact_by_id = warp::get()
+        .and(warp::path("contacts"))
+        .and(warp::path::param::<i32>())
+        .and(warp::path::end())
+        .and(store_filter.clone())
+        .and_then(routes::contact::get_contact_by_id);
 
     let routes = get_contacts
-        //.or(get_contact_by_id)
+        .or(get_contact_by_id)
         .with(cors)
         .with(log)
         .recover(return_error);

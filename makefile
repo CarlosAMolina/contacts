@@ -1,13 +1,14 @@
 ROOT_PATHNAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 SERVER_FOLDER_NAME=contacts
 SERVER_PATHNAME=$(ROOT_PATHNAME)/$(SERVER_FOLDER_NAME)
+CLI_PATHNAME=$(ROOT_PATHNAME)/cli
 API_PORT=3030
 
 build-server-for-debian:
 	cd $(SERVER_PATHNAME) && docker run --rm -v $(SERVER_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 build-cli-for-debian:
-	cd $(SERVER_PATHNAME) && docker run --rm -v $(SERVER_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
+	cd $(CLI_PATHNAME) && docker run --rm -v $(CLI_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 doc:
 	cd $(SERVER_PATHNAME) && cargo doc && cargo doc --open

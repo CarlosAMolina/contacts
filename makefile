@@ -1,16 +1,19 @@
 ROOT_PATHNAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-APP_FOLDER_NAME=contacts
-APP_PATHNAME=$(ROOT_PATHNAME)/$(APP_FOLDER_NAME)
+SERVER_FOLDER_NAME=contacts
+SERVER_PATHNAME=$(ROOT_PATHNAME)/$(SERVER_FOLDER_NAME)
 API_PORT=3030
 
-build_for_debian:
-	cd $(APP_PATHNAME) && docker run --rm -v $(APP_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
+build-server-for-debian:
+	cd $(SERVER_PATHNAME) && docker run --rm -v $(SERVER_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
+
+build-cli-for-debian:
+	cd $(SERVER_PATHNAME) && docker run --rm -v $(SERVER_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 doc:
-	cd $(APP_PATHNAME) && cargo doc && cargo doc --open
+	cd $(SERVER_PATHNAME) && cargo doc && cargo doc --open
 
 run-server:
-	cd $(APP_PATHNAME) && cargo run &
+	cd $(SERVER_PATHNAME) && cargo run &
 
 stop-server:
 	pkill contacts

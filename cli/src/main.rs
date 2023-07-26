@@ -8,7 +8,7 @@ struct Contact {
     pub user_name: Option<String>,
     pub user_surname: Option<String>,
     pub nickname: Option<String>,
-    pub phone: Option<i64>, // TODO set correct type for bigint
+    pub phone: Option<i64>,
     pub phone_description: Option<String>,
     pub category: Option<String>,
     pub address: Option<String>,

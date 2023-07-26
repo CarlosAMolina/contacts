@@ -1,8 +1,8 @@
 use clap::{Parser, ValueEnum};
 use reqwest;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 struct Contact {
     pub user_id: UserId,
     pub user_name: Option<String>,
@@ -20,7 +20,7 @@ struct Contact {
     pub note: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct UserId(pub i32);
 
 #[derive(Parser)]

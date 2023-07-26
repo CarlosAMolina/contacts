@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Contact {
-    pub user_id: i32, // TODO move to struct user_id
+    pub user_id: UserId,
     pub user_name: Option<String>,
     pub user_surname: Option<String>,
     pub nickname: Option<String>,
@@ -19,6 +19,9 @@ struct Contact {
     pub instagram_handle: Option<String>,
     pub note: Option<String>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct UserId(pub i32);
 
 #[derive(Parser)]
 #[command(arg_required_else_help = true, version)]
@@ -104,12 +107,12 @@ fn print_contact_short(contact: Contact) {
     if let Some(value) = contact.category {
         summary = format!("{}. {}", summary, value);
     }
-    summary = format!("{}. ID {}", summary, contact.user_id);
+    summary = format!("{}. ID {:?}", summary, contact.user_id);
     println!("{}", summary);
 }
 
 fn print_contact_all(contact: Contact) {
-    println!("## User ID {}", contact.user_id);
+    println!("## User ID {:?}", contact.user_id);
     print_option_if_has_value(contact.user_name, "name".to_string());
     print_option_if_has_value(contact.user_surname, "surname".to_string());
     print_option_if_has_value(contact.nickname, "nickname".to_string());

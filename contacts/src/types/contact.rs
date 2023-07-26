@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Contact {
-    pub user_id: i32, // TODO move to struct user_id
+    pub user_id: UserId,
     pub user_name: Option<String>,
     pub user_surname: Option<String>,
     pub nickname: Option<String>,
@@ -17,3 +17,6 @@ pub struct Contact {
     pub instagram_handle: Option<String>,
     pub note: Option<String>,
 }
+
+#[derive(Debug, Serialize)]
+pub struct UserId(pub i32);

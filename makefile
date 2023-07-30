@@ -64,5 +64,4 @@ stop-db:
 	make -f $(ROOT_PATHNAME)/makefile-db stop
 
 run: run-db \
-	start-server
-
+	run-api-docker

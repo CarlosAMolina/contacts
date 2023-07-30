@@ -3,6 +3,9 @@ contact.html
 contacts.csv
 contacts/images/*.jpg
 
+# nohup
+nohup.out
+
 # Rust
 target/
 

@@ -52,8 +52,10 @@ async fn main() {
         if response.status() != reqwest::StatusCode::OK {
             panic!("Unexpected error: {:?}", response);
         }
-        let contact = response.json::<Contact>().await.unwrap();
-        print_contact_all(contact);
+        let contacts = response.json::<Vec<Contact>>().await.unwrap();
+        for contact in contacts {
+            print_contact_all(contact);
+        }
     } else {
         if let Some(search_term_vector) = &cli.search_term {
             let search_term = search_term_vector.join(" ");
@@ -112,7 +114,7 @@ fn print_contact_short(contact: Contact) {
 }
 
 fn print_contact_all(contact: Contact) {
-    println!("## User ID {:?}", contact.user_id);
+    println!("## User ID {:?}", contact.user_id.0);
     print_option_if_has_value(contact.user_name, "name".to_string());
     print_option_if_has_value(contact.user_surname, "surname".to_string());
     print_option_if_has_value(contact.nickname, "nickname".to_string());

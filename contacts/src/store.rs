@@ -102,7 +102,7 @@ impl Store {
         }
     }
 
-    pub async fn get_contact_by_id(&self, id: i32) -> Result<Contact, Error> {
+    pub async fn get_contact_by_id(&self, id: i32) -> Result<Vec<Contact>, Error> {
         println!("Init get contact by ID");
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
@@ -122,7 +122,7 @@ impl Store {
                 instagram_handle: row.get("instagram_handle"),
                 note: row.get("note"),
             })
-            .fetch_one(&self.connection)
+            .fetch_all(&self.connection)
             .await
         {
             Ok(all_data) => Ok(all_data),

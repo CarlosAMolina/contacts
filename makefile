@@ -1,20 +1,36 @@
 ROOT_PATHNAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-SERVER_FOLDER_NAME=contacts
-SERVER_PATHNAME=$(ROOT_PATHNAME)/$(SERVER_FOLDER_NAME)
+API_FOLDER_NAME=contacts
+API_PATH_NAME=$(ROOT_PATHNAME)/$(API_FOLDER_NAME)
 CLI_PATHNAME=$(ROOT_PATHNAME)/cli
 API_PORT=3030
+API_IMAGE_NAME=contacts-api
+API_CONTAINER_NAME=$(API_IMAGE_NAME)-container
+NETWORK_NAME=contacts-network
+
+build-api-docker:
+	cd $(API_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
 
 build-server-for-debian:
-	cd $(SERVER_PATHNAME) && docker run --rm -v $(SERVER_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
+	cd $(API_PATH_NAME) && docker run --rm -v $(API_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 build-cli-for-debian:
 	cd $(CLI_PATHNAME) && docker run --rm -v $(CLI_PATHNAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 doc:
-	cd $(SERVER_PATHNAME) && cargo doc && cargo doc --open
+	cd $(API_PATH_NAME) && cargo doc && cargo doc --open
 
 run-server:
-	cd $(SERVER_PATHNAME) && cargo run &
+	cd $(API_PATH_NAME) && cargo run &
+
+run-api-docker:
+	cd $(API_PATH_NAME) && \
+		docker run \
+			--rm \
+			-d \
+			--name $(API_CONTAINER_NAME) \
+			-p$(API_PORT):$(API_PORT)\
+			--net=$(NETWORK_NAME) \
+			$(API_IMAGE_NAME)
 
 stop-server:
 	pkill contacts

@@ -18,7 +18,8 @@ struct Config {
 // TODO pub async fn setup_store(config: &config::Config) -> Result<store::Store, handle_errors::Error> {
 pub async fn setup_store() -> store::Store {
     let config = Config {
-        database_host: "localhost".to_string(),
+        //database_host: "localhost".to_string(), // App in localhost // TODO use config file
+        database_host: "172.20.0.5".to_string(), // App in docker container
         database_name: "contacts".to_string(),
         database_password: "pw".to_string(),
         database_port: 5432,
@@ -84,5 +85,9 @@ async fn main() {
         .with(log)
         .recover(return_error);
 
-    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
+    // Address 0.0.0.0 (meaning all IP4 addresses on the local machine) required when operating within a container to be accessed.
+    // TODO move ip to config file
+    //let ip_no_container = [127, 0, 0, 1];
+    let ip_container = [0, 0, 0, 0];
+    warp::serve(routes).run((ip_container, 3030)).await;
 }

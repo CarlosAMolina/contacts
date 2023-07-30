@@ -24,7 +24,7 @@ run-server:
 
 run-api-docker:
 	cd $(API_PATH_NAME) && \
-		docker run \
+		nohup docker run \
 			--rm \
 			-d \
 			--name $(API_CONTAINER_NAME) \

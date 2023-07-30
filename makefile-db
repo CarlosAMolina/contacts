@@ -21,7 +21,7 @@ create-volume:
 
 run:
 	# PGDATA: tells PostgreSQL where it should store the database.
-	docker run \
+	nohup docker run \
 		--rm \
 		-d \
 		--name $(CONTAINER_NAME) \

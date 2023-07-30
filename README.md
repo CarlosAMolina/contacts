@@ -31,9 +31,17 @@ To run the Docker database, read [this file](https://github.com/CarlosAMolina/po
 
 The db makefile is makefile-db.
 
+## VPS configuration
+
+Rotless containers must be able to run after SSH logout.
+
+Resource: <https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh>
+
 ## Run search contacts
 
-The file `contacts.csv` must exist in the path from where the program is executed.
+```bash
+make run
+```
 
 ### Search term
 

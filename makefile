@@ -23,7 +23,7 @@ run-server:
 	cd $(API_PATH_NAME) && cargo run &
 
 run-api-docker:
-	nohup docker run \
+	docker run \
 		--rm \
 		-d \
 		--name $(API_CONTAINER_NAME) \

@@ -23,14 +23,13 @@ run-server:
 	cd $(API_PATH_NAME) && cargo run &
 
 run-api-docker:
-	cd $(API_PATH_NAME) && \
-		nohup docker run \
-			--rm \
-			-d \
-			--name $(API_CONTAINER_NAME) \
-			-p$(API_PORT):$(API_PORT)\
-			--net=$(NETWORK_NAME) \
-			$(API_IMAGE_NAME)
+	nohup docker run \
+		--rm \
+		-d \
+		--name $(API_CONTAINER_NAME) \
+		-p$(API_PORT):$(API_PORT)\
+		--net=$(NETWORK_NAME) \
+		$(API_IMAGE_NAME)
 
 stop-server:
 	pkill contacts

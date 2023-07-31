@@ -10,7 +10,8 @@ mod store;
 mod types;
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
-struct ConfigArgs {
+pub struct ConfigArgs {
+    api_host: [u8; 4],
     database_host: String,
     database_name: String,
     database_password: String,
@@ -38,8 +39,7 @@ impl ConfigArgs {
 }
 
 // TODO pub async fn setup_store(config: &config::Config) -> Result<store::Store, handle_errors::Error> {
-pub async fn setup_store() -> store::Store {
-    let config = ConfigArgs::new();
+pub async fn setup_store(config: &ConfigArgs) -> store::Store {
     let db_url = format!(
         "postgres://{}:{}@{}:{}/{}",
         config.database_user,
@@ -69,7 +69,8 @@ async fn main() {
         );
     });
 
-    let store = setup_store().await;
+    let config = ConfigArgs::new();
+    let store = setup_store(&config).await;
     let store_filter = warp::any().map(move || store.clone());
 
     let id_filter = warp::any().map(|| uuid::Uuid::new_v4().to_string());
@@ -100,11 +101,7 @@ async fn main() {
         .with(log)
         .recover(return_error);
 
-    // Address 0.0.0.0 (meaning all IP4 addresses on the local machine) required when operating within a container to be accessed.
-    // TODO move ip to config file
-    //let ip_no_container = [127, 0, 0, 1];
-    let ip_container = [0, 0, 0, 0];
-    warp::serve(routes).run((ip_container, 3030)).await;
+    warp::serve(routes).run((config.api_host, 3030)).await;
 }
 
 #[cfg(test)]
@@ -116,6 +113,7 @@ mod config_tests {
     #[test]
     fn config_files_are_detected_correctly() {
         let expected_not_in_docker = ConfigArgs {
+            api_host: [127, 0, 0, 1],
             database_host: "localhost".to_string(),
             database_name: "contacts".to_string(),
             database_password: "pw".to_string(),
@@ -123,6 +121,7 @@ mod config_tests {
             database_user: "postgres".to_string(),
         };
         let expected_in_docker = ConfigArgs {
+            api_host: [0, 0, 0, 0],
             database_host: "172.20.0.5".to_string(), // App in localhost // TODO use config file
             database_name: "contacts".to_string(),
             database_password: "pw".to_string(),

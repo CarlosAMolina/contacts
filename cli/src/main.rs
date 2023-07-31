@@ -109,7 +109,7 @@ fn print_contact_short(contact: Contact) {
     if let Some(value) = contact.category {
         summary = format!("{}. {}", summary, value);
     }
-    summary = format!("{}. ID {:?}", summary, contact.user_id);
+    summary = format!("{}. ID {:?}", summary, contact.user_id.0);
     println!("{}", summary);
 }
 

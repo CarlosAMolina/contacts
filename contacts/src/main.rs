@@ -1,13 +1,16 @@
 #![warn(clippy::all)]
 
-use handle_errors::return_error;
+use config::Config;
 use warp::{http::Method, Filter};
+
+use handle_errors::return_error;
 
 mod routes;
 mod store;
 mod types;
 
-struct Config {
+#[derive(Debug, serde::Deserialize, PartialEq)]
+struct ConfigArgs {
     database_host: String,
     database_name: String,
     database_password: String,
@@ -15,16 +18,28 @@ struct Config {
     database_user: String,
 }
 
+impl ConfigArgs {
+    pub fn new() -> ConfigArgs {
+        let is_app_in_docker = std::env::var("IS_DOCKER_RUNNING")
+            .ok()
+            .map(|val| val.parse::<bool>())
+            .unwrap_or(Ok(false))
+            .unwrap();
+        let config_file_name = match is_app_in_docker {
+            true => "setup-docker.toml",
+            false => "setup-local.toml",
+        };
+        let config = Config::builder()
+            .add_source(config::File::with_name(config_file_name))
+            .build()
+            .unwrap();
+        config.try_deserialize::<ConfigArgs>().unwrap()
+    }
+}
+
 // TODO pub async fn setup_store(config: &config::Config) -> Result<store::Store, handle_errors::Error> {
 pub async fn setup_store() -> store::Store {
-    let config = Config {
-        //database_host: "localhost".to_string(), // App in localhost // TODO use config file
-        database_host: "172.20.0.5".to_string(), // App in docker container
-        database_name: "contacts".to_string(),
-        database_password: "pw".to_string(),
-        database_port: 5432,
-        database_user: "postgres".to_string(),
-    };
+    let config = ConfigArgs::new();
     let db_url = format!(
         "postgres://{}:{}@{}:{}/{}",
         config.database_user,
@@ -90,4 +105,32 @@ async fn main() {
     //let ip_no_container = [127, 0, 0, 1];
     let ip_container = [0, 0, 0, 0];
     warp::serve(routes).run((ip_container, 3030)).await;
+}
+
+#[cfg(test)]
+mod config_tests {
+    use super::*;
+
+    // As Rust runs test in parallel, we run two tests in the same function
+    // in order to not affect each test when env variables are modified.
+    #[test]
+    fn config_files_are_detected_correctly() {
+        let expected_not_in_docker = ConfigArgs {
+            database_host: "localhost".to_string(),
+            database_name: "contacts".to_string(),
+            database_password: "pw".to_string(),
+            database_port: 5432,
+            database_user: "postgres".to_string(),
+        };
+        let expected_in_docker = ConfigArgs {
+            database_host: "172.20.0.5".to_string(), // App in localhost // TODO use config file
+            database_name: "contacts".to_string(),
+            database_password: "pw".to_string(),
+            database_port: 5432,
+            database_user: "postgres".to_string(),
+        };
+        assert_eq!(expected_not_in_docker, ConfigArgs::new());
+        std::env::set_var("IS_DOCKER_RUNNING", "true");
+        assert_eq!(expected_in_docker, ConfigArgs::new());
+    }
 }

@@ -1,0 +1,6 @@
+database_host = "172.20.0.5"
+database_name = "contacts"
+database_password = "pw"
+database_port = 5432
+database_user = "postgres"
+

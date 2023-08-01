@@ -47,7 +47,9 @@ enum Format {
 async fn main() {
     let cli = Cli::parse();
     if let Some(id) = cli.id {
-        let url = format!("http://localhost:3030/contacts/{id}", id = id);
+        // TODO create config file
+        //let url = format!("http://localhost:3030/contacts/{id}", id = id);
+        let url = format!("http://172.20.0.6:3030/contacts/{id}", id = id);
         let response = reqwest::get(url).await.unwrap();
         if response.status() != reqwest::StatusCode::OK {
             panic!("Unexpected error: {:?}", response);
@@ -65,7 +67,9 @@ async fn main() {
                 _ => false,
             };
             let url = format!(
-                "http://localhost:3030/contacts?query={query}",
+                // TODO create config file
+                //"http://localhost:3030/contacts?query={query}",
+                "http://172.20.0.6:3030/contacts?query={query}",
                 query = search_term
             );
             let response = reqwest::get(url).await.unwrap();

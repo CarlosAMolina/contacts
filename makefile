@@ -28,6 +28,8 @@ doc:
 run-server:
 	cd $(API_PATH_NAME) && cargo run &
 
+# TODO ip to variable
+# TODO try to use only one internal port for the api and db to use by the dockerized cli
 run-api-docker:
 	docker run \
 		--rm \
@@ -35,6 +37,7 @@ run-api-docker:
 		--name $(API_CONTAINER_NAME) \
 		-p$(API_PORT):$(API_PORT)\
 		--net=$(NETWORK_NAME) \
+		--ip=172.20.0.6 \
 		$(API_IMAGE_NAME)
 
 run-cli-docker:

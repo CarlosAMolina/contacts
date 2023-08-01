@@ -43,7 +43,8 @@ run-cli-docker:
 		--rm \
 		--name $(CLI_CONTAINER_NAME) \
 		--net=$(NETWORK_NAME) \
-		$(CLI_IMAGE_NAME) carlos a
+		$(CLI_IMAGE_NAME) \
+		carlos a
 
 stop-server:
 	pkill contacts

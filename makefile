@@ -16,16 +16,19 @@ build-api-docker:
 build-cli-docker:
 	cd $(CLI_PATH_NAME) && docker build -t $(CLI_IMAGE_NAME) .
 
-build-server-for-debian:
+build-api-for-debian:
 	cd $(API_PATH_NAME) && docker run --rm -v $(API_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
 build-cli-for-debian:
 	cd $(CLI_PATH_NAME) && docker run --rm -v $(CLI_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
+build: build-api-docker \
+	build-cli-docker
+
 doc:
 	cd $(API_PATH_NAME) && cargo doc && cargo doc --open
 
-run-server:
+run-api-cargo:
 	cd $(API_PATH_NAME) && cargo run &
 
 # TODO ip to variable
@@ -80,5 +83,15 @@ run-db:
 stop-db:
 	make -f $(ROOT_PATH_NAME)/makefile-db stop
 
+stop-api:
+	docker stop $(API_CONTAINER_NAME)
+
+test-cli:
+	cd cli && cargo test
+
 run: run-db \
-	run-api-docker
+	run-api-docker \
+	run-cli-docker
+
+stop: stop-db \
+	stop-api

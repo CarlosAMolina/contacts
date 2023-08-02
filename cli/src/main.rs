@@ -1,6 +1,34 @@
-use clap::{Parser, ValueEnum};
+use config::Config;
 use reqwest;
+use clap::{Parser, ValueEnum};
 use serde::Deserialize;
+
+
+#[derive(Debug, serde::Deserialize, PartialEq)]
+pub struct ConfigArgs {
+    api_host: String,
+    api_port: u16,
+}
+
+impl ConfigArgs {
+    pub fn new() -> ConfigArgs {
+        let is_app_in_docker = std::env::var("IS_DOCKER_RUNNING")
+            .ok()
+            .map(|val| val.parse::<bool>())
+            .unwrap_or(Ok(false))
+            .unwrap();
+        let config_file_name = match is_app_in_docker {
+            true => "setup-docker.toml",
+            false => "setup-local.toml",
+        };
+        let config = Config::builder()
+            .add_source(config::File::with_name(config_file_name))
+            .build()
+            .unwrap();
+        config.try_deserialize::<ConfigArgs>().unwrap()
+    }
+}
+
 
 #[derive(Debug, Deserialize)]
 struct Contact {
@@ -46,10 +74,12 @@ enum Format {
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
+    let config = ConfigArgs::new();
     if let Some(id) = cli.id {
-        // TODO create config file
-        //let url = format!("http://localhost:3030/contacts/{id}", id = id);
-        let url = format!("http://172.20.0.6:3030/contacts/{id}", id = id);
+        let url = format!("http://{host}:{port}/contacts/{id}",
+                          host = config.api_host,
+                          port = config.api_port,
+                          id = id);
         let response = reqwest::get(url).await.unwrap();
         if response.status() != reqwest::StatusCode::OK {
             panic!("Unexpected error: {:?}", response);
@@ -67,9 +97,9 @@ async fn main() {
                 _ => false,
             };
             let url = format!(
-                // TODO create config file
-                //"http://localhost:3030/contacts?query={query}",
-                "http://172.20.0.6:3030/contacts?query={query}",
+                "http://{host}:{port}/contacts?query={query}",
+                host = config.api_host,
+                port = config.api_port,
                 query = search_term
             );
             let response = reqwest::get(url).await.unwrap();
@@ -137,5 +167,28 @@ fn print_contact_all(contact: Contact) {
 fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
     if let Some(value) = option {
         println!("{}: {}", prefix_text, value);
+    }
+}
+
+
+#[cfg(test)]
+mod config_tests {
+    use super::*;
+
+    // As Rust runs test in parallel, we run two tests in the same function
+    // in order to not affect each test when env variables are modified.
+    #[test]
+    fn config_files_are_detected_correctly() {
+        let expected_not_in_docker = ConfigArgs {
+            api_host: "localhost".to_string(),
+            api_port: 3030,
+        };
+        let expected_in_docker = ConfigArgs {
+            api_host: "172.20.0.6".to_string(),
+            api_port: 3030,
+        };
+        assert_eq!(expected_not_in_docker, ConfigArgs::new());
+        std::env::set_var("IS_DOCKER_RUNNING", "true");
+        assert_eq!(expected_in_docker, ConfigArgs::new());
     }
 }

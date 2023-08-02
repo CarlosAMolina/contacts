@@ -19,6 +19,8 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 # Final image.
 FROM alpine:3.17.3
 WORKDIR /app
+COPY --from=builder /app/setup-docker.toml /app/
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/cli /app/
+ENV IS_DOCKER_RUNNING=true
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["./cli"]

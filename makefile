@@ -6,9 +6,11 @@ CLI_PATH_NAME=$(ROOT_PATH_NAME)/$(CLI_FOLDER_NAME)
 API_PORT=3030
 API_IMAGE_NAME=contacts-api
 API_CONTAINER_NAME=$(API_IMAGE_NAME)-container
+API_CONTAINER_IP=172.20.0.6
 CLI_IMAGE_NAME=contacts-cli
 CLI_CONTAINER_NAME=$(CLI_IMAGE_NAME)-container
 NETWORK_NAME=contacts-network
+
 
 build-api-docker:
 	cd $(API_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
@@ -44,7 +46,7 @@ run-api-docker:
 		--name $(API_CONTAINER_NAME) \
 		-p$(API_PORT):$(API_PORT)\
 		--net=$(NETWORK_NAME) \
-		--ip=172.20.0.6 \
+		--ip=$(API_CONTAINER_IP) \
 		$(API_IMAGE_NAME)
 
 run-cli-docker:

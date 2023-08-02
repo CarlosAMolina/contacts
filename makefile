@@ -21,11 +21,11 @@ build-cli-docker:
 build-api-for-debian:
 	cd $(API_PATH_NAME) && docker run --rm -v $(API_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
+# TODO use rust:1.69.0-slim-buster
 build-cli-for-debian:
 	cd $(CLI_PATH_NAME) && docker run --rm -v $(CLI_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
-
-build: build-api-docker \
-	build-cli-docker
+	cp $(CLI_PATH_NAME)/target/release/cli $(CLI_PATH_NAME)
+	rm -rf $(CLI_PATH_NAME)/target
 
 doc:
 	cd $(API_PATH_NAME) && cargo doc && cargo doc --open
@@ -33,12 +33,7 @@ doc:
 run-api-cargo:
 	cd $(API_PATH_NAME) && cargo run &
 
-run-cli-cargo:
-	#curl "localhost:$(API_PORT)/contacts/86"
-	cd $(CLI_PATH_NAME) && cargo run
-
-# TODO ip to variable
-# TODO try to use only one internal port for the api and db to use by the dockerized cli
+# TODO try to use only one internal port for the db to use by the api
 run-api-docker:
 	docker run \
 		--rm \
@@ -58,7 +53,7 @@ run-cli-docker:
 		$(CLI_IMAGE_NAME) \
 		carlos a
 
-stop-server:
+stop-api-cargo:
 	pkill contacts
 
 call-return-error:
@@ -89,15 +84,24 @@ run-db:
 stop-db:
 	make -f $(ROOT_PATH_NAME)/makefile-db stop
 
-stop-api:
+stop-api-docker:
 	docker stop $(API_CONTAINER_NAME)
 
 test-cli:
 	cd $(CLI_PATH_NAME) && cargo test
 
+run-cli-binary:
+	cd $(CLI_PATH_NAME) && ./cli carlos a
+
+build: build-api-docker \
+	build-cli-for-debian
+
 run: run-db \
 	run-api-docker \
-	run-cli-docker
+	run-cli-binary
+
+deploy: build \
+    run
 
 stop: stop-db \
-	stop-api
+	stop-api-docker

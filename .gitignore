@@ -3,6 +3,9 @@ contact.html
 contacts.csv
 contacts/images/*.jpg
 
+# Binaries
+cli/cli
+
 # Rust
 target/
 

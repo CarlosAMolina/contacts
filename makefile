@@ -31,6 +31,10 @@ doc:
 run-api-cargo:
 	cd $(API_PATH_NAME) && cargo run &
 
+run-cli-cargo:
+	#curl "localhost:$(API_PORT)/contacts/86"
+	cd $(CLI_PATH_NAME) && cargo run
+
 # TODO ip to variable
 # TODO try to use only one internal port for the api and db to use by the dockerized cli
 run-api-docker:
@@ -65,14 +69,14 @@ call-return-error:
 
 get-contact-by-id:
 	#curl "localhost:$(API_PORT)/contacts/86"
-	cd cli && cargo run -- --id 86
+	cd $(CLI_PATH_NAME) && cargo run -- --id 86
 
 get-contacts-all:
 	curl "localhost:$(API_PORT)/contacts"
 
 get-contacts-query:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
-	cd cli && cargo run -- arlos a
+	cd $(CLI_PATH_NAME) && cargo run -- arlos a
 
 get-contacts-paginated:
 	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
@@ -87,7 +91,7 @@ stop-api:
 	docker stop $(API_CONTAINER_NAME)
 
 test-cli:
-	cd cli && cargo test
+	cd $(CLI_PATH_NAME) && cargo test
 
 run: run-db \
 	run-api-docker \

@@ -15,17 +15,13 @@ NETWORK_NAME=contacts-network
 build-api-docker:
 	cd $(API_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
 
-build-cli-docker:
-	cd $(CLI_PATH_NAME) && docker build -t $(CLI_IMAGE_NAME) .
-
 build-api-for-debian:
 	cd $(API_PATH_NAME) && docker run --rm -v $(API_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
 
-# TODO use rust:1.69.0-slim-buster
 build-cli-for-debian:
-	cd $(CLI_PATH_NAME) && docker run --rm -v $(CLI_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
-	cp $(CLI_PATH_NAME)/target/release/cli $(CLI_PATH_NAME)
-	rm -rf $(CLI_PATH_NAME)/target
+	cd $(CLI_PATH_NAME) && docker build -t $(CLI_IMAGE_NAME) .
+	# https://stackoverflow.com/questions/25292198/docker-how-can-i-copy-a-file-from-an-image-to-a-host
+	cd $(CLI_PATH_NAME) && docker run --rm -v $(CLI_PATH_NAME):/opt/mount --entrypoint cp $(CLI_IMAGE_NAME) /app/cli /opt/mount/
 
 doc:
 	cd $(API_PATH_NAME) && cargo doc && cargo doc --open

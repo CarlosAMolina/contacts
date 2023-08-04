@@ -86,18 +86,28 @@ stop-api-docker:
 test-cli:
 	cd $(CLI_PATH_NAME) && cargo test
 
+wait-2-seconds:
+	sleep 2
+
 run-cli-binary:
 	cd $(CLI_PATH_NAME) && ./cli carlos a
+
+clean-unrequied-images:
+	docker image prune -f
+	#docker rmi $(shell docker images rust -aq)
 
 build: build-api-docker \
 	build-cli-for-debian
 
 run: run-db \
 	run-api-docker \
+	wait-2-seconds \
 	run-cli-binary
-
-deploy: build \
-    run
 
 stop: stop-db \
 	stop-api-docker
+
+deploy: stop \
+	build \
+	clean-unrequied-images \
+	run

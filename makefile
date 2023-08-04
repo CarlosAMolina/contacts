@@ -1,5 +1,5 @@
 ROOT_PATH_NAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-API_FOLDER_NAME=contacts
+API_FOLDER_NAME=api
 API_PATH_NAME=$(ROOT_PATH_NAME)/$(API_FOLDER_NAME)
 CLI_FOLDER_NAME=cli
 CLI_PATH_NAME=$(ROOT_PATH_NAME)/$(CLI_FOLDER_NAME)
@@ -50,7 +50,7 @@ run-cli-docker:
 		carlos a
 
 stop-api-cargo:
-	pkill contacts
+	pkill api
 
 call-return-error:
 	curl \

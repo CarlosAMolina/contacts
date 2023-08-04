@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
-pub struct Contact {
+pub struct AllData {
     pub user_id: UserId,
     pub user_name: Option<String>,
     pub user_surname: Option<String>,

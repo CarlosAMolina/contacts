@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
-use crate::types::contact::{Contact, UserId};
+use crate::types::contact::{AllData, UserId};
 use handle_errors::Error;
 use sqlx::postgres::{PgPool, PgPoolOptions, PgRow};
 use sqlx::{Postgres, Row};
@@ -23,10 +23,10 @@ impl Store {
         })
     }
 
-    pub async fn get_contacts_all(&self) -> Result<Vec<Contact>, Error> {
+    pub async fn get_contacts_all(&self) -> Result<Vec<AllData>, Error> {
         println!("Init get all data");
         match sqlx::query("SELECT * from contacts.all_data")
-            .map(|row: PgRow| Contact {
+            .map(|row: PgRow| AllData {
                 user_id: UserId(row.get("id")),
                 user_name: row.get("name"),
                 user_surname: row.get("surname"),
@@ -53,7 +53,7 @@ impl Store {
         }
     }
 
-    pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<Contact>, Error> {
+    pub async fn get_contacts_by_query(&self, query: &String) -> Result<Vec<AllData>, Error> {
         println!("Init get all data by query");
         let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
@@ -74,7 +74,7 @@ impl Store {
     ",
         )
         .bind(query)
-        .map(|row: PgRow| Contact {
+        .map(|row: PgRow| AllData {
             user_id: UserId(row.get("id")),
             user_name: row.get("name"),
             user_surname: row.get("surname"),
@@ -101,11 +101,11 @@ impl Store {
         }
     }
 
-    pub async fn get_contact_by_id(&self, id: i32) -> Result<Vec<Contact>, Error> {
+    pub async fn get_contact_by_id(&self, id: i32) -> Result<Vec<AllData>, Error> {
         println!("Init get contact by ID");
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
-            .map(|row: PgRow| Contact {
+            .map(|row: PgRow| AllData {
                 user_id: UserId(row.get("id")),
                 user_name: row.get("name"),
                 user_surname: row.get("surname"),

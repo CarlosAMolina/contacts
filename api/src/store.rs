@@ -58,8 +58,7 @@ impl Store {
         let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
             "SELECT * from contacts.all_data
-    WHERE LOWER(name) LIKE $1
-    OR LOWER(surname) LIKE $1
+    WHERE LOWER(CONCAT_WS(' ', name, surname)) LIKE $1
     OR LOWER(nickname) LIKE $1
     OR CAST(phone AS VARCHAR) LIKE $1
     OR LOWER(phone_description) LIKE $1

@@ -104,8 +104,8 @@ run: run-db \
 	wait-2-seconds \
 	run-cli-binary
 
-stop: stop-db \
-	stop-api-docker
+stop: stop-api-docker \
+	stop-db
 
 deploy: stop \
 	build \

@@ -14,7 +14,7 @@ pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply
 }
 
 // TODO not use clone
-// TODO create the vectors in a better way
+// TODO create the vectors in a better way: https://stackoverflow.com/questions/64819025/is-there-a-simple-way-remove-duplicate-elements-from-an-array
 fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Contact {
     let mut addresses = vec![];
     let mut categories = vec![];

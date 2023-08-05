@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
-use crate::types::contact::{AllData, UserId};
+use crate::types::contact::AllData;
 use handle_errors::Error;
 use sqlx::postgres::{PgPool, PgPoolOptions, PgRow};
 use sqlx::{Postgres, Row};
@@ -27,7 +27,7 @@ impl Store {
         println!("Init get all data");
         match sqlx::query("SELECT * from contacts.all_data")
             .map(|row: PgRow| AllData {
-                user_id: UserId(row.get("id")),
+                user_id: row.get("id"),
                 user_name: row.get("name"),
                 user_surname: row.get("surname"),
                 nickname: row.get("nickname"),
@@ -75,7 +75,7 @@ impl Store {
         )
         .bind(query)
         .map(|row: PgRow| AllData {
-            user_id: UserId(row.get("id")),
+            user_id: row.get("id"),
             user_name: row.get("name"),
             user_surname: row.get("surname"),
             nickname: row.get("nickname"),
@@ -106,7 +106,7 @@ impl Store {
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
             .map(|row: PgRow| AllData {
-                user_id: UserId(row.get("id")),
+                user_id: row.get("id"),
                 user_name: row.get("name"),
                 user_surname: row.get("surname"),
                 nickname: row.get("nickname"),

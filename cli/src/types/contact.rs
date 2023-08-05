@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AllData {
-    pub user_id: UserId,
+    pub user_id: i32,
     pub user_name: Option<String>,
     pub user_surname: Option<String>,
     pub nickname: Option<String>,
@@ -20,7 +20,7 @@ pub struct AllData {
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct Contact {
-    pub user_id: UserId,
+    pub user_id: i32,
     pub user_name: Option<String>,
     pub user_surname: Option<String>,
     pub nicknames: Vec<String>,
@@ -41,5 +41,3 @@ pub struct Phone {
     pub description: Option<String>,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
-pub struct UserId(pub i32);

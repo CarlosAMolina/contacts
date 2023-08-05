@@ -128,7 +128,7 @@ mod config_tests {
         // TODO test empty phone
         let all_data_vec = vec![
             contact::AllData {
-                user_id: contact::UserId(1),
+                user_id: 1,
                 user_name: Some("John".to_string()),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
@@ -145,7 +145,7 @@ mod config_tests {
             },
             // Empty phone
             contact::AllData {
-                user_id: contact::UserId(1),
+                user_id: 1,
                 user_name: Some("John".to_string()),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
@@ -162,7 +162,7 @@ mod config_tests {
             },
             // Empty phone descrition and twitter handle
             contact::AllData {
-                user_id: contact::UserId(1),
+                user_id: 1,
                 user_name: Some("John".to_string()),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
@@ -179,7 +179,7 @@ mod config_tests {
             },
         ];
         let expected = contact::Contact {
-            user_id: contact::UserId(1),
+            user_id: 1,
             user_name: Some("John".to_string()),
             user_surname: Some("Doe".to_string()),
             nicknames: vec![("Johnny".to_string())],

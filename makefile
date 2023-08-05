@@ -77,6 +77,7 @@ stop-api-docker:
 test-cli:
 	cd $(CLI_PATH_NAME) && cargo test
 
+# TODO do these test with the binary too and add them to the deploy section
 test-cli-run: get-contacts-query \
 	get-contacts-query-long-format \
 	get-contact-by-id

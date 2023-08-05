@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use std::println;
 
 use crate::store::Store;
-use crate::types::contact::{AllData, Contact, Phone};
+use crate::types::contact::{Contact, Phone};
+use crate::types::database::AllData;
 use crate::types::pagination::extract_pagination;
 
 pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply, warp::Rejection> {

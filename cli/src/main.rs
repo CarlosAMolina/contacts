@@ -87,70 +87,19 @@ async fn main() {
             if response.status() != reqwest::StatusCode::OK {
                 panic!("Unexpected error: {:?}", response);
             }
-            let all_data_vec= response.json::<Vec<AllData>>().await.unwrap();
+            let contacts = response.json::<Vec<Contact>>().await.unwrap();
             if is_long_format {
-                for all_data in all_data_vec{
-                    print_all_data_all(all_data);
+                for contact in contacts {
+                    print_contact(contact);
                 }
             } else {
-                for all_data in all_data_vec{
-                    print_all_data_summary(all_data);
+                for contact in contacts {
+                    print_contact_summary(contact);
                 }
             }
         }
     }
 }
-
-fn print_all_data_summary(all_data: AllData) {
-    let mut summary: String;
-    match all_data.phone {
-        Some(value) => {
-            summary = value.to_string();
-        }
-        None => summary = "".to_string(),
-    };
-    if let Some(value) = all_data.phone_description {
-        summary = format!("{} ({})", summary, value);
-    }
-    if let Some(value) = all_data.user_name {
-        summary = format!("{} {}", summary, value);
-    }
-    if let Some(value) = all_data.user_surname {
-        summary = format!("{} {}", summary, value);
-    }
-    if let Some(value) = all_data.nickname {
-        summary = format!("{}. {}", summary, value);
-    }
-    if let Some(value) = all_data.category {
-        summary = format!("{}. {}", summary, value);
-    }
-    summary = format!("{}. ID {:?}", summary, all_data.user_id);
-    println!("{}", summary);
-}
-
-fn print_all_data_all(all_data: AllData) {
-    println!("## User ID {:?}", all_data.user_id);
-    print_option_if_has_value(all_data.user_name, "name".to_string());
-    print_option_if_has_value(all_data.user_surname, "surname".to_string());
-    print_option_if_has_value(all_data.nickname, "nickname".to_string());
-    print_option_if_has_value(all_data.phone, "phone".to_string());
-    print_option_if_has_value(all_data.phone_description, "phone_description".to_string());
-    print_option_if_has_value(all_data.category, "category".to_string());
-    print_option_if_has_value(all_data.address, "address".to_string());
-    print_option_if_has_value(all_data.email, "email".to_string());
-    print_option_if_has_value(all_data.url, "url".to_string());
-    print_option_if_has_value(all_data.facebook_url, "facebook url".to_string());
-    print_option_if_has_value(all_data.twitter_handle, "twitter handle".to_string());
-    print_option_if_has_value(all_data.instagram_handle, "instagram handle".to_string());
-    print_option_if_has_value(all_data.note, "note".to_string());
-}
-
-fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
-    if let Some(value) = option {
-        println!("{}: {}", prefix_text, value);
-    }
-}
-
 
 fn print_contact(contact: Contact) {
     print_option_if_has_value(contact.user_name, "name".to_string());
@@ -166,6 +115,48 @@ fn print_contact(contact: Contact) {
     print_vector_if_not_empty(contact.instagram_handles, "instagram handles".to_string());
     print_option_if_has_value(contact.note, "note".to_string());
     println!("user ID: {:?}", contact.user_id);
+}
+
+fn print_contact_summary(contact: Contact) {
+    if contact.phones.is_empty() {
+        let summary = get_summary_without_phone_data(contact);
+        println!("{}", summary);
+    } else {
+        for phone in contact.phones {
+            let mut summary = format!("{}", phone.value);
+            if let Some(value) = phone.description {
+                summary = format!("{} ({})", summary, value);
+            }
+            let summary_without_phone = get_summary_without_phone_data(contact);
+            summary = format!("{} {}", summary, summary_without_phone);
+            println!("{}", summary);
+        }
+    }
+}
+
+fn get_summary_without_phone_data(contact: Contact) -> String {
+        let mut summary: String;
+        if let Some(value) = contact.user_name {
+            summary = format!("{} {}", summary, value);
+        }
+        if let Some(value) = contact.user_surname {
+            summary = format!("{} {}", summary, value);
+        }
+        if !contact.nicknames.is_empty() {
+            summary = format!("{}. {}", summary, contact.nicknames.join(","));
+        }
+        if !contact.categories.is_empty() {
+            summary = format!("{}. {}", summary, contact.categories.join(","));
+        }
+        summary = format!("{}. ID {:?}", summary, contact.user_id);
+        summary
+}
+
+
+fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
+    if let Some(value) = option {
+        println!("{}: {}", prefix_text, value);
+    }
 }
 
 fn print_vector_if_not_empty(array: Vec<String>, prefix_text: String) {

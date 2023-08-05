@@ -8,7 +8,9 @@ use crate::types::pagination::extract_pagination;
 
 pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply, warp::Rejection> {
     match store.get_all_data_by_id(id).await {
-        Ok(all_data) => Ok(warp::reply::json(&transformers::types::get_contact_from_all_data(all_data))),
+        Ok(all_data_vec) => Ok(warp::reply::json(
+            &transformers::types::get_contact_from_all_data(all_data_vec),
+        )),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
@@ -37,9 +39,10 @@ pub async fn get_contacts(
             .get_all_data_by_query(query)
             .await
         {
-            Ok(res) => Ok(warp::reply::json(&res)),
+            Ok(all_data_vec) => Ok(warp::reply::json(
+                &transformers::types::get_contacts_from_all_data(all_data_vec),
+            )),
             Err(e) => return Err(warp::reject::custom(e)),
         }
     }
 }
-

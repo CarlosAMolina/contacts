@@ -17,4 +17,3 @@ pub struct AllData {
     pub instagram_handle: Option<String>,
     pub note: Option<String>,
 }
-

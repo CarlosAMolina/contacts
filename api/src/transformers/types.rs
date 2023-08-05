@@ -1,6 +1,23 @@
 use crate::types::contact::{Contact, Phone};
 use crate::types::database::AllData;
 
+// TODO not use clone or cloned
+pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
+    let mut result = vec![];
+    let mut contact_ids: Vec<i32> = all_data_vec.iter().map(|row| row.user_id).collect();
+    contact_ids.dedup_by(|a, b| a == b);
+    for contact_id in contact_ids {
+        let contact_all_data: Vec<_> = all_data_vec
+            .iter()
+            .filter(|row| row.user_id == contact_id)
+            .cloned()
+            .collect();
+        let contact = get_contact_from_all_data(contact_all_data);
+        result.push(contact);
+    }
+    result
+}
+
 // TODO not use clone
 pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Contact {
     let mut all_data_phone_unique: Vec<_> = all_data_vec
@@ -160,6 +177,107 @@ mod config_tests {
             note: Some("Foo bar".to_string()),
         };
         let result = get_contact_from_all_data(all_data_vec);
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn get_contacts_from_all_data_manages_runs_ok() {
+        // TODO test empty phone
+        let all_data_vec = vec![
+            AllData {
+                user_id: 1,
+                user_name: Some("John".to_string()),
+                user_surname: Some("Doe".to_string()),
+                nickname: Some("Johnny".to_string()),
+                phone: Some(666666666),
+                phone_description: Some("Work".to_string()),
+                category: Some("Friends".to_string()),
+                address: Some("C/ 123".to_string()),
+                email: Some("john@doe.com".to_string()),
+                url: Some("john.com".to_string()),
+                facebook_url: Some("facebook/John".to_string()),
+                twitter_handle: Some("JohnT".to_string()),
+                instagram_handle: Some("JohnI".to_string()),
+                note: Some("Foo bar".to_string()),
+            },
+            // Empty phone
+            AllData {
+                user_id: 1,
+                user_name: Some("John".to_string()),
+                user_surname: Some("Doe".to_string()),
+                nickname: Some("Johnny".to_string()),
+                phone: None,
+                phone_description: None,
+                category: Some("Friends".to_string()),
+                address: Some("C/ 123".to_string()),
+                email: Some("john@doe.com".to_string()),
+                url: Some("john.com".to_string()),
+                facebook_url: Some("facebook/John2".to_string()),
+                twitter_handle: Some("JohnT".to_string()),
+                instagram_handle: Some("JohnI".to_string()),
+                note: Some("Foo bar".to_string()),
+            },
+            // Empty phone descrition and twitter handle
+            AllData {
+                user_id: 2,
+                user_name: Some("Jane".to_string()),
+                user_surname: Some("Doe".to_string()),
+                nickname: Some("Ja".to_string()),
+                phone: Some(666666661),
+                phone_description: None,
+                category: Some("Work".to_string()),
+                address: Some("C/ 12".to_string()),
+                email: Some("jane@doe.com".to_string()),
+                url: Some("jane.com".to_string()),
+                facebook_url: Some("facebook/Jane".to_string()),
+                twitter_handle: Some("JaneT".to_string()),
+                instagram_handle: Some("JaneI".to_string()),
+                note: Some("Foo bar 2".to_string()),
+            },
+        ];
+        let expected = vec![
+            Contact {
+                user_id: 1,
+                user_name: Some("John".to_string()),
+                user_surname: Some("Doe".to_string()),
+                nicknames: vec![("Johnny".to_string())],
+                phones: vec![
+                    Phone {
+                        value: 666666666,
+                        description: Some("Work".to_string()),
+                    }
+                ],
+                categories: vec!["Friends".to_string()],
+                addresses: vec!["C/ 123".to_string()],
+                emails: vec!["john@doe.com".to_string()],
+                urls: vec!["john.com".to_string()],
+                facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
+                twitter_handles: vec!["JohnT".to_string()],
+                instagram_handles: vec!["JohnI".to_string()],
+                note: Some("Foo bar".to_string()),
+            },
+            Contact {
+                user_id: 2,
+                user_name: Some("Jane".to_string()),
+                user_surname: Some("Doe".to_string()),
+                nicknames: vec![("Ja".to_string())],
+                phones: vec![
+                    Phone {
+                        value: 666666661,
+                        description: None,
+                    },
+                ],
+                categories: vec!["Work".to_string()],
+                addresses: vec!["C/ 12".to_string()],
+                emails: vec!["jane@doe.com".to_string()],
+                urls: vec!["jane.com".to_string()],
+                facebook_urls: vec!["facebook/Jane".to_string()],
+                twitter_handles: vec!["JaneT".to_string()],
+                instagram_handles: vec!["JaneI".to_string()],
+                note: Some("Foo bar 2".to_string()),
+            },
+        ];
+        let result = get_contacts_from_all_data(all_data_vec);
         assert_eq!(expected, result);
     }
 }

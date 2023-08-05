@@ -34,14 +34,14 @@ fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Contact {
     let user_name = all_data_vec[0].user_name.clone();
     let user_surname = all_data_vec[0].user_surname.clone();
     for all_data in all_data_vec.iter().cloned() {
-        if let Some(value) = all_data.address  { if !addresses.contains(&value) {addresses.push(value);}}
-        if let Some(value) = all_data.category { if !categories.contains(&value) {categories.push(value); }}
-        if let Some(value) = all_data.email    { if !emails.contains(&value) {emails.push(value); }}
-        if let Some(value) = all_data.facebook_url { if !facebook_urls.contains(&value) {facebook_urls.push(value); }}
-        if let Some(value) = all_data.instagram_handle { if !instagram_handles.contains(&value) {instagram_handles.push(value); }}
-        if let Some(value) = all_data.nickname { if !nicknames.contains(&value) {nicknames.push(value); }}
-        if let Some(value) = all_data.twitter_handle { if !twitter_handles.contains(&value) {twitter_handles.push(value); }}
-        if let Some(value) = all_data.url { if !urls.contains(&value) {urls.push(value); }}
+        if let Some(value) = all_data.address  { push_to_vector_if_new(&mut addresses, value);}
+        if let Some(value) = all_data.category { push_to_vector_if_new(&mut categories, value);}
+        if let Some(value) = all_data.email    { push_to_vector_if_new(&mut emails, value);}
+        if let Some(value) = all_data.facebook_url { push_to_vector_if_new(&mut facebook_urls, value);}
+        if let Some(value) = all_data.instagram_handle { push_to_vector_if_new(&mut instagram_handles, value);}
+        if let Some(value) = all_data.nickname { push_to_vector_if_new(&mut nicknames, value);}
+        if let Some(value) = all_data.twitter_handle { push_to_vector_if_new(&mut twitter_handles, value);}
+        if let Some(value) = all_data.url { push_to_vector_if_new(&mut urls, value);}
     }
     Contact {
         user_id,
@@ -57,6 +57,12 @@ fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Contact {
         twitter_handles,
         instagram_handles,
         note,
+    }
+}
+
+fn push_to_vector_if_new(array: &mut Vec<String>, value: String) {
+    if !array.contains(&value) {
+        array.push(value);
     }
 }
 

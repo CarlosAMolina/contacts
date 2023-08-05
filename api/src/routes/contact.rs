@@ -136,7 +136,7 @@ mod config_tests {
                 instagram_handle: Some("JohnI".to_string()),
                 note: Some("Foo bar".to_string()),
             },
-            // Empty phone descrition
+            // Empty phone descrition and twitter handle
             contact::AllData {
                 user_id: contact::UserId(1),
                 user_name: Some("John".to_string()),
@@ -148,8 +148,8 @@ mod config_tests {
                 address: Some("C/ 123".to_string()),
                 email: Some("john@doe.com".to_string()),
                 url: Some("john.com".to_string()),
-                facebook_url: Some("facebook/John".to_string()),
-                twitter_handle: Some("JohnT".to_string()),
+                facebook_url: Some("facebook/John2".to_string()),
+                twitter_handle: None,
                 instagram_handle: Some("JohnI".to_string()),
                 note: Some("Foo bar".to_string()),
             }
@@ -167,7 +167,7 @@ mod config_tests {
             addresses: vec!["C/ 123".to_string()],
             emails: vec!["john@doe.com".to_string()],
             urls: vec!["john.com".to_string()],
-            facebook_urls: vec!["facebook/John".to_string()],
+            facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
             twitter_handles: vec!["JohnT".to_string()],
             instagram_handles: vec!["JohnI".to_string()],
             note: Some("Foo bar".to_string()),

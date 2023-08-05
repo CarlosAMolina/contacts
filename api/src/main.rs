@@ -7,6 +7,7 @@ use handle_errors::return_error;
 
 mod routes;
 mod store;
+mod transformers;
 mod types;
 
 #[derive(Debug, serde::Deserialize, PartialEq)]

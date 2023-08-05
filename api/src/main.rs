@@ -101,6 +101,7 @@ async fn main() {
         .with(log)
         .recover(return_error);
 
+    // TODO use config file instead of 3030
     warp::serve(routes).run((config.api_host, 3030)).await;
 }
 

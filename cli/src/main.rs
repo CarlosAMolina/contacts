@@ -1,7 +1,11 @@
 use config::Config;
 use reqwest;
 use clap::{Parser, ValueEnum};
-use serde::Deserialize;
+use serde;
+
+mod types;
+
+use crate::types::contact::{AllData, Contact, Phone};
 
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
@@ -29,27 +33,6 @@ impl ConfigArgs {
     }
 }
 
-
-#[derive(Debug, Deserialize)]
-struct Contact {
-    pub user_id: UserId,
-    pub user_name: Option<String>,
-    pub user_surname: Option<String>,
-    pub nickname: Option<String>,
-    pub phone: Option<i64>,
-    pub phone_description: Option<String>,
-    pub category: Option<String>,
-    pub address: Option<String>,
-    pub email: Option<String>,
-    pub url: Option<String>,
-    pub facebook_url: Option<String>,
-    pub twitter_handle: Option<String>,
-    pub instagram_handle: Option<String>,
-    pub note: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct UserId(pub i32);
 
 #[derive(Parser)]
 #[command(arg_required_else_help = true, version)]
@@ -84,10 +67,8 @@ async fn main() {
         if response.status() != reqwest::StatusCode::OK {
             panic!("Unexpected error: {:?}", response);
         }
-        let contacts = response.json::<Vec<Contact>>().await.unwrap();
-        for contact in contacts {
-            print_contact_all(contact);
-        }
+        let contact = response.json::<Contact>().await.unwrap();
+        print_contact(contact);
     } else {
         if let Some(search_term_vector) = &cli.search_term {
             let search_term = search_term_vector.join(" ");
@@ -106,67 +87,103 @@ async fn main() {
             if response.status() != reqwest::StatusCode::OK {
                 panic!("Unexpected error: {:?}", response);
             }
-            let contacts = response.json::<Vec<Contact>>().await.unwrap();
+            let all_data_vec= response.json::<Vec<AllData>>().await.unwrap();
             if is_long_format {
-                for contact in contacts {
-                    print_contact_all(contact);
+                for all_data in all_data_vec{
+                    print_all_data_all(all_data);
                 }
             } else {
-                for contact in contacts {
-                    print_contact_short(contact);
+                for all_data in all_data_vec{
+                    print_all_data_summary(all_data);
                 }
             }
         }
     }
 }
 
-fn print_contact_short(contact: Contact) {
+fn print_all_data_summary(all_data: AllData) {
     let mut summary: String;
-    match contact.phone {
+    match all_data.phone {
         Some(value) => {
             summary = value.to_string();
         }
         None => summary = "".to_string(),
     };
-    if let Some(value) = contact.phone_description {
+    if let Some(value) = all_data.phone_description {
         summary = format!("{} ({})", summary, value);
     }
-    if let Some(value) = contact.user_name {
+    if let Some(value) = all_data.user_name {
         summary = format!("{} {}", summary, value);
     }
-    if let Some(value) = contact.user_surname {
+    if let Some(value) = all_data.user_surname {
         summary = format!("{} {}", summary, value);
     }
-    if let Some(value) = contact.nickname {
+    if let Some(value) = all_data.nickname {
         summary = format!("{}. {}", summary, value);
     }
-    if let Some(value) = contact.category {
+    if let Some(value) = all_data.category {
         summary = format!("{}. {}", summary, value);
     }
-    summary = format!("{}. ID {:?}", summary, contact.user_id.0);
+    summary = format!("{}. ID {:?}", summary, all_data.user_id.0);
     println!("{}", summary);
 }
 
-fn print_contact_all(contact: Contact) {
-    println!("## User ID {:?}", contact.user_id.0);
-    print_option_if_has_value(contact.user_name, "name".to_string());
-    print_option_if_has_value(contact.user_surname, "surname".to_string());
-    print_option_if_has_value(contact.nickname, "nickname".to_string());
-    print_option_if_has_value(contact.phone, "phone".to_string());
-    print_option_if_has_value(contact.phone_description, "phone_description".to_string());
-    print_option_if_has_value(contact.category, "category".to_string());
-    print_option_if_has_value(contact.address, "address".to_string());
-    print_option_if_has_value(contact.email, "email".to_string());
-    print_option_if_has_value(contact.url, "url".to_string());
-    print_option_if_has_value(contact.facebook_url, "facebook url".to_string());
-    print_option_if_has_value(contact.twitter_handle, "twitter handle".to_string());
-    print_option_if_has_value(contact.instagram_handle, "instagram handle".to_string());
-    print_option_if_has_value(contact.note, "note".to_string());
+fn print_all_data_all(all_data: AllData) {
+    println!("## User ID {:?}", all_data.user_id.0);
+    print_option_if_has_value(all_data.user_name, "name".to_string());
+    print_option_if_has_value(all_data.user_surname, "surname".to_string());
+    print_option_if_has_value(all_data.nickname, "nickname".to_string());
+    print_option_if_has_value(all_data.phone, "phone".to_string());
+    print_option_if_has_value(all_data.phone_description, "phone_description".to_string());
+    print_option_if_has_value(all_data.category, "category".to_string());
+    print_option_if_has_value(all_data.address, "address".to_string());
+    print_option_if_has_value(all_data.email, "email".to_string());
+    print_option_if_has_value(all_data.url, "url".to_string());
+    print_option_if_has_value(all_data.facebook_url, "facebook url".to_string());
+    print_option_if_has_value(all_data.twitter_handle, "twitter handle".to_string());
+    print_option_if_has_value(all_data.instagram_handle, "instagram handle".to_string());
+    print_option_if_has_value(all_data.note, "note".to_string());
 }
 
 fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
     if let Some(value) = option {
         println!("{}: {}", prefix_text, value);
+    }
+}
+
+
+fn print_contact(contact: Contact) {
+    println!("## User ID {:?}", contact.user_id.0);
+    print_option_if_has_value(contact.user_name, "name".to_string());
+    print_option_if_has_value(contact.user_surname, "surname".to_string());
+    print_vector_if_not_empty(contact.nicknames, "nicknames".to_string());
+    print_phones_if_not_empty(contact.phones);
+    print_vector_if_not_empty(contact.categories, "categories".to_string());
+    print_vector_if_not_empty(contact.addresses, "addresses".to_string());
+    print_vector_if_not_empty(contact.emails, "emails".to_string());
+    print_vector_if_not_empty(contact.urls, "urls".to_string());
+    print_vector_if_not_empty(contact.facebook_urls, "facebook urls".to_string());
+    print_vector_if_not_empty(contact.twitter_handles, "twitter handles".to_string());
+    print_vector_if_not_empty(contact.instagram_handles, "instagram handles".to_string());
+    print_option_if_has_value(contact.note, "note".to_string());
+}
+
+fn print_vector_if_not_empty(array: Vec<String>, prefix_text: String) {
+    if !array.is_empty() {
+        println!("{}: {}", prefix_text, array.join(", "));
+    }
+}
+
+fn print_phones_if_not_empty(phones: Vec<Phone>) {
+    if !phones.is_empty() {
+        println!("phones:");
+        for phone in phones {
+            if let Some(description) = phone.description {
+                println!("  {:?} ({})", phone.value, description);
+            } else {
+                println!("{}", phone.value);
+            }
+        }
     }
 }
 

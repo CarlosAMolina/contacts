@@ -58,6 +58,10 @@ get-contacts-query:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
 	cd $(CLI_PATH_NAME) && cargo run -- arlos a
 
+get-contacts-query-long-format:
+	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
+	cd $(CLI_PATH_NAME) && cargo run -- arlos a -f long
+
 get-contacts-paginated:
 	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
 
@@ -72,6 +76,10 @@ stop-api-docker:
 
 test-cli:
 	cd $(CLI_PATH_NAME) && cargo test
+
+test-cli-run: get-contacts-query \
+	get-contacts-query-long-format \
+	get-contact-by-id
 
 wait-2-seconds:
 	sleep 2

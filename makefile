@@ -12,15 +12,11 @@ CLI_CONTAINER_NAME=$(CLI_IMAGE_NAME)-container
 NETWORK_NAME=contacts-network
 
 
-build-api-docker:
+build-api-docker-image:
 	cd $(API_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
 
-build-api-for-debian:
-	cd $(API_PATH_NAME) && docker run --rm -v $(API_PATH_NAME):/usr/src/myapp -w /usr/src/myapp rust cargo build --release
-
-build-cli-for-debian:
+build-cli-debian-binary:
 	docker build -t $(CLI_IMAGE_NAME) $(CLI_PATH_NAME)
-	# https://stackoverflow.com/questions/25292198/docker-how-can-i-copy-a-file-from-an-image-to-a-host
 	docker run --rm -v $(CLI_PATH_NAME):/opt/mount --entrypoint cp $(CLI_IMAGE_NAME) /app/cli /opt/mount/
 
 doc:
@@ -39,15 +35,6 @@ run-api-docker:
 		--net=$(NETWORK_NAME) \
 		--ip=$(API_CONTAINER_IP) \
 		$(API_IMAGE_NAME)
-
-run-cli-docker:
-	docker run \
-		-it \
-		--rm \
-		--name $(CLI_CONTAINER_NAME) \
-		--net=$(NETWORK_NAME) \
-		$(CLI_IMAGE_NAME) \
-		carlos a
 
 stop-api-cargo:
 	pkill api
@@ -96,8 +83,8 @@ clean-unrequied-images:
 	docker image prune -f
 	#docker rmi $(shell docker images rust -aq)
 
-build: build-api-docker \
-	build-cli-for-debian
+build: build-api-docker-image \
+	build-cli-debian-binary
 
 run: run-db \
 	run-api-docker \

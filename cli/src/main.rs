@@ -124,12 +124,12 @@ fn print_all_data_summary(all_data: AllData) {
     if let Some(value) = all_data.category {
         summary = format!("{}. {}", summary, value);
     }
-    summary = format!("{}. ID {:?}", summary, all_data.user_id.0);
+    summary = format!("{}. ID {:?}", summary, all_data.user_id);
     println!("{}", summary);
 }
 
 fn print_all_data_all(all_data: AllData) {
-    println!("## User ID {:?}", all_data.user_id.0);
+    println!("## User ID {:?}", all_data.user_id);
     print_option_if_has_value(all_data.user_name, "name".to_string());
     print_option_if_has_value(all_data.user_surname, "surname".to_string());
     print_option_if_has_value(all_data.nickname, "nickname".to_string());
@@ -165,7 +165,7 @@ fn print_contact(contact: Contact) {
     print_vector_if_not_empty(contact.twitter_handles, "twitter handles".to_string());
     print_vector_if_not_empty(contact.instagram_handles, "instagram handles".to_string());
     print_option_if_has_value(contact.note, "note".to_string());
-    println!("user ID: {:?}", contact.user_id.0);
+    println!("user ID: {:?}", contact.user_id);
 }
 
 fn print_vector_if_not_empty(array: Vec<String>, prefix_text: String) {

@@ -1,6 +1,6 @@
 ROOT_PATH_NAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 API_FOLDER_NAME=api
-API_ROOT_PATH_NAME=$(ROOT_PATH_NAME)/$(API_FOLDER_NAME)
+API_ROOT_FOLDER_PATH_NAME=$(ROOT_PATH_NAME)/$(API_FOLDER_NAME)
 CLI_BINARY_NAME=cli
 CLI_FOLDER_NAME=cli
 CLI_ROOT_FOLDER_PATH_NAME=$(ROOT_PATH_NAME)/$(CLI_FOLDER_NAME)
@@ -14,17 +14,17 @@ NETWORK_NAME=contacts-network
 
 
 build-api-docker-image:
-	cd $(API_ROOT_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
+	cd $(API_ROOT_FOLDER_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
 
 build-cli-debian-binary:
 	docker build -t $(CLI_IMAGE_NAME) $(CLI_ROOT_FOLDER_PATH_NAME)
 	docker run --rm -v $(CLI_ROOT_FOLDER_PATH_NAME):/opt/mount --entrypoint cp $(CLI_IMAGE_NAME) /app/cli /opt/mount/
 
 doc:
-	cd $(API_ROOT_PATH_NAME) && cargo doc && cargo doc --open
+	cd $(API_ROOT_FOLDER_PATH_NAME) && cargo doc && cargo doc --open
 
 run-api-cargo:
-	cd $(API_ROOT_PATH_NAME) && cargo run &
+	cd $(API_ROOT_FOLDER_PATH_NAME) && cargo run &
 
 # TODO try to use only one internal port for the db to use by the api
 run-api-docker:
@@ -79,6 +79,9 @@ stop-db:
 stop-api-docker:
 	docker stop $(API_CONTAINER_NAME)
 
+test-api:
+	cd $(API_ROOT_FOLDER_PATH_NAME) && cargo test
+
 test-cli:
 	cd $(CLI_ROOT_FOLDER_PATH_NAME) && cargo test
 
@@ -108,3 +111,6 @@ deploy: stop \
 	build \
 	clean-unrequied-images \
 	run
+
+test: test-api \
+	test-cli

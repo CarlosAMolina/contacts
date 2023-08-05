@@ -1,8 +1,9 @@
 ROOT_PATH_NAME=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 API_FOLDER_NAME=api
 API_PATH_NAME=$(ROOT_PATH_NAME)/$(API_FOLDER_NAME)
+CLI_BINARY_NAME=cli
 CLI_FOLDER_NAME=cli
-CLI_PATH_NAME=$(ROOT_PATH_NAME)/$(CLI_FOLDER_NAME)
+CLI_MAIN_FOLDER_PATH_NAME=$(ROOT_PATH_NAME)/$(CLI_FOLDER_NAME)
 API_PORT=3030
 API_IMAGE_NAME=contacts-api
 API_CONTAINER_NAME=$(API_IMAGE_NAME)-container
@@ -16,8 +17,8 @@ build-api-docker-image:
 	cd $(API_PATH_NAME) && docker build -t $(API_IMAGE_NAME) .
 
 build-cli-debian-binary:
-	docker build -t $(CLI_IMAGE_NAME) $(CLI_PATH_NAME)
-	docker run --rm -v $(CLI_PATH_NAME):/opt/mount --entrypoint cp $(CLI_IMAGE_NAME) /app/cli /opt/mount/
+	docker build -t $(CLI_IMAGE_NAME) $(CLI_MAIN_FOLDER_PATH_NAME)
+	docker run --rm -v $(CLI_MAIN_FOLDER_PATH_NAME):/opt/mount --entrypoint cp $(CLI_IMAGE_NAME) /app/cli /opt/mount/
 
 doc:
 	cd $(API_PATH_NAME) && cargo doc && cargo doc --open
@@ -47,20 +48,24 @@ call-return-error:
 		-H "Origin: https://not-origin.io" \
 		-verbose
 
-get-contact-by-id:
-	#curl "localhost:$(API_PORT)/contacts/86"
-	cd $(CLI_PATH_NAME) && cargo run -- --id 86
-
 get-contacts-all:
 	curl "localhost:$(API_PORT)/contacts"
 
 get-contacts-query:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
-	cd $(CLI_PATH_NAME) && cargo run -- arlos a
+	#cd $(CLI_MAIN_FOLDER_PATH_NAME) && cargo run -- arlos a
+	cd $(CLI_MAIN_FOLDER_PATH_NAME) && ./$(CLI_BINARY_NAME) arlos a
 
 get-contacts-query-long-format:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
-	cd $(CLI_PATH_NAME) && cargo run -- arlos a -f long
+	#cd $(CLI_MAIN_FOLDER_PATH_NAME) && cargo run -- arlos a -f long
+	cd $(CLI_MAIN_FOLDER_PATH_NAME) && ./$(CLI_BINARY_NAME) arlos a -f long
+
+get-contact-by-id:
+	#curl "localhost:$(API_PORT)/contacts/86"
+	#cd $(CLI_MAIN_FOLDER_PATH_NAME) && cargo run -- --id 86
+	cd $(CLI_MAIN_FOLDER_PATH_NAME) && ./$(CLI_BINARY_NAME) --id 86
+
 
 get-contacts-paginated:
 	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
@@ -75,18 +80,14 @@ stop-api-docker:
 	docker stop $(API_CONTAINER_NAME)
 
 test-cli:
-	cd $(CLI_PATH_NAME) && cargo test
-
-# TODO do these test with the binary too and add them to the deploy section
-test-cli-run: get-contacts-query \
-	get-contacts-query-long-format \
-	get-contact-by-id
+	cd $(CLI_MAIN_FOLDER_PATH_NAME) && cargo test
 
 wait-2-seconds:
 	sleep 2
 
-run-cli-binary:
-	cd $(CLI_PATH_NAME) && ./cli carlos a
+run-cli-binary: get-contacts-query \
+	get-contacts-query-long-format \
+	get-contact-by-id
 
 clean-unrequied-images:
 	docker image prune -f

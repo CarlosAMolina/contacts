@@ -153,7 +153,6 @@ fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_tex
 
 
 fn print_contact(contact: Contact) {
-    println!("## User ID {:?}", contact.user_id.0);
     print_option_if_has_value(contact.user_name, "name".to_string());
     print_option_if_has_value(contact.user_surname, "surname".to_string());
     print_vector_if_not_empty(contact.nicknames, "nicknames".to_string());
@@ -166,6 +165,7 @@ fn print_contact(contact: Contact) {
     print_vector_if_not_empty(contact.twitter_handles, "twitter handles".to_string());
     print_vector_if_not_empty(contact.instagram_handles, "instagram handles".to_string());
     print_option_if_has_value(contact.note, "note".to_string());
+    println!("user ID: {:?}", contact.user_id.0);
 }
 
 fn print_vector_if_not_empty(array: Vec<String>, prefix_text: String) {
@@ -181,7 +181,7 @@ fn print_phones_if_not_empty(phones: Vec<Phone>) {
             if let Some(description) = phone.description {
                 println!("  {:?} ({})", phone.value, description);
             } else {
-                println!("{}", phone.value);
+                println!("  {}", phone.value);
             }
         }
     }

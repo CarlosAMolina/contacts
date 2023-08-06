@@ -23,38 +23,8 @@ impl Store {
         })
     }
 
-    pub async fn get_all_data(&self) -> Result<Vec<AllData>, Error> {
-        println!("Init get all data");
-        match sqlx::query("SELECT * from contacts.all_data")
-            .map(|row: PgRow| AllData {
-                user_id: row.get("id"),
-                user_name: row.get("name"),
-                user_surname: row.get("surname"),
-                nickname: row.get("nickname"),
-                phone: row.get("phone"),
-                phone_description: row.get("phone_description"),
-                category: row.get("category"),
-                address: row.get("address"),
-                email: row.get("email"),
-                url: row.get("url"),
-                facebook_url: row.get("facebook_url"),
-                twitter_handle: row.get("twitter_handle"),
-                instagram_handle: row.get("instagram_handle"),
-                note: row.get("note"),
-            })
-            .fetch_all(&self.connection)
-            .await
-        {
-            Ok(all_data) => Ok(all_data),
-            Err(error) => {
-                // TODO tracing::event!(tracing::Level::ERROR, "{:?}", error);
-                Err(Error::DatabaseQueryError(error))
-            }
-        }
-    }
-
     pub async fn get_all_data_by_query(&self, query: &String) -> Result<Vec<AllData>, Error> {
-        println!("Init get all data by query");
+        log::info!("Init get all data by query");
         let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
             "SELECT * from contacts.all_data
@@ -102,7 +72,7 @@ impl Store {
     }
 
     pub async fn get_all_data_by_id(&self, id: i32) -> Result<Vec<AllData>, Error> {
-        println!("Init get all data by ID");
+        log::info!("Init get all data by ID");
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
             .map(|row: PgRow| AllData {

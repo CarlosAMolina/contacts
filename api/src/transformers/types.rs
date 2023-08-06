@@ -241,12 +241,10 @@ mod config_tests {
                 user_name: Some("John".to_string()),
                 user_surname: Some("Doe".to_string()),
                 nicknames: vec![("Johnny".to_string())],
-                phones: vec![
-                    Phone {
-                        value: 666666666,
-                        description: Some("Work".to_string()),
-                    }
-                ],
+                phones: vec![Phone {
+                    value: 666666666,
+                    description: Some("Work".to_string()),
+                }],
                 categories: vec!["Friends".to_string()],
                 addresses: vec!["C/ 123".to_string()],
                 emails: vec!["john@doe.com".to_string()],
@@ -261,12 +259,10 @@ mod config_tests {
                 user_name: Some("Jane".to_string()),
                 user_surname: Some("Doe".to_string()),
                 nicknames: vec![("Ja".to_string())],
-                phones: vec![
-                    Phone {
-                        value: 666666661,
-                        description: None,
-                    },
-                ],
+                phones: vec![Phone {
+                    value: 666666661,
+                    description: None,
+                }],
                 categories: vec!["Work".to_string()],
                 addresses: vec!["C/ 12".to_string()],
                 emails: vec!["jane@doe.com".to_string()],

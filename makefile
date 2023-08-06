@@ -48,8 +48,13 @@ call-return-error:
 		-H "Origin: https://not-origin.io" \
 		-verbose
 
-get-contacts-all:
-	curl "localhost:$(API_PORT)/contacts"
+# TODO implement
+#get-contacts-all:
+#	curl "localhost:$(API_PORT)/contacts"
+#
+# TODO implement
+#get-contacts-paginated:
+#	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
 
 get-contacts-query:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
@@ -65,10 +70,6 @@ get-contact-by-id:
 	#curl "localhost:$(API_PORT)/contacts/86"
 	#cd $(CLI_ROOT_FOLDER_PATH_NAME) && cargo run -- --id 86
 	cd $(CLI_ROOT_FOLDER_PATH_NAME) && ./$(CLI_BINARY_NAME) --id 86
-
-
-get-contacts-paginated:
-	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
 
 run-db:
 	make -f $(ROOT_PATH_NAME)/makefile-db run

@@ -167,12 +167,21 @@ fn print_vector_if_not_empty(array: Vec<String>, prefix_text: String) {
 
 fn print_phones_if_not_empty(phones: Vec<Phone>) {
     if !phones.is_empty() {
-        println!("phones:");
-        for phone in phones {
-            if let Some(description) = phone.description {
-                println!("  {:?} ({})", phone.value, description);
+        if phones.len() == 1 {
+            let phone = &phones[0];
+            if let Some(description) = phone.description.clone() {
+                println!("phone: {:?} ({})", phone.value, description);
             } else {
-                println!("  {}", phone.value);
+                println!("phone: {}", phone.value);
+            }
+        } else {
+            println!("phones:");
+            for phone in phones {
+                if let Some(description) = phone.description {
+                    println!("  {:?} ({})", phone.value, description);
+                } else {
+                    println!("  {}", phone.value);
+                }
             }
         }
     }

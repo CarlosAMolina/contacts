@@ -22,4 +22,3 @@ pub struct Phone {
     pub value: i64,
     pub description: Option<String>,
 }
-

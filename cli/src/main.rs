@@ -1,12 +1,11 @@
+use clap::{Parser, ValueEnum};
 use config::Config;
 use reqwest;
-use clap::{Parser, ValueEnum};
 use serde;
 
 mod types;
 
 use crate::types::contact::{Contact, Phone};
-
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct ConfigArgs {
@@ -33,7 +32,6 @@ impl ConfigArgs {
     }
 }
 
-
 #[derive(Parser)]
 #[command(arg_required_else_help = true, version)]
 struct Cli {
@@ -59,10 +57,12 @@ async fn main() {
     let cli = Cli::parse();
     let config = ConfigArgs::new();
     if let Some(id) = cli.id {
-        let url = format!("http://{host}:{port}/contacts/{id}",
-                          host = config.api_host,
-                          port = config.api_port,
-                          id = id);
+        let url = format!(
+            "http://{host}:{port}/contacts/{id}",
+            host = config.api_host,
+            port = config.api_port,
+            id = id
+        );
         let response = reqwest::get(url).await.unwrap();
         if response.status() != reqwest::StatusCode::OK {
             panic!("Unexpected error: {:?}", response);
@@ -135,23 +135,22 @@ fn print_contact_summary(contact: Contact) {
 }
 
 fn get_summary_without_phone_data(contact: &Contact) -> String {
-        let mut summary: String = "".to_string();
-        if let Some(value) = &contact.user_name {
-            summary = format!("{} {}", summary, value);
-        }
-        if let Some(value) = &contact.user_surname {
-            summary = format!("{} {}", summary, value);
-        }
-        if !contact.nicknames.is_empty() {
-            summary = format!("{}. {}", summary, contact.nicknames.join(","));
-        }
-        if !contact.categories.is_empty() {
-            summary = format!("{}. {}", summary, contact.categories.join(","));
-        }
-        summary = format!("{}. ID {:?}", summary, contact.user_id);
-        summary
+    let mut summary: String = "".to_string();
+    if let Some(value) = &contact.user_name {
+        summary = format!("{} {}", summary, value);
+    }
+    if let Some(value) = &contact.user_surname {
+        summary = format!("{} {}", summary, value);
+    }
+    if !contact.nicknames.is_empty() {
+        summary = format!("{}. {}", summary, contact.nicknames.join(","));
+    }
+    if !contact.categories.is_empty() {
+        summary = format!("{}. {}", summary, contact.categories.join(","));
+    }
+    summary = format!("{}. ID {:?}", summary, contact.user_id);
+    summary
 }
-
 
 fn print_option_if_has_value<T: std::fmt::Display>(option: Option<T>, prefix_text: String) {
     if let Some(value) = option {
@@ -186,7 +185,6 @@ fn print_phones_if_not_empty(phones: Vec<Phone>) {
         }
     }
 }
-
 
 #[cfg(test)]
 mod config_tests {

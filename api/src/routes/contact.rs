@@ -1,6 +1,5 @@
 use handle_errors::Error;
 use std::collections::HashMap;
-use std::println;
 
 use crate::store::Store;
 use crate::transformers;
@@ -15,14 +14,14 @@ pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply
     }
 }
 
+// TODO not use id in each log, add it automatically.
 pub async fn get_contacts(
     params: HashMap<String, String>,
     store: Store,
     id: String,
 ) -> Result<impl warp::Reply, warp::Rejection> {
-    // TODO log::info does not work, I use println instead
     log::info!("{} Start querying contacts", id);
-    println!("Params: {:?}", params);
+    log::info!("{} Params: {:?}", id, params);
     if params.is_empty() {
         log::info!("{} No pagination used", id);
         match store.get_all_data().await {
@@ -31,7 +30,7 @@ pub async fn get_contacts(
         }
     } else {
         let query = params.get("query").unwrap();
-        println!("Start searching {}", query);
+        log::info!("{} Start searching query: {}", id, query);
         //TODO let pagination = extract_pagination(params, res.len())?;
         //TODO log::info!("{} Pagination set {:?}", id, &pagination);
         match store

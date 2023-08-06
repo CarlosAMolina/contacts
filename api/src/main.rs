@@ -13,6 +13,7 @@ mod types;
 #[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct ConfigArgs {
     api_host: [u8; 4],
+    api_port: u16,
     database_host: String,
     database_name: String,
     database_password: String,
@@ -102,8 +103,7 @@ async fn main() {
         .with(log)
         .recover(return_error);
 
-    // TODO use config file instead of 3030
-    warp::serve(routes).run((config.api_host, 3030)).await;
+    warp::serve(routes).run((config.api_host, config.api_port)).await;
 }
 
 #[cfg(test)]
@@ -116,6 +116,7 @@ mod config_tests {
     fn config_files_are_detected_correctly() {
         let expected_not_in_docker = ConfigArgs {
             api_host: [127, 0, 0, 1],
+            api_port: 3030,
             database_host: "localhost".to_string(),
             database_name: "contacts".to_string(),
             database_password: "pw".to_string(),
@@ -124,6 +125,7 @@ mod config_tests {
         };
         let expected_in_docker = ConfigArgs {
             api_host: [0, 0, 0, 0],
+            api_port: 3030,
             database_host: "172.20.0.5".to_string(), // App in localhost // TODO use config file
             database_name: "contacts".to_string(),
             database_password: "pw".to_string(),

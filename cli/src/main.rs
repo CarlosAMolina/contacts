@@ -102,6 +102,7 @@ async fn main() {
 }
 
 fn print_contact(contact: Contact) {
+    println!("## User ID: {:?}", contact.user_id);
     print_option_if_has_value(contact.user_name, "name".to_string());
     print_option_if_has_value(contact.user_surname, "surname".to_string());
     print_vector_if_not_empty(contact.nicknames, "nicknames".to_string());
@@ -114,7 +115,6 @@ fn print_contact(contact: Contact) {
     print_vector_if_not_empty(contact.twitter_handles, "twitter handles".to_string());
     print_vector_if_not_empty(contact.instagram_handles, "instagram handles".to_string());
     print_option_if_has_value(contact.note, "note".to_string());
-    println!("user ID: {:?}", contact.user_id);
 }
 
 fn print_contact_summary(contact: Contact) {

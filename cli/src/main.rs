@@ -5,7 +5,7 @@ use serde;
 
 mod types;
 
-use crate::types::contact::{AllData, Contact, Phone};
+use crate::types::contact::{Contact, Phone};
 
 
 #[derive(Debug, serde::Deserialize, PartialEq)]
@@ -119,27 +119,27 @@ fn print_contact(contact: Contact) {
 
 fn print_contact_summary(contact: Contact) {
     if contact.phones.is_empty() {
-        let summary = get_summary_without_phone_data(contact);
+        let summary = get_summary_without_phone_data(&contact);
         println!("{}", summary);
     } else {
-        for phone in contact.phones {
+        for phone in &contact.phones {
             let mut summary = format!("{}", phone.value);
-            if let Some(value) = phone.description {
+            if let Some(value) = phone.description.clone() {
                 summary = format!("{} ({})", summary, value);
             }
-            let summary_without_phone = get_summary_without_phone_data(contact);
+            let summary_without_phone = get_summary_without_phone_data(&contact);
             summary = format!("{} {}", summary, summary_without_phone);
             println!("{}", summary);
         }
     }
 }
 
-fn get_summary_without_phone_data(contact: Contact) -> String {
-        let mut summary: String;
-        if let Some(value) = contact.user_name {
+fn get_summary_without_phone_data(contact: &Contact) -> String {
+        let mut summary: String = "".to_string();
+        if let Some(value) = &contact.user_name {
             summary = format!("{} {}", summary, value);
         }
-        if let Some(value) = contact.user_surname {
+        if let Some(value) = &contact.user_surname {
             summary = format!("{} {}", summary, value);
         }
         if !contact.nicknames.is_empty() {

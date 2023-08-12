@@ -12,6 +12,18 @@ mod store;
 mod transformers;
 mod types;
 
+pub struct Trace {
+    pub referer: String,
+}
+
+impl Trace {
+    pub fn new(info: &warp::trace::Info<'_>) -> Trace {
+        Trace {
+            referer: get_trace_referer(&info),
+        }
+    }
+}
+
 #[derive(Debug, serde::Deserialize, PartialEq)]
 pub struct ConfigArgs {
     api_host: [u8; 4],
@@ -81,7 +93,7 @@ async fn main() {
         .init();
 
     let trace = warp::trace(|info| {
-        let referer = get_trace_referer(&info);
+        let values = Trace::new(&info);
         let remote_addr = get_trace_remote_addr(&info);
         let request_headers = get_trace_request_headers(&info);
         let user_agent = get_trace_user_agent(&info);
@@ -91,7 +103,7 @@ async fn main() {
               method = %info.method(),
               path = %info.path(),
               version = %version,
-              referer = %referer,
+              referer = %values.referer,
               user_agent = %user_agent,
               remote_addr = %remote_addr,
               request_headers = %request_headers,

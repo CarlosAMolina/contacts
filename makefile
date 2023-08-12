@@ -71,11 +71,11 @@ get-contact-by-id:
 	#cd $(CLI_ROOT_FOLDER_PATH_NAME) && cargo run -- --id 86
 	cd $(CLI_ROOT_FOLDER_PATH_NAME) && ./$(CLI_BINARY_NAME) --id 86
 
-run-db:
-	make -f $(ROOT_PATH_NAME)/makefile-db run
+run-db-docker:
+	make -f $(ROOT_PATH_NAME)/makefile-db run-docker
 
-stop-db:
-	make -f $(ROOT_PATH_NAME)/makefile-db stop
+stop-db-docker:
+	make -f $(ROOT_PATH_NAME)/makefile-db stop-docker
 
 stop-api-docker:
 	docker stop $(API_CONTAINER_NAME)
@@ -100,13 +100,13 @@ clean-unrequied-images:
 build: build-api-docker-image \
 	build-cli-debian-binary
 
-run: run-db \
+run: run-db-docker \
 	run-api-docker \
 	wait-2-seconds \
 	run-cli-binary
 
 stop: stop-api-docker \
-	stop-db
+	stop-db-docker
 
 deploy: stop \
 	build \

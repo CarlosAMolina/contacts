@@ -19,7 +19,7 @@ pull-image:
 create-volume:
 	docker volume create $(CONTAINER_VOLUME)
 
-run:
+run-docker:
 	# PGDATA: tells PostgreSQL where it should store the database.
 	docker run \
 		--rm \
@@ -60,6 +60,6 @@ import-db:
 	docker exec -it $(CONTAINER_NAME) \
 		psql -U $(POSTGRES_USER) --set ON_ERROR_STOP=on -f $(CONTAINER_DB_DUMP_FILE_PATHNAME) $(DATABASE_NAME)
 
-stop:
+stop-docker:
 	docker stop $(CONTAINER_NAME)
 

@@ -81,14 +81,11 @@ async fn main() {
         .init();
 
     let trace = warp::trace(|info| {
-        let referer = info.referer().unwrap_or("");
-        let mut remote_addr = "".to_string();
-        if let Some(value) = info.remote_addr() {
-            remote_addr = format!("{:?}", value);
-        }
-        let request_headers = format!("{:?}", info.request_headers());
-        let user_agent = info.user_agent().unwrap_or("");
-        let version = format!("{:?}", info.version());
+        let referer = get_trace_referer(&info);
+        let remote_addr = get_trace_remote_addr(&info);
+        let request_headers = get_trace_request_headers(&info);
+        let user_agent = get_trace_user_agent(&info);
+        let version = get_trace_version(&info);
         tracing::info_span!(
               "get_contacts request", // TODO change msg at each route
               method = %info.method(),
@@ -141,6 +138,30 @@ async fn main() {
     warp::serve(routes)
         .run((config.api_host, config.api_port))
         .await;
+}
+
+fn get_trace_referer(info: &warp::trace::Info<'_>) -> String {
+    info.referer().unwrap_or("").to_string()
+}
+
+fn get_trace_remote_addr(info: &warp::trace::Info<'_>) -> String {
+    let mut remote_addr = "".to_string();
+    if let Some(value) = info.remote_addr() {
+        remote_addr = format!("{:?}", value);
+    }
+    remote_addr
+}
+
+fn get_trace_request_headers (info: &warp::trace::Info<'_>) -> String {
+    format!("{:?}", info.request_headers())
+}
+
+fn get_trace_user_agent(info: &warp::trace::Info<'_>) -> String {
+    info.user_agent().unwrap_or("").to_string()
+}
+
+fn get_trace_version(info: &warp::trace::Info<'_>) -> String {
+    format!("{:?}", info.version())
 }
 
 #[cfg(test)]

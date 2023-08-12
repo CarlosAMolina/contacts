@@ -134,21 +134,6 @@ async fn main() {
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .init();
 
-    let trace = warp::trace(|info| {
-        let info_values = TraceInfo::new(&info);
-        tracing::info_span!(
-              "get_contacts request", // TODO change msg at each route
-              method = %info_values.method,
-              path = %info_values.path,
-              version = %info_values.version,
-              referer = %info_values.referer,
-              user_agent = %info_values.user_agent,
-              remote_addr = %info_values.remote_addr,
-              request_headers = %info_values.request_headers,
-              id = %info_values.id,
-        )
-    });
-
     let store_filter = warp::any().map(move || store.clone());
     let cors = warp::cors()
         .allow_any_origin()
@@ -161,7 +146,20 @@ async fn main() {
         .and(warp::query())
         .and(store_filter.clone())
         .and_then(routes::contact::get_contacts)
-        .with(trace);
+        .with(warp::trace(|info| {
+            let info_values = TraceInfo::new(&info);
+            tracing::info_span!(
+                  "get_contacts request",
+                  method = %info_values.method,
+                  path = %info_values.path,
+                  version = %info_values.version,
+                  referer = %info_values.referer,
+                  user_agent = %info_values.user_agent,
+                  remote_addr = %info_values.remote_addr,
+                  request_headers = %info_values.request_headers,
+                  id = %info_values.id,
+            )
+        }));
 
     let get_contact_by_id = warp::get()
         .and(warp::path("contacts"))
@@ -169,7 +167,20 @@ async fn main() {
         .and(warp::path::end())
         .and(store_filter.clone())
         .and_then(routes::contact::get_contact_by_id)
-        .with(trace);
+        .with(warp::trace(|info| {
+            let info_values = TraceInfo::new(&info);
+            tracing::info_span!(
+                  "get_contact_by_id request",
+                  method = %info_values.method,
+                  path = %info_values.path,
+                  version = %info_values.version,
+                  referer = %info_values.referer,
+                  user_agent = %info_values.user_agent,
+                  remote_addr = %info_values.remote_addr,
+                  request_headers = %info_values.request_headers,
+                  id = %info_values.id,
+            )
+        }));
 
     let routes = get_contacts
         .or(get_contact_by_id)

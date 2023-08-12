@@ -58,7 +58,7 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
     // TODO use .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
 }
 
-#[tracing::instrument]
+#[tracing::instrument] // TODO rm?
 #[tokio::main]
 async fn main() {
     let log_filter = format!(
@@ -128,6 +128,14 @@ async fn main() {
         .with(warp::trace::request())
         .recover(return_error);
 
+    tracing::info!(
+        "Server running addr={}.{}.{}.{}:{}",
+        config.api_host[0],
+        config.api_host[1],
+        config.api_host[2],
+        config.api_host[3],
+        config.api_port
+    );
     warp::serve(routes)
         .run((config.api_host, config.api_port))
         .await;

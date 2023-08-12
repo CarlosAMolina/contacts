@@ -8,8 +8,8 @@ edition = "2021"
 [dependencies]
 config = { version = "0.13.1", features = ["toml"] }
 csv = "1.2.1"
+derivative = "2.1.1" # After removing the crate log4rs, this dependency is necessary.
 log = "0.4.17"
-log4rs = "1.2.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sqlx = { version = "0.5", features = [ "postgres", "runtime-tokio-rustls" ] }

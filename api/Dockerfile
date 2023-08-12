@@ -19,7 +19,6 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 # Final image.
 FROM alpine:3.17.3
 WORKDIR /app
-COPY --from=builder /app/log4rs.yaml /app/
 COPY --from=builder /app/setup-docker.toml /app/
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/api /app/
 ENV IS_DOCKER_RUNNING=true

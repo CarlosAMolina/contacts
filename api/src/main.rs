@@ -66,6 +66,7 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
 
 #[tokio::main]
 async fn main() {
+    // TODO RM log4rs::init_file("log4rs.yaml", Default::default()).unwrap();
     let trace = warp::trace(|info| {
         let referer = info.referer().unwrap_or("");
         let mut remote_addr = "".to_string();

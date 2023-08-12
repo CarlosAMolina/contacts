@@ -71,7 +71,6 @@ impl Store {
     }
 
     pub async fn get_all_data_by_id(&self, id: i32) -> Result<Vec<AllData>, Error> {
-        log::info!("Init get all data by ID");
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
             .map(|row: PgRow| AllData {
@@ -95,7 +94,7 @@ impl Store {
         {
             Ok(all_data) => Ok(all_data),
             Err(error) => {
-                // TODO tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
                 Err(Error::DatabaseQueryError(error))
             }
         }

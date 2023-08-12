@@ -90,7 +90,7 @@ async fn main() {
         let user_agent = info.user_agent().unwrap_or("");
         let version = format!("{:?}", info.version());
         tracing::info_span!(
-              "get_contacts request",
+              "get_contacts request", // TODO change msg at each route
               method = %info.method(),
               path = %info.path(),
               version = %version,
@@ -121,7 +121,8 @@ async fn main() {
         .and(warp::path::param::<i32>())
         .and(warp::path::end())
         .and(store_filter.clone())
-        .and_then(routes::contact::get_contact_by_id);
+        .and_then(routes::contact::get_contact_by_id)
+        .with(trace);
 
     let routes = get_contacts
         .or(get_contact_by_id)

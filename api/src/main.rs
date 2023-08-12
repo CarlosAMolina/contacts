@@ -74,6 +74,7 @@ async fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(log_filter) // TODO use
         .with_writer(non_blocking_logfile.and(non_blocking_stdout)) // TODO use
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .init();
 
     let trace = warp::trace(|info| {

@@ -1,6 +1,8 @@
 #![warn(clippy::all)]
 
 use config::Config;
+use tracing_appender::rolling::{RollingFileAppender, Rotation};
+use tracing_subscriber::fmt::writer::MakeWriterExt;
 use warp::{http::Method, Filter};
 
 use handle_errors::return_error;
@@ -52,20 +54,28 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
         config.database_port,
         config.database_name
     );
-
-    let log_filter = format!(
-        // TODO "handle_errors={},api={},warp={}",
-        "api={},warp={}",
-        config.log_level_api, config.log_level_warp
-    );
-    tracing_subscriber::fmt().with_env_filter(log_filter).init();
-
     store::Store::new(&db_url).await.unwrap()
     // TODO use .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
 }
 
+#[tracing::instrument]
 #[tokio::main]
 async fn main() {
+    let log_filter = format!(
+        // TODO "handle_errors={},api={},warp={}",
+        "api={},warp={}", // TODO
+        //config.log_level_api, config.log_level_warp // TODO
+        "info",
+        "error" // TODO RM
+    );
+    let logfile = RollingFileAppender::new(Rotation::DAILY, "/tmp", "contacts-api.log");
+    let (non_blocking_logfile, _guard_logfile) = tracing_appender::non_blocking(logfile);
+    let (non_blocking_stdout, _guard_stdout) = tracing_appender::non_blocking(std::io::stdout());
+    tracing_subscriber::fmt()
+        .with_env_filter(log_filter) // TODO use
+        .with_writer(non_blocking_logfile.and(non_blocking_stdout)) // TODO use
+        .init();
+
     let trace = warp::trace(|info| {
         let referer = info.referer().unwrap_or("");
         let mut remote_addr = "".to_string();

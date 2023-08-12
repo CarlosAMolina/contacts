@@ -21,8 +21,10 @@ pub struct ConfigArgs {
     database_password: String,
     database_port: u16,
     database_user: String,
+    log_file_name: String,
     log_level_api: String,
     log_level_warp: String,
+    log_path_name: String,
 }
 
 impl ConfigArgs {
@@ -60,19 +62,21 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
 
 #[tokio::main]
 async fn main() {
+    let config = ConfigArgs::new();
+    let store = setup_store(&config).await;
+
     let log_filter = format!(
         // TODO "handle_errors={},api={},warp={}",
         "api={},warp={}", // TODO
-        //config.log_level_api, config.log_level_warp // TODO
-        "info",
-        "error" // TODO RM
+        config.log_level_api, config.log_level_warp
     );
-    let logfile = RollingFileAppender::new(Rotation::DAILY, "/tmp", "contacts-api.log");
+    let logfile =
+        RollingFileAppender::new(Rotation::DAILY, config.log_path_name, config.log_file_name);
     let (non_blocking_logfile, _guard_logfile) = tracing_appender::non_blocking(logfile);
     let (non_blocking_stdout, _guard_stdout) = tracing_appender::non_blocking(std::io::stdout());
     tracing_subscriber::fmt()
-        .with_env_filter(log_filter) // TODO use
-        .with_writer(non_blocking_logfile.and(non_blocking_stdout)) // TODO use
+        .with_env_filter(log_filter)
+        .with_writer(non_blocking_logfile.and(non_blocking_stdout))
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .init();
 
@@ -98,8 +102,6 @@ async fn main() {
         )
     });
 
-    let config = ConfigArgs::new();
-    let store = setup_store(&config).await;
     let store_filter = warp::any().map(move || store.clone());
     let cors = warp::cors()
         .allow_any_origin()
@@ -156,19 +158,23 @@ mod config_tests {
             database_password: "pw".to_string(),
             database_port: 5432,
             database_user: "postgres".to_string(),
+            log_file_name: "contact-api.log".to_string(),
             log_level_api: "info".to_string(),
             log_level_warp: "error".to_string(),
+            log_path_name: "/tmp".to_string(),
         };
         let expected_in_docker = ConfigArgs {
             api_host: [0, 0, 0, 0],
             api_port: 3030,
-            database_host: "172.20.0.5".to_string(), // App in localhost // TODO use config file
+            database_host: "172.20.0.5".to_string(), // App in localhost
             database_name: "contacts".to_string(),
             database_password: "pw".to_string(),
             database_port: 5432,
             database_user: "postgres".to_string(),
+            log_file_name: "contact-api.log".to_string(),
             log_level_api: "info".to_string(),
             log_level_warp: "error".to_string(),
+            log_path_name: "/tmp".to_string(),
         };
         assert_eq!(expected_not_in_docker, ConfigArgs::new());
         std::env::set_var("IS_DOCKER_RUNNING", "true");

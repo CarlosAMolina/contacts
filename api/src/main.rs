@@ -58,7 +58,6 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
     // TODO use .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
 }
 
-#[tracing::instrument] // TODO rm?
 #[tokio::main]
 async fn main() {
     let log_filter = format!(

@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::store::Store;
 use crate::transformers;
 use crate::types::pagination::extract_pagination;
+use tracing::{event, Level};
 
 pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply, warp::Rejection> {
     match store.get_all_data_by_id(id).await {
@@ -14,16 +15,12 @@ pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply
     }
 }
 
-// TODO not use id in each log, add it automatically.
 pub async fn get_contacts(
     params: HashMap<String, String>,
     store: Store,
-    id: String,
 ) -> Result<impl warp::Reply, warp::Rejection> {
-    log::info!("{} Start querying contacts", id);
-    log::info!("{} Params: {:?}", id, params);
+    event!(Level::INFO, "params={:?}", params);
     let query = params.get("query").unwrap();
-    log::info!("{} Start searching query: {}", id, query);
     //TODO let pagination = extract_pagination(params, res.len())?;
     //TODO log::info!("{} Pagination set {:?}", id, &pagination);
     match store

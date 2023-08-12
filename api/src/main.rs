@@ -19,6 +19,8 @@ pub struct ConfigArgs {
     database_password: String,
     database_port: u16,
     database_user: String,
+    log_level_api: String,
+    log_level_warp: String,
 }
 
 impl ConfigArgs {
@@ -51,32 +53,45 @@ pub async fn setup_store(config: &ConfigArgs) -> store::Store {
         config.database_name
     );
 
+    let log_filter = format!(
+        // TODO "handle_errors={},api={},warp={}",
+        "api={},warp={}",
+        config.log_level_api, config.log_level_warp
+    );
+    tracing_subscriber::fmt().with_env_filter(log_filter).init();
+
     store::Store::new(&db_url).await.unwrap()
     // TODO use .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
 }
 
 #[tokio::main]
 async fn main() {
-    log4rs::init_file("log4rs.yaml", Default::default()).unwrap();
-
-    let log = warp::log::custom(|info| {
-        log::info!(
-            "{} {} {} {:?} from {} with {:?}",
-            info.method(),
-            info.path(),
-            info.status(),
-            info.elapsed(),
-            info.remote_addr().unwrap(),
-            info.request_headers()
-        );
+    // TODO RM log4rs::init_file("log4rs.yaml", Default::default()).unwrap();
+    let trace = warp::trace(|info| {
+        let referer = info.referer().unwrap_or("");
+        let mut remote_addr = "".to_string();
+        if let Some(value) = info.remote_addr() {
+            remote_addr = format!("{:?}", value);
+        }
+        let request_headers = format!("{:?}", info.request_headers());
+        let user_agent = info.user_agent().unwrap_or("");
+        let version = format!("{:?}", info.version());
+        tracing::info_span!(
+              "get_contacts request",
+              method = %info.method(),
+              path = %info.path(),
+              version = %version,
+              referer = %referer,
+              user_agent = %user_agent,
+              remote_addr = %remote_addr,
+              request_headers = %request_headers,
+              id = %uuid::Uuid::new_v4(),
+        )
     });
 
     let config = ConfigArgs::new();
     let store = setup_store(&config).await;
     let store_filter = warp::any().map(move || store.clone());
-
-    let id_filter = warp::any().map(|| uuid::Uuid::new_v4().to_string());
-
     let cors = warp::cors()
         .allow_any_origin()
         .allow_header("content-type")
@@ -87,8 +102,8 @@ async fn main() {
         .and(warp::path::end())
         .and(warp::query())
         .and(store_filter.clone())
-        .and(id_filter)
-        .and_then(routes::contact::get_contacts);
+        .and_then(routes::contact::get_contacts)
+        .with(trace);
 
     let get_contact_by_id = warp::get()
         .and(warp::path("contacts"))
@@ -100,10 +115,12 @@ async fn main() {
     let routes = get_contacts
         .or(get_contact_by_id)
         .with(cors)
-        .with(log)
+        .with(warp::trace::request())
         .recover(return_error);
 
-    warp::serve(routes).run((config.api_host, config.api_port)).await;
+    warp::serve(routes)
+        .run((config.api_host, config.api_port))
+        .await;
 }
 
 #[cfg(test)]
@@ -122,6 +139,8 @@ mod config_tests {
             database_password: "pw".to_string(),
             database_port: 5432,
             database_user: "postgres".to_string(),
+            log_level_api: "info".to_string(),
+            log_level_warp: "error".to_string(),
         };
         let expected_in_docker = ConfigArgs {
             api_host: [0, 0, 0, 0],
@@ -131,6 +150,8 @@ mod config_tests {
             database_password: "pw".to_string(),
             database_port: 5432,
             database_user: "postgres".to_string(),
+            log_level_api: "info".to_string(),
+            log_level_warp: "error".to_string(),
         };
         assert_eq!(expected_not_in_docker, ConfigArgs::new());
         std::env::set_var("IS_DOCKER_RUNNING", "true");

@@ -24,7 +24,6 @@ impl Store {
     }
 
     pub async fn get_all_data_by_query(&self, query: &String) -> Result<Vec<AllData>, Error> {
-        log::info!("Init get all data by query");
         let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
             "SELECT * from contacts.all_data
@@ -65,7 +64,7 @@ impl Store {
         {
             Ok(all_data) => Ok(all_data),
             Err(error) => {
-                // TODO tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
                 Err(Error::DatabaseQueryError(error))
             }
         }

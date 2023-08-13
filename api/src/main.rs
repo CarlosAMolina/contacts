@@ -188,6 +188,7 @@ async fn main() {
         .with(warp::trace::request())
         .recover(return_error);
 
+    tracing::info!("Q&A service build ID {}", env!("RUST_WEB_DEV_VERSION"));
     tracing::info!(
         "Server running addr={}.{}.{}.{}:{}",
         config.api_host[0],

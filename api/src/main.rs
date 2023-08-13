@@ -167,6 +167,13 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         .recover(return_error)
 }
 
+pub async fn run(config: ConfigArgs, store: store::Store) {
+    let routes = build_routes(store).await;
+    warp::serve(routes)
+        .run((config.api_host, config.api_port))
+        .await;
+}
+
 #[tokio::main]
 async fn main() {
     let config = ConfigArgs::new();
@@ -177,8 +184,11 @@ async fn main() {
         "api={},warp={}", // TODO
         config.log_level_api, config.log_level_warp
     );
-    let logfile =
-        RollingFileAppender::new(Rotation::DAILY, config.log_path_name, config.log_file_name);
+    let logfile = RollingFileAppender::new(
+        Rotation::DAILY,
+        &config.log_path_name,
+        &config.log_file_name,
+    );
     let (non_blocking_logfile, _guard_logfile) = tracing_appender::non_blocking(logfile);
     let (non_blocking_stdout, _guard_stdout) = tracing_appender::non_blocking(std::io::stdout());
     tracing_subscriber::fmt()
@@ -186,8 +196,6 @@ async fn main() {
         .with_writer(non_blocking_logfile.and(non_blocking_stdout))
         //.with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .init();
-
-    let routes = build_routes(store).await;
 
     tracing::info!("Q&A service build ID {}", env!("RUST_WEB_DEV_VERSION"));
     tracing::info!(
@@ -198,9 +206,7 @@ async fn main() {
         config.api_host[3],
         config.api_port
     );
-    warp::serve(routes)
-        .run((config.api_host, config.api_port))
-        .await;
+    run(config, store).await;
 }
 
 #[cfg(test)]

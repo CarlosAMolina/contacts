@@ -1,8 +1,5 @@
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::fmt::writer::MakeWriterExt;
-use warp::{http::Method, Filter, Reply};
-
-use handle_errors::return_error;
 
 use api::config_api;
 use api::{run, setup_store};

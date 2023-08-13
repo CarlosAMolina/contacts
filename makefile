@@ -56,6 +56,10 @@ call-return-error:
 #get-contacts-paginated:
 #	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
 
+
+get-invented-route:
+	curl "localhost:$(API_PORT)/invented"
+
 get-contacts-query:
 	#curl "localhost:$(API_PORT)/contacts?query=arlos%20a"
 	#cd $(CLI_ROOT_FOLDER_PATH_NAME) && cargo run -- arlos a

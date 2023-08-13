@@ -131,7 +131,7 @@ async fn main() {
     tracing_subscriber::fmt()
         .with_env_filter(log_filter)
         .with_writer(non_blocking_logfile.and(non_blocking_stdout))
-        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
+        //.with_span_events(tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .init();
 
     let store_filter = warp::any().map(move || store.clone());

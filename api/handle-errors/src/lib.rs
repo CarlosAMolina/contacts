@@ -5,6 +5,7 @@ use warp::{
     reject::Reject,
     Rejection, Reply,
 };
+use tracing::{event, Level};
 
 
 #[derive(Debug)]
@@ -57,6 +58,7 @@ pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
             StatusCode::UNPROCESSABLE_ENTITY,
         ))
     } else {
+        event!(Level::WARN, "Requested route was not found");
         Ok(warp::reply::with_status(
             "Route not found".to_string(),
             StatusCode::NOT_FOUND,

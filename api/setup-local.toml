@@ -7,5 +7,6 @@ database_port = 5432
 database_user = "postgres"
 log_file_name = "contact-api.log"
 log_level_api = "info"
+log_level_handle_errors = "info"
 log_level_warp = "error"
 log_path_name = "/tmp"

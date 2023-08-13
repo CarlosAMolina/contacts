@@ -10,9 +10,8 @@ async fn main() {
     let store = setup_store(&config).await;
 
     let log_filter = format!(
-        // TODO "handle_errors={},api={},warp={}",
-        "api={},warp={}", // TODO
-        config.log_level_api, config.log_level_warp
+        "handle_errors={},api={},warp={}",
+        config.log_level_handle_errors, config.log_level_api, config.log_level_warp,
     );
     let logfile = RollingFileAppender::new(
         Rotation::DAILY,

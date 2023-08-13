@@ -13,6 +13,7 @@ pub struct Config {
     pub database_user: String,
     pub log_file_name: String,
     pub log_level_api: String,
+    pub log_level_handle_errors: String,
     pub log_level_warp: String,
     pub log_path_name: String,
 }
@@ -54,6 +55,7 @@ mod config_tests {
             database_user: "postgres".to_string(),
             log_file_name: "contact-api.log".to_string(),
             log_level_api: "info".to_string(),
+            log_level_handle_errors: "info".to_string(),
             log_level_warp: "error".to_string(),
             log_path_name: "/tmp".to_string(),
         };
@@ -67,6 +69,7 @@ mod config_tests {
             database_user: "postgres".to_string(),
             log_file_name: "contact-api.log".to_string(),
             log_level_api: "info".to_string(),
+            log_level_handle_errors: "info".to_string(),
             log_level_warp: "error".to_string(),
             log_path_name: "/tmp".to_string(),
         };

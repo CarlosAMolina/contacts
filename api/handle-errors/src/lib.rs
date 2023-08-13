@@ -36,7 +36,6 @@ impl std::fmt::Display for Error {
 impl Reject for Error {}
 
 pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
-    println!("{:?}", r);
     if let Some(crate::Error::DatabaseQueryError(e)) = r.find() {
         Ok(warp::reply::with_status(
             e.to_string(),
@@ -57,11 +56,17 @@ pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
             error.to_string(),
             StatusCode::UNPROCESSABLE_ENTITY,
         ))
-    } else {
+    } else if r.is_not_found() {
         event!(Level::WARN, "Requested route was not found");
         Ok(warp::reply::with_status(
             "Route not found".to_string(),
             StatusCode::NOT_FOUND,
+        ))
+    } else {
+        event!(Level::ERROR, "Unknown error: {:?}", r);
+        Ok(warp::reply::with_status(
+            "Unknown error".to_string(),
+            StatusCode::INTERNAL_SERVER_ERROR,
         ))
     }
 }

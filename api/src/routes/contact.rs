@@ -21,6 +21,7 @@ pub async fn get_contacts(
     params: HashMap<String, String>,
     store: Store,
 ) -> Result<impl warp::Reply, warp::Rejection> {
+    // TODO if empty params return MissingParameters error
     event!(Level::INFO, "params={:?}", params);
     let query = params.get("query").unwrap();
     match store.get_all_data_by_query(query).await {

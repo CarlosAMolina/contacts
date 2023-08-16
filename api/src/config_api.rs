@@ -19,7 +19,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new() -> Config {
+    pub fn new() -> Result <Config, handle_errors::Error> {
         let is_app_in_docker = std::env::var("IS_DOCKER_RUNNING")
             .ok()
             .map(|val| val.parse::<bool>())
@@ -33,7 +33,7 @@ impl Config {
             .add_source(config::File::with_name(config_file_name))
             .build()
             .unwrap();
-        config.try_deserialize::<Config>().unwrap()
+        Ok(config.try_deserialize::<Config>().unwrap())
     }
 }
 
@@ -73,8 +73,8 @@ mod config_tests {
             log_level_warp: "error".to_string(),
             log_path_name: "/tmp".to_string(),
         };
-        assert_eq!(expected_not_in_docker, Config::new());
+        assert_eq!(expected_not_in_docker, Config::new().unwrap());
         std::env::set_var("IS_DOCKER_RUNNING", "true");
-        assert_eq!(expected_in_docker, Config::new());
+        assert_eq!(expected_in_docker, Config::new().unwrap());
     }
 }

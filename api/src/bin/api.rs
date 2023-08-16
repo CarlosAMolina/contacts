@@ -6,7 +6,7 @@ use api::{run, setup_store};
 
 #[tokio::main]
 async fn main() {
-    let config = config_api::Config::new();
+    let config = config_api::Config::new().expect("Config can't be set");
     let store = setup_store(&config).await;
 
     let log_filter = format!(

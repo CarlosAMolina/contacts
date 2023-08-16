@@ -1,6 +1,6 @@
 use warp::{http::Method, Filter, Reply};
 
-use handle_errors::return_error;
+pub use handle_errors;
 
 pub mod config_api; // TODO try use mod instead of mod
 mod routes;
@@ -126,7 +126,7 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         .or(get_contact_by_id)
         .with(cors)
         .with(warp::trace::request())
-        .recover(return_error)
+        .recover(handle_errors::return_error)
 }
 
 pub async fn run(config: config_api::Config, store: store::Store) {

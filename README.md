@@ -49,6 +49,14 @@ make run
 make search_term
 ```
 
+## Tests
+
+The integration tests require the database to be running.
+
+```bash
+make test
+```
+
 ## Resources
 
 Tutorial:

@@ -87,6 +87,9 @@ stop-api-docker:
 test-api:
 	cd $(API_ROOT_FOLDER_PATH_NAME) && cargo test
 
+test-api-integration:
+	cd $(API_ROOT_FOLDER_PATH_NAME)/integration-tests && cargo run
+
 test-cli:
 	cd $(CLI_ROOT_FOLDER_PATH_NAME) && cargo test
 
@@ -118,4 +121,5 @@ deploy: stop \
 	run
 
 test: test-api \
-	test-cli
+	test-cli \
+	test-api-integration

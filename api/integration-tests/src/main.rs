@@ -1,5 +1,5 @@
-use api::{config_api, handle_errors, oneshot, setup_store, store};
 use api::types::database::AllData;
+use api::{config_api, handle_errors, oneshot, setup_store, store};
 use sqlx;
 use sqlx::Row;
 use std::io::{self, Write};
@@ -103,7 +103,7 @@ async fn exists_database(config: &config_api::Config, store: &store::Store) -> b
 
 async fn test_get_contacts() {
     let client = reqwest::Client::new();
-    // TODO use config to create the URL 
+    // TODO use config to create the URL
     let res = client
         .get("http://localhost:3030/contacts?query=arlos%20a")
         .send()
@@ -113,6 +113,6 @@ async fn test_get_contacts() {
         .await
         .unwrap();
     println!("{:?}", res); // TODO
-    // TODO assert_eq!(res.id, 1);
-    // TODO assert_eq!(res.title, q.title);
+                           // TODO assert_eq!(res.id, 1);
+                           // TODO assert_eq!(res.title, q.title);
 }

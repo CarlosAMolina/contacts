@@ -7,7 +7,7 @@ pub mod config_api; // TODO try use mod instead of mod
 mod routes;
 pub mod store;
 mod transformers;
-mod types;
+pub mod types;
 
 pub struct TraceInfo {
     pub id: uuid::Uuid,

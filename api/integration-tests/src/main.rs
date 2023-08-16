@@ -1,4 +1,5 @@
 use api::{config_api, handle_errors, oneshot, setup_store, store};
+use api::types::database::AllData;
 use sqlx;
 use sqlx::Row;
 use std::io::{self, Write};
@@ -14,6 +15,11 @@ async fn main() -> Result<(), handle_errors::Error> {
     recreate_database(&config, &store).await;
     println!("Init start the api web server");
     let handler = oneshot(store).await;
+
+    // TODO run migrations to create the tables.
+
+    println!("Init test get_contacts");
+    test_get_contacts().await;
 
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
@@ -93,4 +99,20 @@ async fn exists_database(config: &config_api::Config, store: &store::Store) -> b
         println!("The database {} does not exist", config.database_name);
         false
     }
+}
+
+async fn test_get_contacts() {
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL 
+    let res = client
+        .get("http://localhost:3030/contacts?query=arlos%20a")
+        .send()
+        .await
+        .unwrap()
+        .json::<AllData>()
+        .await
+        .unwrap();
+    println!("{:?}", res); // TODO
+    // TODO assert_eq!(res.id, 1);
+    // TODO assert_eq!(res.title, q.title);
 }

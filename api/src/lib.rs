@@ -4,7 +4,7 @@ pub use handle_errors;
 
 pub mod config_api; // TODO try use mod instead of mod
 mod routes;
-mod store;
+pub mod store;
 mod transformers;
 mod types;
 

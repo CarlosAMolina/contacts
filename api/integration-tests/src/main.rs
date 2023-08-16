@@ -1,6 +1,5 @@
-use api::{config_api, handle_errors};
+use api::{config_api, handle_errors, setup_store, store};
 use sqlx;
-use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
 use std::io::{self, Write};
 use std::process::Command;
@@ -10,9 +9,9 @@ async fn main() -> Result<(), handle_errors::Error> {
     println!("Init integration tests");
     let config = config_api::Config::new().expect("Config can't be set");
 
-    if exists_database(&config).await {
-        println!("The database {} exists", config.database_name);
+    let store = setup_store(&config).await;
 
+    if exists_database(&config, &store).await {
         let url = format!(
             "postgres://{}:{}@{}:{}/{}",
             config.database_user,
@@ -57,14 +56,14 @@ async fn main() -> Result<(), handle_errors::Error> {
         .output()
         .expect("sqlx command failed to start");
     io::stdout().write_all(&s.stderr).unwrap();
-    if !exists_database(&config).await {
+    if !exists_database(&config, &store).await {
         panic!("The database has not been created");
     }
 
     Ok(())
 }
 
-async fn exists_database(config: &config_api::Config) -> bool {
+async fn exists_database(config: &config_api::Config, store: &store::Store) -> bool {
     let url = format!(
         "postgres://{}:{}@{}:{}",
         config.database_user, config.database_password, config.database_host, config.database_port,
@@ -73,15 +72,16 @@ async fn exists_database(config: &config_api::Config) -> bool {
         "Init check database {} exists. URL: {}",
         config.database_name, url
     );
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&url)
-        .await
-        .unwrap();
     let database_names: Vec<_> = sqlx::query("SELECT datname FROM pg_database")
         .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("datname").to_string())
-        .fetch_all(&pool)
+        .fetch_all(&store.connection)
         .await
         .unwrap();
-    database_names.contains(&config.database_name)
+    if database_names.contains(&config.database_name) {
+        println!("The database {} exists", config.database_name);
+        true
+    } else {
+        println!("The database {} does not exist", config.database_name);
+        false
+    }
 }

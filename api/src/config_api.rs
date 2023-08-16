@@ -19,7 +19,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new() -> Result <Config, handle_errors::Error> {
+    pub fn new() -> Result<Config, handle_errors::Error> {
         let is_app_in_docker = std::env::var("IS_DOCKER_RUNNING")
             .ok()
             .map(|val| val.parse::<bool>())

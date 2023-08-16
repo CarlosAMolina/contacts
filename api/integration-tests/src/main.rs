@@ -11,6 +11,11 @@ async fn main() -> Result<(), handle_errors::Error> {
 
     let store = setup_store(&config).await;
 
+    recreate_database(&config, &store).await;
+    Ok(())
+}
+
+async fn recreate_database(config: &config_api::Config, store: &store::Store) {
     if exists_database(&config, &store).await {
         let url = format!(
             "postgres://{}:{}@{}:{}/{}",
@@ -21,7 +26,7 @@ async fn main() -> Result<(), handle_errors::Error> {
             config.database_name
         );
         println!(
-            "Init delete database {:?}. URL: {}",
+            "Init delete database {}. URL: {}",
             config.database_name, url
         );
         let s = Command::new("sqlx")
@@ -45,7 +50,7 @@ async fn main() -> Result<(), handle_errors::Error> {
         config.database_name
     );
     println!(
-        "Init create database {:?}. URL: {}",
+        "Init create database {}. URL: {}",
         config.database_name, url
     );
     let s = Command::new("sqlx")
@@ -59,8 +64,6 @@ async fn main() -> Result<(), handle_errors::Error> {
     if !exists_database(&config, &store).await {
         panic!("The database has not been created");
     }
-
-    Ok(())
 }
 
 async fn exists_database(config: &config_api::Config, store: &store::Store) -> bool {

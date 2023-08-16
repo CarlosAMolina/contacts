@@ -1,3 +1,4 @@
+use tokio::sync::{oneshot, oneshot::Sender};
 use warp::{http::Method, Filter, Reply};
 
 pub use handle_errors;
@@ -134,4 +135,26 @@ pub async fn run(config: config_api::Config, store: store::Store) {
     warp::serve(routes)
         .run((config.api_host, config.api_port))
         .await;
+}
+
+pub struct OneshotHandler {
+    pub sender: Sender<i32>,
+}
+
+pub async fn oneshot(store: store::Store) -> OneshotHandler {
+    let routes = build_routes(store).await;
+    let (tx, rx) = oneshot::channel::<i32>();
+    // TODO use config in the url
+    let socket: std::net::SocketAddr = "127.0.0.1:3030"
+        .to_string()
+        .parse()
+        .expect("Not a valid address");
+
+    let (_, server) = warp::serve(routes).bind_with_graceful_shutdown(socket, async {
+        rx.await.ok();
+    });
+
+    tokio::task::spawn(server);
+
+    OneshotHandler { sender: tx }
 }

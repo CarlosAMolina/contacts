@@ -1,4 +1,4 @@
-use api::{config_api, handle_errors, setup_store, store};
+use api::{config_api, handle_errors, oneshot, setup_store, store};
 use sqlx;
 use sqlx::Row;
 use std::io::{self, Write};
@@ -12,6 +12,12 @@ async fn main() -> Result<(), handle_errors::Error> {
     let store = setup_store(&config).await;
 
     recreate_database(&config, &store).await;
+    println!("Init start the api web server");
+    let handler = oneshot(store).await;
+
+    println!("Init shut down the api web server");
+    let _ = handler.sender.send(1);
+
     Ok(())
 }
 

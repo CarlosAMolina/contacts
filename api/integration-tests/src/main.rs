@@ -2,8 +2,8 @@ use api::store::Store;
 use api::types::contact::Contact;
 use api::{config_api, handle_errors, oneshot, setup_store, store};
 use sqlx;
-use sqlx::Row;
 use sqlx::postgres::PgPoolOptions;
+use sqlx::Row;
 use std::io::{self, Write};
 use std::process::Command;
 
@@ -22,10 +22,12 @@ async fn main() -> Result<(), handle_errors::Error> {
         .await
         .unwrap();
     println!("Init migrations");
-    sqlx::migrate!().run(&store.clone().connection).await.unwrap();
+    sqlx::migrate!()
+        .run(&store.clone().connection)
+        .await
+        .unwrap();
     // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
     assert_migrations_have_correctly_executed(&store.connection).await;
-
 
     println!("Init insert data in db");
     // TODO use api methods
@@ -51,7 +53,8 @@ async fn recreate_database(config: &config_api::Config) {
     let postgres_connection = PgPoolOptions::new()
         .max_connections(5)
         .connect(&postgres_url)
-        .await.unwrap();
+        .await
+        .unwrap();
     if exists_database(&config, &postgres_connection).await {
         let url = format!(
             "postgres://{}:{}@{}:{}/{}",
@@ -108,11 +111,11 @@ async fn recreate_database(config: &config_api::Config) {
     }
 }
 
-async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx::Pool<sqlx::Postgres>) -> bool {
-    println!(
-        "Init check database {} exists",
-        config.database_name
-    );
+async fn exists_database(
+    config: &config_api::Config,
+    postgres_connection: &sqlx::Pool<sqlx::Postgres>,
+) -> bool {
+    println!("Init check database {} exists", config.database_name);
     let database_names: Vec<_> = sqlx::query("SELECT datname FROM pg_database")
         .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("datname").to_string())
         .fetch_all(postgres_connection)
@@ -127,7 +130,9 @@ async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx
     }
 }
 
-async fn assert_migrations_have_correctly_executed(postgres_connection: &sqlx::Pool<sqlx::Postgres>) {
+async fn assert_migrations_have_correctly_executed(
+    postgres_connection: &sqlx::Pool<sqlx::Postgres>,
+) {
     println!("Init assert migrations have correctly executed");
     println!("Init get all tables");
     let query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'contacts'";
@@ -156,7 +161,11 @@ async fn assert_migrations_have_correctly_executed(postgres_connection: &sqlx::P
     if expected_table_names == table_names {
         println!("The tables have been created correctly");
     } else {
-        println!("Expected table names ({}): {:?}", expected_table_names.len(), expected_table_names);
+        println!(
+            "Expected table names ({}): {:?}",
+            expected_table_names.len(),
+            expected_table_names
+        );
         panic!("Table names do not match the expected ones");
     }
 }
@@ -173,23 +182,21 @@ async fn test_get_contacts() {
         .json::<Vec<Contact>>()
         .await
         .unwrap();
-    let expected_result = vec![
-        Contact {
-            user_id: 1,
-            user_name: Some("John".to_string()),
-            user_surname: Some("Doe".to_string()),
-            nicknames: vec![],
-            phones: vec![],
-            categories: vec![],
-            addresses: vec![],
-            emails: vec![],
-            urls: vec![],
-            facebook_urls: vec![],
-            twitter_handles: vec![],
-            instagram_handles: vec![],
-            note: None,
-        }
-    ];
+    let expected_result = vec![Contact {
+        user_id: 1,
+        user_name: Some("John".to_string()),
+        user_surname: Some("Doe".to_string()),
+        nicknames: vec![],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
+    }];
     assert_eq!(expected_result, response);
     println!("✓");
 }

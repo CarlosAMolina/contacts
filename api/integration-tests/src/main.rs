@@ -2,6 +2,7 @@ use api::types::database::AllData;
 use api::{config_api, handle_errors, oneshot, setup_store, store};
 use sqlx;
 use sqlx::Row;
+use sqlx::postgres::PgPoolOptions;
 use std::io::{self, Write};
 use std::process::Command;
 
@@ -9,10 +10,8 @@ use std::process::Command;
 async fn main() -> Result<(), handle_errors::Error> {
     println!("Init integration tests");
     let config = config_api::Config::new().expect("Config can't be set");
-
+    recreate_database(&config).await;
     let store = setup_store(&config).await;
-
-    recreate_database(&config, &store).await;
     println!("Init start the api web server");
     let handler = oneshot(store).await;
 
@@ -27,8 +26,17 @@ async fn main() -> Result<(), handle_errors::Error> {
     Ok(())
 }
 
-async fn recreate_database(config: &config_api::Config, store: &store::Store) {
-    if exists_database(&config, &store).await {
+async fn recreate_database(config: &config_api::Config) {
+    let postgres_url = format!(
+        "postgres://{}:{}@{}:{}",
+        config.database_user, config.database_password, config.database_host, config.database_port,
+    );
+    println!("Init create postgres connection. URL: {}", postgres_url);
+    let postgres_connection = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&postgres_url)
+        .await.unwrap();
+    if exists_database(&config, &postgres_connection).await {
         let url = format!(
             "postgres://{}:{}@{}:{}/{}",
             config.database_user,
@@ -41,7 +49,7 @@ async fn recreate_database(config: &config_api::Config, store: &store::Store) {
             "Init delete database {}. URL: {}",
             config.database_name, url
         );
-        let s = Command::new("sqlx")
+        let command = Command::new("sqlx")
             .arg("database")
             .arg("drop")
             .arg("--database-url")
@@ -49,7 +57,10 @@ async fn recreate_database(config: &config_api::Config, store: &store::Store) {
             .arg("-y")
             .output()
             .expect("sqlx command failed to start");
-        io::stdout().write_all(&s.stderr).unwrap();
+        if command.status.code().unwrap() != 0 {
+            panic!("Unsucessful command: {:?}", command);
+        }
+        io::stdout().write_all(&command.stderr).unwrap();
     } else {
         println!("The database {} does not exist", config.database_name);
     }
@@ -65,20 +76,23 @@ async fn recreate_database(config: &config_api::Config, store: &store::Store) {
         "Init create database {}. URL: {}",
         config.database_name, url
     );
-    let s = Command::new("sqlx")
+    let command = Command::new("sqlx")
         .arg("database")
         .arg("create")
         .arg("--database-url")
         .arg(url)
         .output()
         .expect("sqlx command failed to start");
-    io::stdout().write_all(&s.stderr).unwrap();
-    if !exists_database(&config, &store).await {
+    if command.status.code().unwrap() != 0 {
+        panic!("Unsucessful command: {:?}", command);
+    }
+    io::stdout().write_all(&command.stderr).unwrap();
+    if !exists_database(&config, &postgres_connection).await {
         panic!("The database has not been created");
     }
 }
 
-async fn exists_database(config: &config_api::Config, store: &store::Store) -> bool {
+async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx::Pool<sqlx::Postgres>) -> bool {
     let url = format!(
         "postgres://{}:{}@{}:{}",
         config.database_user, config.database_password, config.database_host, config.database_port,
@@ -89,7 +103,7 @@ async fn exists_database(config: &config_api::Config, store: &store::Store) -> b
     );
     let database_names: Vec<_> = sqlx::query("SELECT datname FROM pg_database")
         .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("datname").to_string())
-        .fetch_all(&store.connection)
+        .fetch_all(postgres_connection)
         .await
         .unwrap();
     if database_names.contains(&config.database_name) {

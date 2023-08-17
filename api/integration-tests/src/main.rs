@@ -29,15 +29,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
     assert_migrations_have_correctly_executed(&store.connection).await;
 
-    println!("Init insert data in db");
-    // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.users (id, name, surname)
-        VALUES (1, 'John', 'Doe')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
+    insert_db_data(&store).await;
     test_get_contacts().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
@@ -168,6 +160,18 @@ async fn assert_migrations_have_correctly_executed(
         );
         panic!("Table names do not match the expected ones");
     }
+}
+
+async fn insert_db_data(store: &Store) {
+    println!("Init insert data in db");
+    // TODO use api methods
+    sqlx::query(
+        "INSERT INTO contacts.users (id, name, surname)
+        VALUES (1, 'John', 'Doe')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
 }
 
 async fn test_get_contacts() {

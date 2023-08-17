@@ -141,8 +141,8 @@ pub struct OneshotHandler {
     pub sender: Sender<i32>,
 }
 
-pub async fn oneshot(store: store::Store) -> OneshotHandler {
-    let routes = build_routes(store).await;
+pub async fn oneshot(store: &store::Store) -> OneshotHandler {
+    let routes = build_routes(store.clone()).await;
     let (tx, rx) = oneshot::channel::<i32>();
     // TODO use config in the url
     let socket: std::net::SocketAddr = "127.0.0.1:3030"

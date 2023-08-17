@@ -13,9 +13,17 @@ async fn main() -> Result<(), handle_errors::Error> {
     recreate_database(&config).await;
     let store = setup_store(&config).await;
     println!("Init start the api web server");
-    let handler = oneshot(store).await;
+    let handler = oneshot(&store).await;
+    println!("Init create schema");
+    sqlx::query("CREATE SCHEMA IF NOT EXISTS contacts")
+        //.execute(&postgres_connection)
+        .execute(&store.clone().connection)
+        .await
+        .unwrap();
 
-    // TODO run migrations to create the tables.
+    println!("Init migrations");
+    sqlx::migrate!().run(&store.clone().connection).await.unwrap();
+    // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
 
     println!("Init test get_contacts");
     test_get_contacts().await;
@@ -90,16 +98,13 @@ async fn recreate_database(config: &config_api::Config) {
     if !exists_database(&config, &postgres_connection).await {
         panic!("The database has not been created");
     }
+
 }
 
 async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx::Pool<sqlx::Postgres>) -> bool {
-    let url = format!(
-        "postgres://{}:{}@{}:{}",
-        config.database_user, config.database_password, config.database_host, config.database_port,
-    );
     println!(
-        "Init check database {} exists. URL: {}",
-        config.database_name, url
+        "Init check database {} exists",
+        config.database_name
     );
     let database_names: Vec<_> = sqlx::query("SELECT datname FROM pg_database")
         .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("datname").to_string())

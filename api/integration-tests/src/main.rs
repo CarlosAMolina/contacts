@@ -26,7 +26,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     sqlx::migrate!().run(&store.clone().connection).await.unwrap();
     // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
 
-    assert_all_tables_have_been_created(&store.connection).await;
+    assert_migrations_have_correctly_executed(&store.connection).await;
 
     println!("Init test get_contacts");
     // TODO test_get_contacts().await;
@@ -123,8 +123,8 @@ async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx
     }
 }
 
-async fn assert_all_tables_have_been_created(postgres_connection: &sqlx::Pool<sqlx::Postgres>) {
-    println!("Init assert all tables have been created");
+async fn assert_migrations_have_correctly_executed(postgres_connection: &sqlx::Pool<sqlx::Postgres>) {
+    println!("Init assert migrations have correctly executed");
     println!("Init get all tables");
     let query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'contacts'";
     let mut table_names: Vec<_> = sqlx::query(query)

@@ -21,14 +21,7 @@ async fn main() -> Result<(), handle_errors::Error> {
         .execute(&store.clone().connection)
         .await
         .unwrap();
-    println!("Init migrations");
-    sqlx::migrate!()
-        .run(&store.clone().connection)
-        .await
-        .unwrap();
-    // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
-    assert_migrations_have_correctly_executed(&store.connection).await;
-
+    run_migrations(&store).await;
     insert_db_data(&store).await;
     test_get_contacts().await;
     println!("Init shut down the api web server");
@@ -120,6 +113,16 @@ async fn exists_database(
         println!("The database {} does not exist", config.database_name);
         false
     }
+}
+
+async fn run_migrations(store: &Store) {
+    println!("Init migrations");
+    sqlx::migrate!()
+        .run(&store.clone().connection)
+        .await
+        .unwrap();
+    // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
+    assert_migrations_have_correctly_executed(&store.connection).await;
 }
 
 async fn assert_migrations_have_correctly_executed(

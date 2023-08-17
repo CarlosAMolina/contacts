@@ -132,9 +132,11 @@ async fn assert_all_tables_have_been_created(postgres_connection: &sqlx::Pool<sq
         .fetch_all(postgres_connection)
         .await
         .unwrap();
+    table_names.sort();
     println!("Table names ({}): {:?}", table_names.len(), table_names);
     let expected_table_names = vec![
         "addresses".to_string(),
+        "all_data".to_string(),
         "categories".to_string(),
         "emails".to_string(),
         "facebook".to_string(),
@@ -147,11 +149,10 @@ async fn assert_all_tables_have_been_created(postgres_connection: &sqlx::Pool<sq
         "users".to_string(),
         "users_categories".to_string(),
     ];
-    println!("Expected table names ({}): {:?}", expected_table_names.len(), expected_table_names);
-    table_names.sort();
     if expected_table_names == table_names {
         println!("The tables have been created correctly");
     } else {
+        println!("Expected table names ({}): {:?}", expected_table_names.len(), expected_table_names);
         panic!("Table names do not match the expected ones");
     }
 }

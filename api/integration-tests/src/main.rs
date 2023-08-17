@@ -1,4 +1,5 @@
-use api::types::database::AllData;
+use api::store::Store;
+use api::types::contact::Contact;
 use api::{config_api, handle_errors, oneshot, setup_store, store};
 use sqlx;
 use sqlx::Row;
@@ -12,7 +13,6 @@ async fn main() -> Result<(), handle_errors::Error> {
     let config = config_api::Config::new().expect("Config can't be set");
     recreate_database(&config).await;
     let store = setup_store(&config).await;
-
     println!("Init start the api web server");
     let handler = oneshot(&store).await;
     println!("Init create schema");
@@ -21,19 +21,24 @@ async fn main() -> Result<(), handle_errors::Error> {
         .execute(&store.clone().connection)
         .await
         .unwrap();
-
     println!("Init migrations");
     sqlx::migrate!().run(&store.clone().connection).await.unwrap();
     // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
-
     assert_migrations_have_correctly_executed(&store.connection).await;
 
-    println!("Init test get_contacts");
-    // TODO test_get_contacts().await;
 
+    println!("Init insert data in db");
+    // TODO use api methods
+    sqlx::query(
+        "INSERT INTO contacts.users (id, name, surname)
+        VALUES (1, 'John', 'Doe')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
+    test_get_contacts().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
-
     Ok(())
 }
 
@@ -101,7 +106,6 @@ async fn recreate_database(config: &config_api::Config) {
     if !exists_database(&config, &postgres_connection).await {
         panic!("The database has not been created");
     }
-
 }
 
 async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx::Pool<sqlx::Postgres>) -> bool {
@@ -158,17 +162,34 @@ async fn assert_migrations_have_correctly_executed(postgres_connection: &sqlx::P
 }
 
 async fn test_get_contacts() {
+    println!("Init test get_contacts");
     let client = reqwest::Client::new();
     // TODO use config to create the URL
-    let res = client
-        .get("http://localhost:3030/contacts?query=arlos%20a")
+    let response = client
+        .get("http://localhost:3030/contacts?query=ohn")
         .send()
         .await
         .unwrap()
-        .json::<AllData>()
+        .json::<Vec<Contact>>()
         .await
         .unwrap();
-    println!("{:?}", res); // TODO
-                           // TODO assert_eq!(res.id, 1);
-                           // TODO assert_eq!(res.title, q.title);
+    let expected_result = vec![
+        Contact {
+            user_id: 1,
+            user_name: Some("John".to_string()),
+            user_surname: Some("Doe".to_string()),
+            nicknames: vec![],
+            phones: vec![],
+            categories: vec![],
+            addresses: vec![],
+            emails: vec![],
+            urls: vec![],
+            facebook_urls: vec![],
+            twitter_handles: vec![],
+            instagram_handles: vec![],
+            note: None,
+        }
+    ];
+    assert_eq!(expected_result, response);
+    println!("✓");
 }

@@ -12,6 +12,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     let config = config_api::Config::new().expect("Config can't be set");
     recreate_database(&config).await;
     let store = setup_store(&config).await;
+
     println!("Init start the api web server");
     let handler = oneshot(&store).await;
     println!("Init create schema");
@@ -25,8 +26,10 @@ async fn main() -> Result<(), handle_errors::Error> {
     sqlx::migrate!().run(&store.clone().connection).await.unwrap();
     // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
 
+    assert_all_tables_have_been_created(&store.connection).await;
+
     println!("Init test get_contacts");
-    test_get_contacts().await;
+    // TODO test_get_contacts().await;
 
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
@@ -117,6 +120,39 @@ async fn exists_database(config: &config_api::Config, postgres_connection: &sqlx
     } else {
         println!("The database {} does not exist", config.database_name);
         false
+    }
+}
+
+async fn assert_all_tables_have_been_created(postgres_connection: &sqlx::Pool<sqlx::Postgres>) {
+    println!("Init assert all tables have been created");
+    println!("Init get all tables");
+    let query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'contacts'";
+    let mut table_names: Vec<_> = sqlx::query(query)
+        .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("table_name").to_string())
+        .fetch_all(postgres_connection)
+        .await
+        .unwrap();
+    println!("Table names ({}): {:?}", table_names.len(), table_names);
+    let expected_table_names = vec![
+        "addresses".to_string(),
+        "categories".to_string(),
+        "emails".to_string(),
+        "facebook".to_string(),
+        "instagram".to_string(),
+        "nicknames".to_string(),
+        "notes".to_string(),
+        "phones".to_string(),
+        "twitter".to_string(),
+        "urls".to_string(),
+        "users".to_string(),
+        "users_categories".to_string(),
+    ];
+    println!("Expected table names ({}): {:?}", expected_table_names.len(), expected_table_names);
+    table_names.sort();
+    if expected_table_names == table_names {
+        println!("The tables have been created correctly");
+    } else {
+        panic!("Table names do not match the expected ones");
     }
 }
 

@@ -1,6 +1,6 @@
 use api::store::Store;
 use api::types::contact::Contact;
-use api::{config_api, handle_errors, oneshot, setup_store, store};
+use api::{config_api, handle_errors, oneshot, setup_store};
 use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;

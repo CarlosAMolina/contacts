@@ -15,12 +15,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     let store = setup_store(&config).await;
     println!("Init start the api web server");
     let handler = oneshot(&store).await;
-    println!("Init create schema");
-    sqlx::query("CREATE SCHEMA IF NOT EXISTS contacts")
-        //.execute(&postgres_connection)
-        .execute(&store.clone().connection)
-        .await
-        .unwrap();
+    add_db_schema(&store).await;
     run_migrations(&store).await;
     insert_db_data(&store).await;
     test_get_contacts().await;
@@ -113,6 +108,15 @@ async fn exists_database(
         println!("The database {} does not exist", config.database_name);
         false
     }
+}
+
+async fn add_db_schema(store: &Store) {
+    println!("Init create schema");
+    sqlx::query("CREATE SCHEMA IF NOT EXISTS contacts")
+        //.execute(&postgres_connection)
+        .execute(&store.clone().connection)
+        .await
+        .unwrap();
 }
 
 async fn run_migrations(store: &Store) {

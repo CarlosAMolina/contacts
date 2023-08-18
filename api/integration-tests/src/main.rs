@@ -20,13 +20,14 @@ async fn main() -> Result<(), Error> {
     add_db_schema(&store).await;
     run_migrations(&store).await;
     insert_db_data(&store).await;
-    let url_api = format!("http://{:?}.{:?}.{:?}.{:?}:{:?}",
-                     config.api_host[0],
-                     config.api_host[1],
-                     config.api_host[2],
-                     config.api_host[3],
-                     config.api_port,
-                     );
+    let url_api = format!(
+        "http://{:?}.{:?}.{:?}.{:?}:{:?}",
+        config.api_host[0],
+        config.api_host[1],
+        config.api_host[2],
+        config.api_host[3],
+        config.api_port,
+    );
     test_get_contacts(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
     test_get_contacts_if_no_results(&url_api).await;
@@ -231,14 +232,7 @@ async fn test_get_contacts_if_invalid_path(url_api: &String) {
     println!("Init test_get_contacts_if_invalid_path");
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts/a");
-    let response = client
-        .get(url)
-        .send()
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
+    let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = Error::RouteNotFound.to_string();
     assert_eq!(response, expected_result);
     println!("✓");
@@ -264,14 +258,7 @@ async fn test_get_contacts_if_missing_parameters(url_api: &String) {
     println!("Init test_get_contacts_if_missing_parameters");
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts");
-    let response = client
-        .get(url)
-        .send()
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
+    let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = format!("{}", Error::MissingParameters);
     assert_eq!(response, expected_result);
     println!("✓");
@@ -281,19 +268,11 @@ async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash(url_api: 
     println!("Init test_get_contacts_if_missing_parameters_and_url_ends_in_slash");
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts/");
-    let response = client
-        .get(url)
-        .send()
-        .await
-        .unwrap()
-        .text()
-        .await
-        .unwrap();
+    let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = format!("{}", Error::MissingParameters);
     assert_eq!(response, expected_result);
     println!("✓");
 }
-
 
 async fn test_get_contact_by_id(url_api: &String) {
     println!("Init test_get_contact_by_id");
@@ -342,4 +321,3 @@ async fn test_get_contact_by_id_if_id_does_not_exist(url_api: &String) {
     assert_eq!(expected_result, response);
     println!("✓");
 }
-

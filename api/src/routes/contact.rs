@@ -31,6 +31,7 @@ pub async fn get_contacts(
     }
 }
 
+// TODO create Query type and move to types/query.rs
 fn extract_query(params: HashMap<String, String>) -> Result<String, Error> {
     if params.contains_key("query") {
         let query = params.get("query").unwrap().clone();

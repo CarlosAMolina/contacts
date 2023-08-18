@@ -19,6 +19,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     run_migrations(&store).await;
     insert_db_data(&store).await;
     test_get_contacts().await;
+    test_get_contact_by_id().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
     Ok(())
@@ -208,6 +209,37 @@ async fn test_get_contacts() {
         instagram_handles: vec![],
         note: None,
     }];
+    assert_eq!(expected_result, response);
+    println!("✓");
+}
+
+async fn test_get_contact_by_id() {
+    println!("Init test test_get_contact_by_id");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts/1")
+        .send()
+        .await
+        .unwrap()
+        .json::<Contact>()
+        .await
+        .unwrap();
+    let expected_result = Contact {
+        user_id: 1,
+        user_name: Some("John".to_string()),
+        user_surname: Some("Doe".to_string()),
+        nicknames: vec![],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
+    };
     assert_eq!(expected_result, response);
     println!("✓");
 }

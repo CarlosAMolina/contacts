@@ -20,6 +20,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     insert_db_data(&store).await;
     test_get_contacts().await;
     test_get_contact_by_id().await;
+    test_get_contact_by_id_if_id_does_not_exist().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
     Ok(())
@@ -240,6 +241,23 @@ async fn test_get_contact_by_id() {
         instagram_handles: vec![],
         note: None,
     };
+    assert_eq!(expected_result, response);
+    println!("✓");
+}
+
+async fn test_get_contact_by_id_if_id_does_not_exist() {
+    println!("Init test test_get_contact_by_id");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts/999")
+        .send()
+        .await
+        .unwrap()
+        .json::<Option<Contact>>()
+        .await
+        .unwrap();
+    let expected_result = None;
     assert_eq!(expected_result, response);
     println!("✓");
 }

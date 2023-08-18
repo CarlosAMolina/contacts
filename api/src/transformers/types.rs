@@ -12,78 +12,85 @@ pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
             .filter(|row| row.user_id == contact_id)
             .cloned()
             .collect();
-        let contact = get_contact_from_all_data(contact_all_data);
-        result.push(contact);
+        if let Some(contact) = get_contact_from_all_data(contact_all_data){
+            result.push(contact);
+        };
     }
     result
 }
 
 // TODO not use clone
-pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Contact {
-    let mut all_data_phone_unique: Vec<_> = all_data_vec
-        .iter()
-        .filter(|row| row.phone.is_some())
-        .collect();
-    all_data_phone_unique.dedup_by(|a, b| a.phone == b.phone);
-    let phones: Vec<Phone> = all_data_phone_unique
-        .iter()
-        .map(|row| Phone {
-            value: row.phone.unwrap(),
-            description: row.phone_description.clone(),
-        })
-        .collect();
-    let mut addresses = vec![];
-    let mut categories = vec![];
-    let mut emails = vec![];
-    let mut facebook_urls = vec![];
-    let mut instagram_handles = vec![];
-    let mut nicknames = vec![];
-    let mut twitter_handles = vec![];
-    let mut urls = vec![];
-    let note = all_data_vec[0].note.clone();
-    let user_id = all_data_vec[0].user_id.clone();
-    let user_name = all_data_vec[0].user_name.clone();
-    let user_surname = all_data_vec[0].user_surname.clone();
-    for all_data in all_data_vec.iter().cloned() {
-        if let Some(value) = all_data.address {
-            push_to_vector_if_new(&mut addresses, value);
+pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> {
+    if all_data_vec.len() == 0 {
+        return  None;
+    } else {
+        let mut all_data_phone_unique: Vec<_> = all_data_vec
+            .iter()
+            .filter(|row| row.phone.is_some())
+            .collect();
+        all_data_phone_unique.dedup_by(|a, b| a.phone == b.phone);
+        let phones: Vec<Phone> = all_data_phone_unique
+            .iter()
+            .map(|row| Phone {
+                value: row.phone.unwrap(),
+                description: row.phone_description.clone(),
+            })
+            .collect();
+        let mut addresses = vec![];
+        let mut categories = vec![];
+        let mut emails = vec![];
+        let mut facebook_urls = vec![];
+        let mut instagram_handles = vec![];
+        let mut nicknames = vec![];
+        let mut twitter_handles = vec![];
+        let mut urls = vec![];
+        let note = all_data_vec[0].note.clone();
+        let user_id = all_data_vec[0].user_id.clone();
+        let user_name = all_data_vec[0].user_name.clone();
+        let user_surname = all_data_vec[0].user_surname.clone();
+        for all_data in all_data_vec.iter().cloned() {
+            if let Some(value) = all_data.address {
+                push_to_vector_if_new(&mut addresses, value);
+            }
+            if let Some(value) = all_data.category {
+                push_to_vector_if_new(&mut categories, value);
+            }
+            if let Some(value) = all_data.email {
+                push_to_vector_if_new(&mut emails, value);
+            }
+            if let Some(value) = all_data.facebook_url {
+                push_to_vector_if_new(&mut facebook_urls, value);
+            }
+            if let Some(value) = all_data.instagram_handle {
+                push_to_vector_if_new(&mut instagram_handles, value);
+            }
+            if let Some(value) = all_data.nickname {
+                push_to_vector_if_new(&mut nicknames, value);
+            }
+            if let Some(value) = all_data.twitter_handle {
+                push_to_vector_if_new(&mut twitter_handles, value);
+            }
+            if let Some(value) = all_data.url {
+                push_to_vector_if_new(&mut urls, value);
+            }
         }
-        if let Some(value) = all_data.category {
-            push_to_vector_if_new(&mut categories, value);
+        Some(
+            Contact {
+            user_id,
+            user_name,
+            user_surname,
+            nicknames,
+            phones,
+            categories,
+            addresses,
+            emails,
+            urls,
+            facebook_urls,
+            twitter_handles,
+            instagram_handles,
+            note,
         }
-        if let Some(value) = all_data.email {
-            push_to_vector_if_new(&mut emails, value);
-        }
-        if let Some(value) = all_data.facebook_url {
-            push_to_vector_if_new(&mut facebook_urls, value);
-        }
-        if let Some(value) = all_data.instagram_handle {
-            push_to_vector_if_new(&mut instagram_handles, value);
-        }
-        if let Some(value) = all_data.nickname {
-            push_to_vector_if_new(&mut nicknames, value);
-        }
-        if let Some(value) = all_data.twitter_handle {
-            push_to_vector_if_new(&mut twitter_handles, value);
-        }
-        if let Some(value) = all_data.url {
-            push_to_vector_if_new(&mut urls, value);
-        }
-    }
-    Contact {
-        user_id,
-        user_name,
-        user_surname,
-        nicknames,
-        phones,
-        categories,
-        addresses,
-        emails,
-        urls,
-        facebook_urls,
-        twitter_handles,
-        instagram_handles,
-        note,
+        )
     }
 }
 

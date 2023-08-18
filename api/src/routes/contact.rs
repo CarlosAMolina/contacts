@@ -22,20 +22,13 @@ pub async fn get_contacts(
     params: HashMap<String, String>,
     store: Store,
 ) -> Result<impl warp::Reply, warp::Rejection> {
-    // TODO if empty params return MissingParameters error
     event!(Level::INFO, "params={:?}", params);
-    // TODO drop duplicated
-    if params.is_empty() {
-        return Err(warp::reject::custom(Error::MissingParameters));
-    } else {
-        // TODO test ? -> returns error
-        let query = extract_query(params)?;
-        match store.get_all_data_by_query(query).await {
-            Ok(all_data_vec) => Ok(warp::reply::json(
-                &transformers::types::get_contacts_from_all_data(all_data_vec),
-            )),
-            Err(e) => return Err(warp::reject::custom(e)),
-        }
+    let query = extract_query(params)?;
+    match store.get_all_data_by_query(query).await {
+        Ok(all_data_vec) => Ok(warp::reply::json(
+            &transformers::types::get_contacts_from_all_data(all_data_vec),
+        )),
+        Err(e) => return Err(warp::reject::custom(e)),
     }
 }
 

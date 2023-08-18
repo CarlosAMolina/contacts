@@ -20,6 +20,7 @@ async fn main() -> Result<(), handle_errors::Error> {
     insert_db_data(&store).await;
     test_get_contacts().await;
     test_get_contact_by_id().await;
+    test_get_contacts_if_no_results().await;
     test_get_contact_by_id_if_id_does_not_exist().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
@@ -184,7 +185,7 @@ async fn insert_db_data(store: &Store) {
 }
 
 async fn test_get_contacts() {
-    println!("Init test get_contacts");
+    println!("Init test_get_contacts");
     let client = reqwest::Client::new();
     // TODO use config to create the URL
     let response = client
@@ -214,8 +215,24 @@ async fn test_get_contacts() {
     println!("✓");
 }
 
+async fn test_get_contacts_if_no_results() {
+    println!("Init test_get_contacts_if_no_results");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts?query=asdfasdfsadf")
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Contact>>()
+        .await
+        .unwrap();
+    assert_eq!(0, response.len());
+    println!("✓");
+}
+
 async fn test_get_contact_by_id() {
-    println!("Init test test_get_contact_by_id");
+    println!("Init test_get_contact_by_id");
     let client = reqwest::Client::new();
     // TODO use config to create the URL
     let response = client
@@ -246,7 +263,7 @@ async fn test_get_contact_by_id() {
 }
 
 async fn test_get_contact_by_id_if_id_does_not_exist() {
-    println!("Init test test_get_contact_by_id");
+    println!("Init test_get_contact_by_id_if_id_does_not_exist");
     let client = reqwest::Client::new();
     // TODO use config to create the URL
     let response = client

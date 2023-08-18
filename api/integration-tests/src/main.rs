@@ -22,6 +22,7 @@ async fn main() -> Result<(), Error> {
     test_get_contacts().await;
     test_get_contacts_if_no_results().await;
     test_get_contacts_if_missing_parameters().await;
+    test_get_contacts_if_missing_parameters_and_url_ends_in_slash().await;
     test_get_contact_by_id().await;
     test_get_contact_by_id_if_id_does_not_exist().await;
     println!("Init shut down the api web server");
@@ -245,11 +246,28 @@ async fn test_get_contacts_if_missing_parameters() {
         .text()
         .await
         .unwrap();
-    println!("response: {:?}", response); // TODO
     let expected_result = format!("{}", Error::MissingParameters);
     assert_eq!(response, expected_result);
     println!("✓");
 }
+
+async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash() {
+    println!("Init test_get_contacts_if_missing_parameters_and_url_ends_in_slash");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts/")
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    let expected_result = format!("{}", Error::MissingParameters);
+    assert_eq!(response, expected_result);
+    println!("✓");
+}
+
 
 async fn test_get_contact_by_id() {
     println!("Init test_get_contact_by_id");

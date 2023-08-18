@@ -7,7 +7,6 @@ use tracing::{event, Level};
 
 // TODO use pagination
 
-// TODO can id be empty? return error if it can be
 pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply, warp::Rejection> {
     event!(Level::INFO, "id={}", id);
     match store.get_all_data_by_id(id).await {

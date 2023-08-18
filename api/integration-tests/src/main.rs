@@ -20,6 +20,7 @@ async fn main() -> Result<(), Error> {
     run_migrations(&store).await;
     insert_db_data(&store).await;
     test_get_contacts().await;
+    test_get_contacts_if_invalid_path().await;
     test_get_contacts_if_no_results().await;
     test_get_contacts_if_missing_parameters().await;
     test_get_contacts_if_missing_parameters_and_url_ends_in_slash().await;
@@ -218,6 +219,23 @@ async fn test_get_contacts() {
     println!("✓");
 }
 
+async fn test_get_contacts_if_invalid_path() {
+    println!("Init test_get_contacts_if_invalid_path");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts/a")
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    let expected_result = Error::RouteNotFound.to_string();
+    assert_eq!(response, expected_result);
+    println!("✓");
+}
+
 async fn test_get_contacts_if_no_results() {
     println!("Init test_get_contacts_if_no_results");
     let client = reqwest::Client::new();
@@ -316,3 +334,4 @@ async fn test_get_contact_by_id_if_id_does_not_exist() {
     assert_eq!(expected_result, response);
     println!("✓");
 }
+

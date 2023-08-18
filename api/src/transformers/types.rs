@@ -183,7 +183,7 @@ mod config_tests {
             instagram_handles: vec!["JohnI".to_string()],
             note: Some("Foo bar".to_string()),
         };
-        let result = get_contact_from_all_data(all_data_vec);
+        let result = get_contact_from_all_data(all_data_vec).unwrap();
         assert_eq!(expected, result);
     }
 

@@ -1,6 +1,7 @@
+use api::handle_errors::Error;
 use api::store::Store;
 use api::types::contact::Contact;
-use api::{config_api, handle_errors, oneshot, setup_store};
+use api::{config_api, oneshot, setup_store};
 use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
@@ -8,7 +9,7 @@ use std::io::{self, Write};
 use std::process::Command;
 
 #[tokio::main]
-async fn main() -> Result<(), handle_errors::Error> {
+async fn main() -> Result<(), Error> {
     println!("Init integration tests");
     let config = config_api::Config::new().expect("Config can't be set");
     recreate_database(&config).await;
@@ -19,8 +20,9 @@ async fn main() -> Result<(), handle_errors::Error> {
     run_migrations(&store).await;
     insert_db_data(&store).await;
     test_get_contacts().await;
-    test_get_contact_by_id().await;
     test_get_contacts_if_no_results().await;
+    test_get_contacts_if_missing_parameters().await;
+    test_get_contact_by_id().await;
     test_get_contact_by_id_if_id_does_not_exist().await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
@@ -227,7 +229,25 @@ async fn test_get_contacts_if_no_results() {
         .json::<Vec<Contact>>()
         .await
         .unwrap();
-    assert_eq!(0, response.len());
+    assert!(response.is_empty());
+    println!("✓");
+}
+
+async fn test_get_contacts_if_missing_parameters() {
+    println!("Init test_get_contacts_if_missing_parameters");
+    let client = reqwest::Client::new();
+    // TODO use config to create the URL
+    let response = client
+        .get("http://localhost:3030/contacts")
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    println!("response: {:?}", response); // TODO
+    let expected_result = format!("{}", Error::MissingParameters);
+    assert_eq!(response, expected_result);
     println!("✓");
 }
 

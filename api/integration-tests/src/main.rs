@@ -5,6 +5,7 @@ use api::{config_api, oneshot, setup_store};
 use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
+use std::fmt::format;
 use std::io::{self, Write};
 use std::process::Command;
 
@@ -19,13 +20,20 @@ async fn main() -> Result<(), Error> {
     add_db_schema(&store).await;
     run_migrations(&store).await;
     insert_db_data(&store).await;
-    test_get_contacts().await;
-    test_get_contacts_if_invalid_path().await;
-    test_get_contacts_if_no_results().await;
-    test_get_contacts_if_missing_parameters().await;
-    test_get_contacts_if_missing_parameters_and_url_ends_in_slash().await;
-    test_get_contact_by_id().await;
-    test_get_contact_by_id_if_id_does_not_exist().await;
+    let url_api = format!("http://{:?}.{:?}.{:?}.{:?}:{:?}",
+                     config.api_host[0],
+                     config.api_host[1],
+                     config.api_host[2],
+                     config.api_host[3],
+                     config.api_port,
+                     );
+    test_get_contacts(&url_api).await;
+    test_get_contacts_if_invalid_path(&url_api).await;
+    test_get_contacts_if_no_results(&url_api).await;
+    test_get_contacts_if_missing_parameters(&url_api).await;
+    test_get_contacts_if_missing_parameters_and_url_ends_in_slash(&url_api).await;
+    test_get_contact_by_id(&url_api).await;
+    test_get_contact_by_id_if_id_does_not_exist(&url_api).await;
     println!("Init shut down the api web server");
     let _ = handler.sender.send(1);
     Ok(())
@@ -188,12 +196,12 @@ async fn insert_db_data(store: &Store) {
     .unwrap();
 }
 
-async fn test_get_contacts() {
+async fn test_get_contacts(url_api: &String) {
     println!("Init test_get_contacts");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts?query=ohn");
     let response = client
-        .get("http://localhost:3030/contacts?query=ohn")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -219,12 +227,12 @@ async fn test_get_contacts() {
     println!("✓");
 }
 
-async fn test_get_contacts_if_invalid_path() {
+async fn test_get_contacts_if_invalid_path(url_api: &String) {
     println!("Init test_get_contacts_if_invalid_path");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts/a");
     let response = client
-        .get("http://localhost:3030/contacts/a")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -236,12 +244,12 @@ async fn test_get_contacts_if_invalid_path() {
     println!("✓");
 }
 
-async fn test_get_contacts_if_no_results() {
+async fn test_get_contacts_if_no_results(url_api: &String) {
     println!("Init test_get_contacts_if_no_results");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts?query=asdfasdfsadf");
     let response = client
-        .get("http://localhost:3030/contacts?query=asdfasdfsadf")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -252,12 +260,12 @@ async fn test_get_contacts_if_no_results() {
     println!("✓");
 }
 
-async fn test_get_contacts_if_missing_parameters() {
+async fn test_get_contacts_if_missing_parameters(url_api: &String) {
     println!("Init test_get_contacts_if_missing_parameters");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts");
     let response = client
-        .get("http://localhost:3030/contacts")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -269,12 +277,12 @@ async fn test_get_contacts_if_missing_parameters() {
     println!("✓");
 }
 
-async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash() {
+async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash(url_api: &String) {
     println!("Init test_get_contacts_if_missing_parameters_and_url_ends_in_slash");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts/");
     let response = client
-        .get("http://localhost:3030/contacts/")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -287,12 +295,12 @@ async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash() {
 }
 
 
-async fn test_get_contact_by_id() {
+async fn test_get_contact_by_id(url_api: &String) {
     println!("Init test_get_contact_by_id");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts/1");
     let response = client
-        .get("http://localhost:3030/contacts/1")
+        .get(url)
         .send()
         .await
         .unwrap()
@@ -318,12 +326,12 @@ async fn test_get_contact_by_id() {
     println!("✓");
 }
 
-async fn test_get_contact_by_id_if_id_does_not_exist() {
+async fn test_get_contact_by_id_if_id_does_not_exist(url_api: &String) {
     println!("Init test_get_contact_by_id_if_id_does_not_exist");
     let client = reqwest::Client::new();
-    // TODO use config to create the URL
+    let url = format!("{url_api}/contacts/999");
     let response = client
-        .get("http://localhost:3030/contacts/999")
+        .get(url)
         .send()
         .await
         .unwrap()

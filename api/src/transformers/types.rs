@@ -12,7 +12,7 @@ pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
             .filter(|row| row.user_id == contact_id)
             .cloned()
             .collect();
-        if let Some(contact) = get_contact_from_all_data(contact_all_data){
+        if let Some(contact) = get_contact_from_all_data(contact_all_data) {
             result.push(contact);
         };
     }
@@ -22,7 +22,7 @@ pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
 // TODO not use clone
 pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> {
     if all_data_vec.len() == 0 {
-        return  None;
+        return None;
     } else {
         let mut all_data_phone_unique: Vec<_> = all_data_vec
             .iter()
@@ -74,8 +74,7 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> 
                 push_to_vector_if_new(&mut urls, value);
             }
         }
-        Some(
-            Contact {
+        Some(Contact {
             user_id,
             user_name,
             user_surname,
@@ -89,8 +88,7 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> 
             twitter_handles,
             instagram_handles,
             note,
-        }
-        )
+        })
     }
 }
 

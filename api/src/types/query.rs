@@ -12,7 +12,7 @@ pub fn extract_query(params: HashMap<String, String>) -> Result<String, Error> {
 }
 
 #[cfg(test)]
-mod tests_extract_query{
+mod tests_extract_query {
     use super::*;
 
     #[test]
@@ -31,5 +31,4 @@ mod tests_extract_query{
         let expected_result = format!("{}", Error::MissingParameters);
         assert_eq!(result, expected_result);
     }
-
 }

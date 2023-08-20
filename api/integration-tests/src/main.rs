@@ -157,7 +157,6 @@ async fn assert_migrations_have_correctly_executed(
         .await
         .unwrap();
     table_names.sort();
-    println!("Table names ({}): {:?}", table_names.len(), table_names);
     let expected_table_names = vec![
         "addresses".to_string(),
         "all_data".to_string(),
@@ -176,6 +175,7 @@ async fn assert_migrations_have_correctly_executed(
     if expected_table_names == table_names {
         println!("The tables have been created correctly");
     } else {
+        println!("Table names ({}): {:?}", table_names.len(), table_names);
         println!(
             "Expected table names ({}): {:?}",
             expected_table_names.len(),

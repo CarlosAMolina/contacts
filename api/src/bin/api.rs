@@ -5,6 +5,7 @@ use api::config_api;
 use api::{run, setup_store};
 
 #[tokio::main]
+// TODO (use `?` where it is required) async fn main() -> Result<(), handle_errors::Error> {
 async fn main() {
     let config = config_api::Config::new().expect("Config can't be set");
     let store = setup_store(&config).await;

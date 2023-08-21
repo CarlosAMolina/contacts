@@ -25,6 +25,8 @@ impl Config {
             .map(|val| val.parse::<bool>())
             .unwrap_or(Ok(false))
             .unwrap();
+        // TODO (create ParseBoolError) .map_err(|e| handle_errors::Error::ParseError(e))
+        // TODO .expect("Cannot parse port");
         let config_file_name = match is_app_in_docker {
             true => "setup-docker.toml",
             false => "setup-local.toml",
@@ -45,6 +47,11 @@ mod config_tests {
     // in order to not affect each test when env variables are modified.
     #[test]
     fn config_files_are_detected_correctly() {
+        // TODO // The env variables are not set.
+        // TODO // catch_unwind: captures panics without bringing down the program.
+        // TODO let result = std::panic::catch_unwind(|| Config::new());
+        // TODO assert!(result.is_err());
+
         let expected_not_in_docker = Config {
             api_host: [127, 0, 0, 1],
             api_port: 3030,

@@ -3,7 +3,7 @@ use warp::{http::Method, Filter, Reply};
 
 pub use handle_errors;
 
-pub mod config_api; // TODO try use mod instead of mod
+pub mod config_api;
 mod routes;
 pub mod store;
 mod transformers;

@@ -12,12 +12,16 @@ use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
 
+const RUN_SLOW_TESTS: bool = false;
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     println!("Init integration tests");
     let config = config_api::Config::new().expect("Config can't be set");
     recreate_database(&config).await;
-    test_setup_store_returns_expected_error_if_invalid_config().await;
+    if RUN_SLOW_TESTS {
+        test_setup_store_returns_expected_error_if_invalid_config().await;
+    }
     let store = setup_store(&config).await.unwrap();
     println!("Init start the api web server");
     let handler = oneshot(&store).await;

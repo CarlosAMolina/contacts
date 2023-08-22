@@ -104,7 +104,6 @@ mod config_tests {
 
     #[test]
     fn get_contact_from_all_data_manages_duplicates_correctly() {
-        // TODO test empty phone
         let all_data_vec = vec![
             AllData {
                 user_id: 1,
@@ -187,7 +186,6 @@ mod config_tests {
 
     #[test]
     fn get_contacts_from_all_data_manages_runs_ok() {
-        // TODO test empty phone
         let all_data_vec = vec![
             AllData {
                 user_id: 1,

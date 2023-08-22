@@ -39,16 +39,18 @@ impl Config {
 
 #[cfg(test)]
 mod config_tests {
+    use std::env;
     use super::*;
 
-    // As Rust runs test in parallel, we run two tests in the same function
+    // As Rust runs test in parallel, we run multiple tests in the same function
     // in order to not affect each test when env variables are modified.
     #[test]
     fn config_files_are_detected_correctly() {
-        // TODO // The env variables are not set.
-        // TODO // catch_unwind: captures panics without bringing down the program.
-        // TODO let result = std::panic::catch_unwind(|| Config::new());
-        // TODO assert!(result.is_err());
+        // Test wrong Docker env variable panics the program.
+        env::set_var("IS_DOCKER_RUNNING", "non_bool");
+        let result = std::panic::catch_unwind(|| Config::new());
+        assert!(result.is_err());
+        env::remove_var("IS_DOCKER_RUNNING");
 
         let expected_not_in_docker = Config {
             api_host: [127, 0, 0, 1],
@@ -81,5 +83,6 @@ mod config_tests {
         assert_eq!(expected_not_in_docker, Config::new().unwrap());
         std::env::set_var("IS_DOCKER_RUNNING", "true");
         assert_eq!(expected_in_docker, Config::new().unwrap());
+        env::remove_var("IS_DOCKER_RUNNING");
     }
 }

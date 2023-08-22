@@ -25,8 +25,6 @@ impl Config {
             .map(|val| val.parse::<bool>())
             .unwrap_or(Ok(false))
             .unwrap();
-        // TODO (create ParseBoolError) .map_err(|e| handle_errors::Error::ParseError(e))
-        // TODO .expect("Cannot parse port");
         let config_file_name = match is_app_in_docker {
             true => "setup-docker.toml",
             false => "setup-local.toml",

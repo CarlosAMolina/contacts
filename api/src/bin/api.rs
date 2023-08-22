@@ -8,7 +8,7 @@ use api::{run, setup_store};
 // TODO (use `?` where it is required) async fn main() -> Result<(), handle_errors::Error> {
 async fn main() {
     let config = config_api::Config::new().expect("Config can't be set");
-    let store = setup_store(&config).await;
+    let store = setup_store(&config).await.unwrap(); // TODO replace with await?
 
     let log_filter = format!(
         "handle_errors={},api={},warp={}",

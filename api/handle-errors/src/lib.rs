@@ -1,12 +1,11 @@
 use sqlx;
+use tracing::{event, Level};
 use warp::{
     filters::{body::BodyDeserializeError, cors::CorsForbidden},
     http::StatusCode,
     reject::Reject,
     Rejection, Reply,
 };
-use tracing::{event, Level};
-
 
 #[derive(Debug)]
 pub enum Error {
@@ -22,7 +21,7 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
-            Error::ContactNotFound=> write!(f, "Contact not found"),
+            Error::ContactNotFound => write!(f, "Contact not found"),
             Error::MissingParameters => write!(f, "Missing parameter"),
             Error::ParseError(ref err) => {
                 write!(f, "Cannot parse parameter: {}", err)
@@ -38,7 +37,10 @@ impl std::fmt::Display for Error {
 impl Reject for Error {}
 
 pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
+    // TODO implement event!(Level::ERROR .. in all cases
     if let Some(crate::Error::DatabaseQueryError(e)) = r.find() {
+        // TODO implement all DB errors
+        event!(Level::ERROR, "Database query error");
         Ok(warp::reply::with_status(
             e.to_string(),
             StatusCode::UNPROCESSABLE_ENTITY,

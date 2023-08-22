@@ -1,20 +1,24 @@
+use std::fmt::format;
+use std::io::{self, Write};
+use std::panic;
+use std::process::Command;
+
 use api::handle_errors::Error;
 use api::store::Store;
 use api::types::contact::Contact;
 use api::{config_api, oneshot, setup_store};
+use futures_util::future::FutureExt; // Required by catch_unwind.
 use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
-use std::fmt::format;
-use std::io::{self, Write};
-use std::process::Command;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
     println!("Init integration tests");
     let config = config_api::Config::new().expect("Config can't be set");
     recreate_database(&config).await;
-    let store = setup_store(&config).await;
+    test_setup_store_returns_expected_error_if_invalid_config().await;
+    let store = setup_store(&config).await.unwrap();
     println!("Init start the api web server");
     let handler = oneshot(&store).await;
     add_db_schema(&store).await;
@@ -105,6 +109,33 @@ async fn recreate_database(config: &config_api::Config) {
     if !exists_database(&config, &postgres_connection).await {
         panic!("The database has not been created");
     }
+}
+
+async fn test_setup_store_returns_expected_error_if_invalid_config() {
+    println!(
+        "Init test_setup_store_raises_exception_if_invalid_config (this test takes 30 seconds)"
+    );
+    let config_wrong = config_api::Config {
+        api_host: [1, 2, 3, 4],
+        api_port: 1,
+        database_host: "localhost".to_string(),
+        database_name: "test".to_string(),
+        database_password: "foo".to_string(),
+        database_port: 1,
+        database_user: "foo".to_string(),
+        log_file_name: "foo.log".to_string(),
+        log_level_api: "info".to_string(),
+        log_level_handle_errors: "info".to_string(),
+        log_level_warp: "error".to_string(),
+        log_path_name: "/tmp".to_string(),
+    };
+    let result = panic::AssertUnwindSafe(setup_store(&config_wrong))
+        .catch_unwind()
+        .await;
+    match result.unwrap().unwrap_err() {
+        Error::DatabaseQueryError(_) => println!("✓"),
+        _ => panic!("Test error"),
+    };
 }
 
 async fn exists_database(

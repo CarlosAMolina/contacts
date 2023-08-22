@@ -63,8 +63,9 @@ impl TraceInfo {
     }
 }
 
-// TODO pub async fn setup_store(config: &config::Config) -> Result<store::Store, handle_errors::Error> {
-pub async fn setup_store(config: &config_api::Config) -> store::Store {
+pub async fn setup_store(
+    config: &config_api::Config,
+) -> Result<store::Store, handle_errors::Error> {
     let db_url = format!(
         "postgres://{}:{}@{}:{}/{}",
         config.database_user,
@@ -73,8 +74,10 @@ pub async fn setup_store(config: &config_api::Config) -> store::Store {
         config.database_port,
         config.database_name
     );
-    store::Store::new(&db_url).await.unwrap()
-    // TODO use .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
+    let store = store::Store::new(&db_url)
+        .await
+        .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
+    Ok(store)
 }
 
 async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> + Clone {

@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 sqlx = { version = "0.5", features = ["postgres"] }
-# TODO check if feture log is required
+# TODO check if feature log is required
 # sqlx = { version = "0.5", features = ["postgres"] }
 tracing = "0.1"
 warp = "0.3"

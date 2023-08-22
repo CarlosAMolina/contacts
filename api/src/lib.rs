@@ -144,14 +144,19 @@ pub struct OneshotHandler {
     pub sender: Sender<i32>,
 }
 
-pub async fn oneshot(store: &store::Store) -> OneshotHandler {
+pub async fn oneshot(config: &config_api::Config, store: &store::Store) -> OneshotHandler {
     let routes = build_routes(store.clone()).await;
     let (tx, rx) = oneshot::channel::<i32>();
-    // TODO use config in the url
-    let socket: std::net::SocketAddr = "127.0.0.1:3030"
-        .to_string()
-        .parse()
-        .expect("Not a valid address");
+    let socket: std::net::SocketAddr = format!(
+        "{:?}.{:?}.{:?}.{:?}:{:?}",
+        config.api_host[0],
+        config.api_host[1],
+        config.api_host[2],
+        config.api_host[3],
+        config.api_port,
+    )
+    .parse()
+    .expect("Not a valid address");
 
     let (_, server) = warp::serve(routes).bind_with_graceful_shutdown(socket, async {
         rx.await.ok();

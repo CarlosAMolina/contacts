@@ -24,7 +24,7 @@ async fn main() -> Result<(), Error> {
     }
     let store = setup_store(&config).await.unwrap();
     println!("Init start the api web server");
-    let handler = oneshot(&store).await;
+    let handler = oneshot(&config, &store).await;
     add_db_schema(&store).await;
     run_migrations(&store).await;
     insert_db_data(&store).await;

@@ -39,8 +39,8 @@ impl Config {
 
 #[cfg(test)]
 mod config_tests {
-    use std::env;
     use super::*;
+    use std::env;
 
     // As Rust runs test in parallel, we run multiple tests in the same function
     // in order to not affect each test when env variables are modified.

@@ -5,11 +5,9 @@ use api::config_api;
 use api::{run, setup_store};
 
 #[tokio::main]
-// TODO (use `?` where it is required) async fn main() -> Result<(), handle_errors::Error> {
-async fn main() {
+async fn main() -> Result<(), handle_errors::Error> {
     let config = config_api::Config::new().expect("Config can't be set");
-    let store = setup_store(&config).await.unwrap(); // TODO replace with await?
-
+    let store = setup_store(&config).await?;
     let log_filter = format!(
         "handle_errors={},api={},warp={}",
         config.log_level_handle_errors, config.log_level_api, config.log_level_warp,
@@ -37,4 +35,5 @@ async fn main() {
         config.api_port
     );
     run(config, store).await;
+    Ok(())
 }

@@ -66,7 +66,7 @@ function getContactHtml(json) {
         <p class="title">Note</p>
         <p>${json.note}</p>
         <p class="title">ID</p>
-        <p>${json.id}</p>
+        <p>${json.user_id}</p>
     `
 }
 

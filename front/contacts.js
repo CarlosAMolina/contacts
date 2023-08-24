@@ -38,11 +38,11 @@ function getContactsHtml(json) {
 
 function getContactHtml(json) {
     return `
-        <h1>${json.name} ${json.surname}</h1>
+        <h1>${json.user_name} ${json.user_surname}</h1>
         <p class="title">Name</p>
-        <p>${json.name}</p>
+        <p>${json.user_name}</p>
         <p class="title">Surname</p>
-        <p>${json.surname}</p>
+        <p>${json.user_surname}</p>
         <p class="title">Nickname</p>
         <p>${json.nickname}</p>
         <p class="title">Phone</p>
@@ -61,6 +61,8 @@ function getContactHtml(json) {
         <p>${json.facebook_url}</p>
         <p class="title">Twitter</p>
         <p>${json.twitter_handle}</p>
+        <p class="title">Instagram</p>
+        <p>${json.instagram_handle}</p>
         <p class="title">Note</p>
         <p>${json.note}</p>
         <p class="title">ID</p>

@@ -49,6 +49,12 @@ make run
 make search_term
 ```
 
+## Front
+
+## Configuration front
+
+The `contacts.js` file must be edited, change the `urlPrefix` constant with it's real value.
+
 ## Tests
 
 The integration tests require the database to be running.

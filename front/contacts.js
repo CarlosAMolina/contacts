@@ -52,7 +52,7 @@ function getContactHtml(json) {
     result = getHtmlAddArrayIfNotNull(result, json.urls, 'URLs');
     result = getHtmlAddFacebookArrayIfNotNull(result, json.facebook_urls, 'Facebook');
     result = getHtmlAddTwitterArrayIfNotNull(result, json.twitter_handles, 'Twitter');
-    result = getHtmlAddArrayIfNotNull(result, json.instagram_handles, 'Instagram');
+    result = getHtmlAddInstagramArrayIfNotNull(result, json.instagram_handles, 'Instagram');
     result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
     result = result.concat(`
         <p class="title">ID</p>
@@ -99,8 +99,14 @@ function getHtmlAddFacebookArrayIfNotNull(html, array, title) {
     return result;
 }
 
-function getHtmlAddTwitterArrayIfNotNull(html, array_twitter_handle, title) {
-    let array = Array.from(array_twitter_handle, (twitter_handle) => `https://twitter.com/${twitter_handle}`);
+function getHtmlAddTwitterArrayIfNotNull(html, array_handles, title) {
+    let array = Array.from(array_handles, (handle) => `https://twitter.com/${handle}`);
+    result = getHtmlAddHyperlinkArrayIfNotNull(html, array, title);
+    return result;
+}
+
+function getHtmlAddInstagramArrayIfNotNull(html, array_handles, title) {
+    let array = Array.from(array_handles, (handle) => `https://www.instagram.com/${handle}/`);
     result = getHtmlAddHyperlinkArrayIfNotNull(html, array, title);
     return result;
 }

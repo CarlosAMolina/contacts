@@ -26,22 +26,42 @@ impl Store {
     pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<AllData>, Error> {
         let query = format!("%{}%", query.to_lowercase());
         match sqlx::query(
-            "SELECT * from contacts.all_data
-    WHERE LOWER(CONCAT_WS(' ', name, surname)) LIKE $1
-    OR LOWER(nickname) LIKE $1
-    OR CAST(phone AS VARCHAR) LIKE $1
-    OR LOWER(phone_description) LIKE $1
-    OR LOWER(category) LIKE $1
-    OR LOWER(address) LIKE $1
-    OR LOWER(email) LIKE $1
-    OR LOWER(url) LIKE $1
-    OR LOWER(facebook_url) LIKE $1
-    OR LOWER(twitter_handle) LIKE $1
-    OR LOWER(instagram_handle) LIKE $1
-    OR LOWER(note) LIKE $1
-    ORDER BY LOWER(CONCAT_WS(' ', name, surname)) ASC
-    ;
-    ",
+            "SELECT
+               *
+             from
+               contacts.all_data
+             WHERE
+               id IN (
+                 SELECT
+                   id
+                 from
+                   contacts.all_data
+                 WHERE
+                   LOWER(
+                     CONCAT_WS(
+                       ' ',
+                       name,
+                       surname,
+                       nickname,
+                       phone,
+                       phone_description,
+                       category,
+                       address,
+                       email,
+                       url,
+                       facebook_url,
+                       twitter_handle,
+                       instagram_handle,
+                       note
+                     )
+                   ) LIKE $1
+               )
+             ORDER BY
+               LOWER(
+                 CONCAT_WS(' ', name, surname)
+               ) ASC;
+             ",
+
         )
         .bind(query)
         .map(|row: PgRow| AllData {

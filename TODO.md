@@ -1,9 +1,5 @@
 # TODO
 
-## Fix
-
-- Search contact with multiple nicknames by nickname, only one row of the contact is retrieved instead of all the rows.
-
 ## To implement
 
 [ ] Docker compose

@@ -37,37 +37,42 @@ function getContactsHtml(json) {
 }
 
 function getContactHtml(json) {
-    return `
-        <h1>${json.user_name} ${json.user_surname}</h1>
-        <p class="title">Name</p>
-        <p>${json.user_name}</p>
-        <p class="title">Surname</p>
-        <p>${json.user_surname}</p>
-        <p class="title">Nickname</p>
-        <p>${json.nickname}</p>
-        <p class="title">Phone</p>
-        <p>${json.phone}</p>
-        <p class="title">Phone description</p>
-        <p>${json.phone_description}</p>
-        <p class="title">Category</p>
-        <p>${json.category}</p>
-        <p class="title">Address</p>
-        <p>${json.address}</p>
-        <p class="title">Email</p>
-        <p>${json.email}</p>
-        <p class="title">URL</p>
-        <p>${json.url}</p>
-        <p class="title">Facebook</p>
-        <p>${json.facebook_url}</p>
-        <p class="title">Twitter</p>
-        <p>${json.twitter_handle}</p>
-        <p class="title">Instagram</p>
-        <p>${json.instagram_handle}</p>
-        <p class="title">Note</p>
-        <p>${json.note}</p>
+    let title = json.user_name;
+    if ( json.user_surname != null ) {
+        title = `${title} ${json.user_surname}`;
+    }
+    let result = `<h1>${title}</h1>`;
+    result = getHtmlAddIfNotNull(result, json.user_name, 'Name');
+    result = getHtmlAddIfNotNull(result, json.user_surname, 'Surname');
+    result = getHtmlAddIfNotNull(result, json.nickname, 'Nickname');
+    result = getHtmlAddIfNotNull(result, json.phone, 'Phone');
+    result = getHtmlAddIfNotNull(result, json.phone_description, 'Phone description');
+    result = getHtmlAddIfNotNull(result, json.category, 'Category');
+    result = getHtmlAddIfNotNull(result, json.address, 'Address');
+    result = getHtmlAddIfNotNull(result, json.email, 'Email');
+    result = getHtmlAddIfNotNull(result, json.url, 'URL');
+    result = getHtmlAddIfNotNull(result, json.facebook_url, 'Facebook');
+    result = getHtmlAddIfNotNull(result, json.twitter_handle, 'Twitter');
+    result = getHtmlAddIfNotNull(result, json.instagram_handle, 'Instagram');
+    result = getHtmlAddIfNotNull(result, json.note, 'Note');
+    result = `
+        ${result}
         <p class="title">ID</p>
         <p>${json.user_id}</p>
     `
+    return result
+}
+
+function getHtmlAddIfNotNull(html, value, title) {
+    let result = html;
+    if ( value != null ) {
+        result = `
+            ${result}
+            <p class="title">${title}</p>
+            <p>${value}</p>
+         `;
+    }
+    return result
 }
 
 // TODO

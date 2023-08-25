@@ -51,7 +51,7 @@ function getContactHtml(json) {
     result = getHtmlAddArrayIfNotNull(result, json.emails, 'Emails');
     result = getHtmlAddArrayIfNotNull(result, json.urls, 'URLs');
     result = getHtmlAddFacebookArrayIfNotNull(result, json.facebook_urls, 'Facebook');
-    result = getHtmlAddArrayIfNotNull(result, json.twitter_handles, 'Twitter');
+    result = getHtmlAddTwitterArrayIfNotNull(result, json.twitter_handles, 'Twitter');
     result = getHtmlAddArrayIfNotNull(result, json.instagram_handles, 'Instagram');
     result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
     result = result.concat(`
@@ -95,6 +95,17 @@ function getHtmlAddArrayIfNotNull(html, array, title) {
 }
 
 function getHtmlAddFacebookArrayIfNotNull(html, array, title) {
+    result = getHtmlAddHyperlinkArrayIfNotNull(html, array, title);
+    return result;
+}
+
+function getHtmlAddTwitterArrayIfNotNull(html, array_twitter_handle, title) {
+    let array = Array.from(array_twitter_handle, (twitter_handle) => `https://twitter.com/${twitter_handle}`);
+    result = getHtmlAddHyperlinkArrayIfNotNull(html, array, title);
+    return result;
+}
+
+function getHtmlAddHyperlinkArrayIfNotNull(html, array, title) {
     let result = html;
     if ( array.length != 0 ) {
         result = result.concat(`

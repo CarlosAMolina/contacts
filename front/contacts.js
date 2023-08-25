@@ -49,7 +49,7 @@ function getContactHtml(json) {
     result = getHtmlAddArrayIfNotNull(result, json.categories, 'Categories');
     result = getHtmlAddArrayIfNotNull(result, json.addresses, 'Addresses');
     result = getHtmlAddArrayIfNotNull(result, json.emails, 'Emails');
-    result = getHtmlAddArrayIfNotNull(result, json.urls, 'URLs');
+    result = getHtmlAddHyperlinkArrayIfNotNull(result, json.urls, 'URLs');
     result = getHtmlAddFacebookArrayIfNotNull(result, json.facebook_urls, 'Facebook');
     result = getHtmlAddTwitterArrayIfNotNull(result, json.twitter_handles, 'Twitter');
     result = getHtmlAddInstagramArrayIfNotNull(result, json.instagram_handles, 'Instagram');

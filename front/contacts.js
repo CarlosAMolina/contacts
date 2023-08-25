@@ -29,8 +29,8 @@ function setContactsHtml(json) {
 
 function getContactsHtml(json) {
     let result = `<p>Number of results: ${json.length}</p>`;
-    for(let i = 0; i < json.length; i++) {
-        const html_contact = getContactHtml(json[i]);
+    for(const contact of json) {
+        const html_contact = getContactHtml(contact);
         result = result.concat(html_contact);
     }
     return result;
@@ -83,9 +83,9 @@ function getHtmlAddArrayIfNotNull(html, array, title) {
                 <p>${array}</p>
              `);
         } else {
-            for(let i = 0; i < array.length; i++) {
+            for(const value of array) {
                 result = result.concat(`
-                    <ul>${array[i]}</ul>
+                    <ul>${value}</ul>
                  `);
             }
         }
@@ -105,8 +105,8 @@ function getHtmlAddPhonesArrayIfNotNull(html, array, title) {
                 <p>${phone_str}</p>
              `);
         } else {
-            for(let i = 0; i < array.length; i++) {
-                phone_str = getStrFromPhone(array[i])
+            for(const phone of array) {
+                phone_str = getStrFromPhone(phone)
                 result = result.concat(`
                     <ul>${phone_str}</ul>
                  `);

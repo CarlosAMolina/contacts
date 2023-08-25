@@ -42,19 +42,19 @@ function getContactHtml(json) {
         title = title.concat(` ${json.user_surname}`);
     }
     let result = `<h1>${title}</h1>`;
-    result = getHtmlAddIfNotNull(result, json.user_name, 'Name');
-    result = getHtmlAddIfNotNull(result, json.user_surname, 'Surname');
-    result = getHtmlAddIfNotNull(result, json.nickname, 'Nickname');
-    result = getHtmlAddIfNotNull(result, json.phone, 'Phone');
-    result = getHtmlAddIfNotNull(result, json.phone_description, 'Phone description');
-    result = getHtmlAddIfNotNull(result, json.category, 'Category');
-    result = getHtmlAddIfNotNull(result, json.address, 'Address');
-    result = getHtmlAddIfNotNull(result, json.email, 'Email');
-    result = getHtmlAddIfNotNull(result, json.url, 'URL');
-    result = getHtmlAddIfNotNull(result, json.facebook_url, 'Facebook');
-    result = getHtmlAddIfNotNull(result, json.twitter_handle, 'Twitter');
-    result = getHtmlAddIfNotNull(result, json.instagram_handle, 'Instagram');
-    result = getHtmlAddIfNotNull(result, json.note, 'Note');
+    result = getHtmlAddValueIfNotNull(result, json.user_name, 'Name');
+    result = getHtmlAddValueIfNotNull(result, json.user_surname, 'Surname');
+    result = getHtmlAddValueIfNotNull(result, json.nickname, 'Nickname');
+    result = getHtmlAddValueIfNotNull(result, json.phone, 'Phone');
+    result = getHtmlAddValueIfNotNull(result, json.phone_description, 'Phone description');
+    result = getHtmlAddValueIfNotNull(result, json.category, 'Category');
+    result = getHtmlAddValueIfNotNull(result, json.address, 'Address');
+    result = getHtmlAddValueIfNotNull(result, json.email, 'Email');
+    result = getHtmlAddValueIfNotNull(result, json.url, 'URL');
+    result = getHtmlAddValueIfNotNull(result, json.facebook_url, 'Facebook');
+    result = getHtmlAddValueIfNotNull(result, json.twitter_handle, 'Twitter');
+    result = getHtmlAddValueIfNotNull(result, json.instagram_handle, 'Instagram');
+    result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
     result = result.concat(`
         <p class="title">ID</p>
         <p>${json.user_id}</p>
@@ -62,7 +62,7 @@ function getContactHtml(json) {
     return result
 }
 
-function getHtmlAddIfNotNull(html, value, title) {
+function getHtmlAddValueIfNotNull(html, value, title) {
     let result = html;
     if ( value != null ) {
         result = result.concat(`

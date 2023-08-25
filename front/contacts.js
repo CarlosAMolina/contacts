@@ -39,7 +39,7 @@ function getContactsHtml(json) {
 function getContactHtml(json) {
     let title = json.user_name;
     if ( json.user_surname != null ) {
-        title = `${title} ${json.user_surname}`;
+        title = title.concat(` ${json.user_surname}`);
     }
     let result = `<h1>${title}</h1>`;
     result = getHtmlAddIfNotNull(result, json.user_name, 'Name');
@@ -55,22 +55,20 @@ function getContactHtml(json) {
     result = getHtmlAddIfNotNull(result, json.twitter_handle, 'Twitter');
     result = getHtmlAddIfNotNull(result, json.instagram_handle, 'Instagram');
     result = getHtmlAddIfNotNull(result, json.note, 'Note');
-    result = `
-        ${result}
+    result = result.concat(`
         <p class="title">ID</p>
         <p>${json.user_id}</p>
-    `
+    `);
     return result
 }
 
 function getHtmlAddIfNotNull(html, value, title) {
     let result = html;
     if ( value != null ) {
-        result = `
-            ${result}
+        result = result.concat(`
             <p class="title">${title}</p>
             <p>${value}</p>
-         `;
+         `);
     }
     return result
 }

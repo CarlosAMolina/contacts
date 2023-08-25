@@ -44,22 +44,21 @@ function getContactHtml(json) {
     let result = `<h1>${title}</h1>`;
     result = getHtmlAddValueIfNotNull(result, json.user_name, 'Name');
     result = getHtmlAddValueIfNotNull(result, json.user_surname, 'Surname');
-    result = getHtmlAddValueIfNotNull(result, json.nickname, 'Nickname');
-    result = getHtmlAddValueIfNotNull(result, json.phone, 'Phone');
-    result = getHtmlAddValueIfNotNull(result, json.phone_description, 'Phone description');
-    result = getHtmlAddValueIfNotNull(result, json.category, 'Category');
-    result = getHtmlAddValueIfNotNull(result, json.address, 'Address');
-    result = getHtmlAddValueIfNotNull(result, json.email, 'Email');
-    result = getHtmlAddValueIfNotNull(result, json.url, 'URL');
-    result = getHtmlAddValueIfNotNull(result, json.facebook_url, 'Facebook');
-    result = getHtmlAddValueIfNotNull(result, json.twitter_handle, 'Twitter');
-    result = getHtmlAddValueIfNotNull(result, json.instagram_handle, 'Instagram');
+    result = getHtmlAddArrayIfNotNull(result, json.nicknames, 'Nicknames');
+    result = getHtmlAddPhonesArrayIfNotNull(result, json.phones, 'Phones');
+    result = getHtmlAddArrayIfNotNull(result, json.categories, 'Categories');
+    result = getHtmlAddArrayIfNotNull(result, json.addresses, 'Addresses');
+    result = getHtmlAddArrayIfNotNull(result, json.emails, 'Emails');
+    result = getHtmlAddArrayIfNotNull(result, json.urls, 'URLs');
+    result = getHtmlAddArrayIfNotNull(result, json.facebook_urls, 'Facebook');
+    result = getHtmlAddArrayIfNotNull(result, json.twitter_handles, 'Twitter');
+    result = getHtmlAddArrayIfNotNull(result, json.instagram_handles, 'Instagram');
     result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
     result = result.concat(`
         <p class="title">ID</p>
         <p>${json.user_id}</p>
     `);
-    return result
+    return result;
 }
 
 function getHtmlAddValueIfNotNull(html, value, title) {
@@ -70,7 +69,59 @@ function getHtmlAddValueIfNotNull(html, value, title) {
             <p>${value}</p>
          `);
     }
-    return result
+    return result;
+}
+
+function getHtmlAddArrayIfNotNull(html, array, title) {
+    let result = html;
+    if ( array.length != 0 ) {
+        result = result.concat(`
+            <p class="title">${title}</p>
+         `);
+        if ( array.length == 1 ) {
+            result = result.concat(`
+                <p>${array}</p>
+             `);
+        } else {
+            for(let i = 0; i < array.length; i++) {
+                result = result.concat(`
+                    <ul>${array[i]}</ul>
+                 `);
+            }
+        }
+    }
+    return result;
+}
+
+function getHtmlAddPhonesArrayIfNotNull(html, array, title) {
+    let result = html;
+    if ( array.length != 0 ) {
+        result = result.concat(`
+            <p class="title">${title}</p>
+         `);
+        if ( array.length == 1 ) {
+            phone_str = getStrFromPhone(array[0])
+            result = result.concat(`
+                <p>${phone_str}</p>
+             `);
+        } else {
+            for(let i = 0; i < array.length; i++) {
+                phone_str = getStrFromPhone(array[i])
+                result = result.concat(`
+                    <ul>${phone_str}</ul>
+                 `);
+            }
+        }
+    }
+    return result;
+}
+
+function getStrFromPhone(phone) {
+    let result = `${phone.value}`;
+    if ( phone.description != null ) {
+        result = result.concat( ` - ${phone.description}`);
+    }
+    return result;
 }
 
 // TODO

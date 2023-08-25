@@ -28,7 +28,7 @@ function setContactsHtml(json) {
 }
 
 function getContactsHtml(json) {
-    let result = '';
+    let result = `<p>Number of results: ${json.length}</p>`;
     for(let i = 0; i < json.length; i++) {
         const html_contact = getContactHtml(json[i]);
         result = result.concat(html_contact);

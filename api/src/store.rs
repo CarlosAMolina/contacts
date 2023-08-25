@@ -39,6 +39,7 @@ impl Store {
     OR LOWER(twitter_handle) LIKE $1
     OR LOWER(instagram_handle) LIKE $1
     OR LOWER(note) LIKE $1
+    ORDER BY LOWER(CONCAT_WS(' ', name, surname)) ASC
     ;
     ",
         )

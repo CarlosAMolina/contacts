@@ -50,7 +50,7 @@ function getContactHtml(json) {
     result = getHtmlAddArrayIfNotNull(result, json.addresses, 'Addresses');
     result = getHtmlAddArrayIfNotNull(result, json.emails, 'Emails');
     result = getHtmlAddArrayIfNotNull(result, json.urls, 'URLs');
-    result = getHtmlAddArrayIfNotNull(result, json.facebook_urls, 'Facebook');
+    result = getHtmlAddFacebookArrayIfNotNull(result, json.facebook_urls, 'Facebook');
     result = getHtmlAddArrayIfNotNull(result, json.twitter_handles, 'Twitter');
     result = getHtmlAddArrayIfNotNull(result, json.instagram_handles, 'Instagram');
     result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
@@ -79,13 +79,36 @@ function getHtmlAddArrayIfNotNull(html, array, title) {
             <p class="title">${title}</p>
          `);
         if ( array.length == 1 ) {
+            const value = array[0];
             result = result.concat(`
-                <p>${array}</p>
+                <p>${value}</p>
              `);
         } else {
             for(const value of array) {
                 result = result.concat(`
                     <ul>${value}</ul>
+                 `);
+            }
+        }
+    }
+    return result;
+}
+
+function getHtmlAddFacebookArrayIfNotNull(html, array, title) {
+    let result = html;
+    if ( array.length != 0 ) {
+        result = result.concat(`
+            <p class="title">${title}</p>
+         `);
+        if ( array.length == 1 ) {
+            const value = array[0];
+            result = result.concat(`
+                <p><a href="${value}">${value}</a></p>
+             `);
+        } else {
+            for(const value of array) {
+                result = result.concat(`
+                    <ul><a href="${value}">${value}</a></ul>
                  `);
             }
         }
@@ -100,13 +123,14 @@ function getHtmlAddPhonesArrayIfNotNull(html, array, title) {
             <p class="title">${title}</p>
          `);
         if ( array.length == 1 ) {
-            phone_str = getStrFromPhone(array[0])
+            const phone = array[0];
+            const phone_str = getStrFromPhone(phone);
             result = result.concat(`
                 <p>${phone_str}</p>
              `);
         } else {
             for(const phone of array) {
-                phone_str = getStrFromPhone(phone)
+                const phone_str = getStrFromPhone(phone);
                 result = result.concat(`
                     <ul>${phone_str}</ul>
                  `);

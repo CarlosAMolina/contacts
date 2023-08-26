@@ -11,6 +11,7 @@
   --SEARCH-ICON-COLOR-HOVER: #cccccc;
   --SEARCH-MARGIN-BOTTOM: 40px;
   --SEARCH-MARGIN-TOP: 20px;
+  --TAG-A-COLOR: #63c0f5;
 }
 
 body {
@@ -21,6 +22,11 @@ body {
 p {
     color: var(--FONT-COLOR);
     font-size: var(--FONT-SIZE);
+}
+
+a {
+  text-decoration: none;
+  color: var(--TAG-A-COLOR);
 }
 
 .hidden {

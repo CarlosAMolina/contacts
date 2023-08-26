@@ -100,3 +100,8 @@ p {
   fill: var(--SEARCH-BACKGROUND-HOVER);
 }
 
+@media screen and (max-width: 930px) {
+  .searchWrap{
+    width: 80%;
+  }
+}

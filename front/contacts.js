@@ -53,10 +53,6 @@ function getContactHtml(json) {
     result = getHtmlAddTwitterArrayIfNotNull(result, json.twitter_handles, 'Twitter');
     result = getHtmlAddInstagramArrayIfNotNull(result, json.instagram_handles, 'Instagram');
     result = getHtmlAddValueIfNotNull(result, json.note, 'Note');
-    result = result.concat(`
-        <p class="title">ID</p>
-        <p>${json.user_id}</p>
-    `);
     return result;
 }
 

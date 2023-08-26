@@ -6,7 +6,6 @@ document.getElementById("search-button").onclick = function () {
       .then((response) => response.json())
       .then(
           (json) => { 
-              console.log(json);
               document.getElementById("response-error-div").classList.add('hidden');
               document.getElementById("response-div").classList.remove('hidden');
               setContactsHtml(json);

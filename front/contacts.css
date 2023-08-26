@@ -1,10 +1,24 @@
+:root {
+  --BACKGROUND-COLOR: #1a1a1a;
+  --FONT-COLOR: white;
+  --FONT-SIZE: 16px;
+  --SEARCH-BACKGROUND: #333333;
+  --SEARCH-BACKGROUND-HOVER: #444444;
+  --SEARCH-HEIGHT: 45px;
+  --SEARCH-BUTTON-HEIGHT: 127%;
+  --SEARCH-BUTTON-WIDTH: --SEARCH-HEIGHT;
+  --SEARCH-ICON-COLOR: #999999;
+  --SEARCH-ICON-COLOR-HOVER: #cccccc;
+}
+
 body {
-    background-color: #1a1a1a;
+    background-color: var(--BACKGROUND-COLOR);
+    font-family: sans-serif;
 }
 
 p {
-    color: #ffffff;
-    font-size: 16px;
+    color: var(--FONT-COLOR);
+    font-size: var(--FONT-SIZE);
 }
 
 .hidden {
@@ -15,3 +29,74 @@ p {
     color: #ce8989;
     font-size: 12px;
 }
+
+.searchBar {
+  height: var(--SEARCH-HEIGHT);
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  background: var(--SEARCH-BACKGROUND);
+  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
+  border-right: none;
+  padding: 5px;
+  height: 100%;
+  font-size: var(--FONT-SIZE);
+  color: var(--FONT-COLOR);
+  border-radius: 5px 0 0 5px;
+}
+
+.searchTerm:focus {
+    outline: none;
+}
+
+/* https://stackoverflow.com/questions/22252472/how-can-i-change-the-color-of-an-svg-element */
+.searchButton {
+  width: var(--SEARCH-BUTTON-WIDTH);
+  height: var(--SEARCH-BUTTON-HEIGHT);
+  background: var(--SEARCH-BACKGROUND);
+  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
+  border-left: none;
+  text-align: center;
+  color: var(--SEARCH-ICON-COLOR);
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+
+.searchButton:focus {
+  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
+  background: var(--SEARCH-BACKGROUND-HOVER);
+  color: var(--SEARCH-ICON-COLOR-HOVER);
+  outline: none;
+}
+
+.searchButton:hover {
+  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
+  background: var(--SEARCH-BACKGROUND-HOVER);
+  color: var(--SEARCH-ICON-COLOR-HOVER);
+}
+
+.searchWrap{
+  width: 40%;
+  margin: auto;
+}
+
+/* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes */
+#SearchIconRect {
+  stroke: currentcolor;
+  fill: var(--SEARCH-BACKGROUND);
+  stroke-width: 1.9;
+}
+
+.searchButton:hover #SearchIconRect{
+  fill: var(--SEARCH-BACKGROUND-HOVER);
+}
+
+.searchButton:focus #SearchIconRect{
+  fill: var(--SEARCH-BACKGROUND-HOVER);
+}
+

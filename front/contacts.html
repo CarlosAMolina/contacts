@@ -8,14 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <input
-      type="text"
-      id="search-input"
-      name="search-input"
-      placeholder="Search term. Example: Mol"
-      required
-    >
-    <input id="search-button" type="button" value="Search"/>
+    <div class="searchWrap">
+       <div class="searchBar">
+          <input
+            type="text"
+            class="searchTerm"
+            id="search-input"
+            name="search-input"
+            placeholder="Search term. Example: Mol"
+            required
+          >
+          <button
+              id="search-button"
+              type="submit"
+              class="searchButton"
+          >
+              <!-- https://iconoir.com/ Search term: search -->
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%" height="100%" viewBox="0 0 24 24">
+              <path d="M17 17l4 4M3 11a8 8 0 1016 0 8 8 0 00-16 0z" id="SearchIconRect"></path>
+            </svg>
+         </button>
+       </div>
+    </div>
     <div id="response-error-div" class="hidden">
       <p>Error:</p>
       <p id="error-output"></p>

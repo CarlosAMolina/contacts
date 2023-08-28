@@ -38,6 +38,7 @@ async fn main() -> Result<(), Error> {
     );
     test_get_contacts(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
+    test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(&store, &url_api).await;
     test_get_contacts_if_no_results(&url_api).await;
     test_get_contacts_if_missing_parameters(&url_api).await;
     test_get_contacts_if_missing_parameters_and_url_ends_in_slash(&url_api).await;
@@ -270,6 +271,53 @@ async fn test_get_contacts_if_invalid_path(url_api: &String) {
     let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = Error::RouteNotFound.to_string();
     assert_eq!(response, expected_result);
+    println!("✓");
+}
+
+async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(store: &Store, url_api: &String) {
+    println!("Init test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows");
+    println!("Init insert test data in db");
+    // TODO use api methods
+    sqlx::query(
+        "INSERT INTO contacts.users (id, name)
+        VALUES (2, 'Boby')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
+    sqlx::query(
+        "INSERT INTO contacts.nicknames (id_user, nickname)
+        VALUES (2, 'FooNickname'), (2, 'BarNickname')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
+    let client = reqwest::Client::new();
+    let url = format!("{url_api}/contacts?query=fooNick");
+    let response = client
+        .get(url)
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Contact>>()
+        .await
+        .unwrap();
+    let expected_result = vec![Contact {
+        user_id: 2,
+        user_name: Some("Boby".to_string()),
+        user_surname: None,
+        nicknames: vec!["FooNickname".to_string(), "BarNickname".to_string()],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
+    }];
+    assert_eq!(expected_result, response);
     println!("✓");
 }
 

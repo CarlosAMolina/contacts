@@ -44,7 +44,6 @@ a {
     font-size: 12px;
 }
 
-/* new */
 .searchWrap {
   position:relative;
   width: 40%;
@@ -89,6 +88,7 @@ a {
   border-radius: 0 var(--BORDER-RADIUS) var(--BORDER-RADIUS) 0;
 }
 
+.searchInput:focus,
 .searchButton:focus {
   outline: none;
 }

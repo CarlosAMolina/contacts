@@ -93,6 +93,9 @@ a {
   outline: none;
 }
 
+/* https://stackoverflow.com/questions/22061454/change-style-of-an-element-when-focus-is-another-element */
+.searchInput:focus + .searchButton,
+.searchInput:hover + .searchButton,
 .searchButton:focus,
 .searchButton:hover {
   background: var(--SEARCH-BACKGROUND-HOVER);

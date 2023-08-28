@@ -1,4 +1,14 @@
 document.getElementById("search-button").onclick = function () { 
+    run_input_query();
+}
+
+document.getElementById('search-input').onkeydown = function(e){
+   if(e.key === 'Enter'){
+     run_input_query();
+   }
+}
+
+function run_input_query() {
     const searchTerm = document.getElementById("search-input").value
     const urlPrefix = "http://localhost:3030/contacts?query=";
     const url = urlPrefix.concat(searchTerm);
@@ -19,7 +29,7 @@ document.getElementById("search-button").onclick = function () {
           }
       );
     ;
-};
+}
 
 function setContactsHtml(json) {
     html = getContactsHtml(json)

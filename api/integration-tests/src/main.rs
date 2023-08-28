@@ -38,7 +38,10 @@ async fn main() -> Result<(), Error> {
     );
     test_get_contacts(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
-    test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(&store, &url_api).await;
+    test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(
+        &store, &url_api,
+    )
+    .await;
     test_get_contacts_if_no_results(&url_api).await;
     test_get_contacts_if_missing_parameters(&url_api).await;
     test_get_contacts_if_missing_parameters_and_url_ends_in_slash(&url_api).await;
@@ -274,7 +277,10 @@ async fn test_get_contacts_if_invalid_path(url_api: &String) {
     println!("✓");
 }
 
-async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(store: &Store, url_api: &String) {
+async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(
+    store: &Store,
+    url_api: &String,
+) {
     println!("Init test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows");
     println!("Init insert test data in db");
     // TODO use api methods

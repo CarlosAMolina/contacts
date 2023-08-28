@@ -21,13 +21,13 @@
 }
 
 body {
-    background-color: var(--BACKGROUND-COLOR);
-    font-family: sans-serif;
+   background-color: var(--BACKGROUND-COLOR);
+   font-family: sans-serif;
 }
 
 p {
-    color: var(--FONT-COLOR);
-    font-size: var(--FONT-SIZE);
+   color: var(--FONT-COLOR);
+   font-size: var(--FONT-SIZE);
 }
 
 a {
@@ -36,12 +36,12 @@ a {
 }
 
 .hidden {
-    display: none;
+   display: none;
 }
 
 .title   {
-    color: #ce8989;
-    font-size: 12px;
+   color: #ce8989;
+   font-size: 12px;
 }
 
 .searchWrap {

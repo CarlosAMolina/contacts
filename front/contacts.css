@@ -12,6 +12,9 @@
   --SEARCH-MARGIN-BOTTOM: 40px;
   --SEARCH-MARGIN-TOP: 20px;
   --TAG-A-COLOR: #63c0f5;
+
+  --max-content-width: 590px;
+  --default-border-radius: 4px;
 }
 
 body {
@@ -57,10 +60,6 @@ a {
   border-radius: 5px 0 0 5px;
 }
 
-.searchTerm:focus {
-    outline: none;
-}
-
 /* https://stackoverflow.com/questions/22252472/how-can-i-change-the-color-of-an-svg-element */
 .searchButton {
   width: var(--SEARCH-BUTTON-WIDTH);
@@ -74,18 +73,16 @@ a {
   cursor: pointer;
 }
 
-
+.searchButton:hover,
 .searchButton:focus {
   border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
   background: var(--SEARCH-BACKGROUND-HOVER);
   color: var(--SEARCH-ICON-COLOR-HOVER);
-  outline: none;
 }
 
-.searchButton:hover {
-  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
-  background: var(--SEARCH-BACKGROUND-HOVER);
-  color: var(--SEARCH-ICON-COLOR-HOVER);
+.searchTerm:focus,
+.searchButton:focus {
+  outline: none;
 }
 
 .searchWrap{
@@ -103,15 +100,62 @@ a {
   stroke-width: 1.9;
 }
 
-.searchButton:hover #SearchIconRect{
-  fill: var(--SEARCH-BACKGROUND-HOVER);
-}
-
+.searchButton:hover #SearchIconRect,
 .searchButton:focus #SearchIconRect{
   fill: var(--SEARCH-BACKGROUND-HOVER);
 }
 
+
+/* new */
+.header__search-wrap {
+  position:relative;
+  width: 40%;
+  margin-top:1px;
+  margin-bottom:3px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search__button:focus,
+.search__input--adv:focus {
+  outline: none;
+}
+
+.search--adv {
+  background: var(--SEARCH-BACKGROUND);
+  border-radius:var(--default-border-radius);
+  border:1px solid rgba(0,0,0,0.15);
+  box-shadow:0 2px 3px rgba(0,0,0,0.06);
+  padding-left:.75em;
+  padding-right:3.5em;
+}
+
+.search__input--adv {
+  line-height:var(--SEARCH-HEIGHT);
+  font-size:1.1em;
+  width:100%;
+  background:none;
+  border:none;
+  color: var(--FONT-COLOR);
+}
+
+.search__button {
+  cursor:pointer;
+  border:none;
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:2px;
+  left:auto;
+  min-width:50px;
+  font-size:1.25em;
+  margin-right:-3px;
+  background-color:transparent;
+  color: var(--FONT-COLOR);
+}
+
 @media screen and (max-width: 930px) {
+  .header__search-wrap,
   .searchWrap{
     width: 80%;
   }

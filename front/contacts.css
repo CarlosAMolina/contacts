@@ -103,7 +103,7 @@ a {
 }
 
 @media screen and (max-width: 930px) {
-  .searchWrap{
+  .searchWrap {
     width: 80%;
   }
 }

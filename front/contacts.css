@@ -6,21 +6,18 @@
 
 :root {
   --BACKGROUND-COLOR: #1a1a1a;
+  --BORDER-RADIUS: 5px;
   --FONT-COLOR: white;
   --FONT-SIZE: 16px;
   --SEARCH-BACKGROUND: #333333;
   --SEARCH-BACKGROUND-HOVER: #444444;
+  --SEARCH-BUTTON-MIN-WIDTH: 50px;
   --SEARCH-HEIGHT: 45px;
-  --SEARCH-BUTTON-HEIGHT: 127%;
-  --SEARCH-BUTTON-WIDTH: --SEARCH-HEIGHT;
   --SEARCH-ICON-COLOR: #999999;
   --SEARCH-ICON-COLOR-HOVER: #cccccc;
   --SEARCH-MARGIN-BOTTOM: 40px;
   --SEARCH-MARGIN-TOP: 20px;
   --TAG-A-COLOR: #63c0f5;
-
-  --max-content-width: 590px;
-  --default-border-radius: 5px;
 }
 
 body {
@@ -47,99 +44,35 @@ a {
     font-size: 12px;
 }
 
-.searchBar {
-  height: var(--SEARCH-HEIGHT);
-  width: 100%;
-  position: relative;
-  display: flex;
-}
-
-.searchTerm {
-  width: 100%;
-  background: var(--SEARCH-BACKGROUND);
-  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
-  border-right: none;
-  padding: 5px;
-  height: 100%;
-  font-size: var(--FONT-SIZE);
-  color: var(--FONT-COLOR);
-  border-radius: 5px 0 0 5px;
-}
-
-/* https://stackoverflow.com/questions/22252472/how-can-i-change-the-color-of-an-svg-element */
-.searchButton {
-  width: var(--SEARCH-BUTTON-WIDTH);
-  height: var(--SEARCH-BUTTON-HEIGHT);
-  background: var(--SEARCH-BACKGROUND);
-  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
-  border-left: none;
-  text-align: center;
-  color: var(--SEARCH-ICON-COLOR);
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-}
-
-.searchButton:hover,
-.searchButton:focus {
-  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
-  background: var(--SEARCH-BACKGROUND-HOVER);
-  color: var(--SEARCH-ICON-COLOR-HOVER);
-}
-
-.searchTerm:focus,
-.searchButton:focus {
-  outline: none;
-}
-
-.searchWrap{
-  width: 40%;
-  margin-bottom: var(--SEARCH-MARGIN-BOTTOM);
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: var(--SEARCH-MARGIN-TOP);
-}
-
-/* https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes */
-#SearchIconRect {
-  stroke: currentcolor;
-  fill: var(--SEARCH-BACKGROUND);
-  stroke-width: 1.9;
-}
-
-.searchButton:hover #SearchIconRect,
-.searchButton:focus #SearchIconRect{
-  fill: var(--SEARCH-BACKGROUND-HOVER);
-}
-
-
 /* new */
-.header__search-wrap {
+.searchWrap {
   position:relative;
   width: 40%;
   margin-top:1px;
-  margin-bottom:3px;
+  margin-top: var(--SEARCH-MARGIN-TOP);
+  margin-bottom: var(--SEARCH-MARGIN-BOTTOM);
   margin-left: auto;
   margin-right: auto;
 }
 
-.search--adv {
+.searchBar {
   background: var(--SEARCH-BACKGROUND);
   border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
   padding-left:.75em;
   padding-right:3.5em;
-  border-radius: var(--default-border-radius);
+  border-radius: var(--BORDER-RADIUS);
 }
 
-.search__input--adv {
+.searchInput {
+  width:100%;
   line-height:var(--SEARCH-HEIGHT);
   font-size:1.1em;
-  width:100%;
   background:none;
   border:none;
   color: var(--FONT-COLOR);
 }
 
-.search__button {
+.searchButton {
   cursor:pointer;
   border:none;
   position:absolute;
@@ -147,28 +80,26 @@ a {
   bottom:0;
   right:2px;
   left:auto;
-  min-width:50px;
+  min-width: var(--SEARCH-BUTTON-MIN-WIDTH);
   font-size:1.25em;
   margin-right:-3px;
   background-color:transparent;
   color: var(--SEARCH-ICON-COLOR);
   font-family: 'ddg-serp-icons';
-  border-radius: 0 var(--default-border-radius) var(--default-border-radius) 0;
+  border-radius: 0 var(--BORDER-RADIUS) var(--BORDER-RADIUS) 0;
 }
 
-.search__button:focus,
-.search__input--adv:focus {
+.searchButton:focus {
   outline: none;
 }
 
-.search__button:focus,
-.search__button:hover {
+.searchButton:focus,
+.searchButton:hover {
   background: var(--SEARCH-BACKGROUND-HOVER);
   color: var(--SEARCH-ICON-COLOR-HOVER);
 }
 
 @media screen and (max-width: 930px) {
-  .header__search-wrap,
   .searchWrap{
     width: 80%;
   }

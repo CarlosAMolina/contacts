@@ -2,6 +2,9 @@
 
 ## To implement
 
+[ ] Logs
+[ ] - Save API docker logs in volume
+[ ] - Logs rotation
 [ ] Docker compose
 [ ] Login
 [ ] - Login errors:
@@ -10,7 +13,6 @@
 [ ] CRUD tables
 [ ] - Modify tables 
 [ ] - Error if row not found
-[ ] Log rotation
 [ ] Drop
 [ ] - contacts.csv
 [ ] Handle-errors

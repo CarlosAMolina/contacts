@@ -3,7 +3,7 @@
 ## To implement
 
 [ ] Logs
-[ ] - Save API docker logs in volume
+[x] - Save API docker logs in volume
 [ ] - Logs rotation
 [ ] Docker compose
 [ ] Login

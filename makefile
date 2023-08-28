@@ -8,6 +8,8 @@ API_PORT=3030
 API_IMAGE_NAME=contacts-api
 API_CONTAINER_NAME=$(API_IMAGE_NAME)-container
 API_CONTAINER_IP=172.20.0.6
+API_CONTAINER_LOGS_PATH_NAME=/logs
+API_CONTAINER_LOGS_VOLUME_NAME=$(API_IMAGE_NAME)-logs
 CLI_IMAGE_NAME=contacts-cli
 CLI_CONTAINER_NAME=$(CLI_IMAGE_NAME)-container
 NETWORK_NAME=contacts-network
@@ -35,6 +37,7 @@ run-api-docker:
 		-p$(API_PORT):$(API_PORT)\
 		--net=$(NETWORK_NAME) \
 		--ip=$(API_CONTAINER_IP) \
+		--mount type=volume,source=$(API_CONTAINER_LOGS_VOLUME_NAME),target=$(API_CONTAINER_LOGS_PATH_NAME) \
 		$(API_IMAGE_NAME)
 
 stop-api-cargo:
@@ -119,6 +122,9 @@ deploy: stop \
 	build \
 	clean-unrequied-images \
 	run
+
+logs-api-docker:
+	tail -f $(shell docker volume inspect $(API_CONTAINER_LOGS_VOLUME_NAME) --format '{{.Mountpoint}}')/*
 
 test: test-api \
 	test-cli \

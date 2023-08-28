@@ -22,5 +22,6 @@ WORKDIR /app
 COPY --from=builder /app/setup-docker.toml /app/
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/api /app/
 ENV IS_DOCKER_RUNNING=true
+RUN mkdir /logs
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
 ENTRYPOINT ["./api"]

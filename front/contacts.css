@@ -1,3 +1,9 @@
+/* https://github.com/duckduckgo/duckduckgo-styles/blob/master/icons/font/ddg-serp-icons.ttf */
+@font-face {
+  font-family: 'ddg-serp-icons';
+  src: URL('ddg-serp-icons.ttf') format('truetype');
+}
+
 :root {
   --BACKGROUND-COLOR: #1a1a1a;
   --FONT-COLOR: white;
@@ -14,7 +20,7 @@
   --TAG-A-COLOR: #63c0f5;
 
   --max-content-width: 590px;
-  --default-border-radius: 4px;
+  --default-border-radius: 5px;
 }
 
 body {
@@ -116,18 +122,12 @@ a {
   margin-right: auto;
 }
 
-.search__button:focus,
-.search__input--adv:focus {
-  outline: none;
-}
-
 .search--adv {
   background: var(--SEARCH-BACKGROUND);
-  border-radius:var(--default-border-radius);
-  border:1px solid rgba(0,0,0,0.15);
-  box-shadow:0 2px 3px rgba(0,0,0,0.06);
+  border: 1px solid var(--SEARCH-BACKGROUND-HOVER);
   padding-left:.75em;
   padding-right:3.5em;
+  border-radius: var(--default-border-radius);
 }
 
 .search__input--adv {
@@ -151,7 +151,20 @@ a {
   font-size:1.25em;
   margin-right:-3px;
   background-color:transparent;
-  color: var(--FONT-COLOR);
+  color: var(--SEARCH-ICON-COLOR);
+  font-family: 'ddg-serp-icons';
+  border-radius: 0 var(--default-border-radius) var(--default-border-radius) 0;
+}
+
+.search__button:focus,
+.search__input--adv:focus {
+  outline: none;
+}
+
+.search__button:focus,
+.search__button:hover {
+  background: var(--SEARCH-BACKGROUND-HOVER);
+  color: var(--SEARCH-ICON-COLOR-HOVER);
 }
 
 @media screen and (max-width: 930px) {
@@ -160,3 +173,4 @@ a {
     width: 80%;
   }
 }
+

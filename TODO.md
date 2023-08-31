@@ -13,6 +13,7 @@
 [ ] CRUD tables
 [ ] - Modify tables 
 [ ] - Error if row not found
+[x] - Search: find accentuated characters if query no accentuated and vice versa.
 [ ] Drop
 [ ] - contacts.csv
 [ ] Handle-errors

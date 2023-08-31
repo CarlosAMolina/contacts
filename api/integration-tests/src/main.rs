@@ -42,6 +42,7 @@ async fn main() -> Result<(), Error> {
         &store, &url_api,
     )
     .await;
+    test_get_contacts_with_accents(&store, &url_api).await;
     test_get_contacts_if_no_results(&url_api).await;
     test_get_contacts_if_missing_parameters(&url_api).await;
     test_get_contacts_if_missing_parameters_and_url_ends_in_slash(&url_api).await;
@@ -324,6 +325,58 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         note: None,
     }];
     assert_eq!(expected_result, response);
+    println!("✓");
+}
+
+async fn test_get_contacts_with_accents(store: &Store, url_api: &String) {
+    println!("Init test_get_contacts_with_accents");
+    println!("Init insert test data in db");
+    // TODO use api methods
+    sqlx::query(
+        "INSERT INTO contacts.users (id, name)
+        VALUES (3, 'MartínÁÉÍÓÚáéíóú')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
+    let client = reqwest::Client::new();
+    // Test search term with accent.
+    let url_search_term_with_accent = format!("{url_api}/contacts?query=martínáéíóúáéíóú");
+    let response_search_term_with_accent = client
+        .get(url_search_term_with_accent)
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Contact>>()
+        .await
+        .unwrap();
+    // Test search term without accent.
+    let url_search_term_without_accent = format!("{url_api}/contacts?query=martinaeiouaeiou");
+    let response_search_term_without_accent = client
+        .get(url_search_term_without_accent)
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<Contact>>()
+        .await
+        .unwrap();
+    let expected_result = vec![Contact {
+        user_id: 3,
+        user_name: Some("MartínÁÉÍÓÚáéíóú".to_string()),
+        user_surname: None,
+        nicknames: vec![],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
+    }];
+    assert_eq!(expected_result, response_search_term_with_accent);
+    assert_eq!(expected_result, response_search_term_without_accent);
     println!("✓");
 }
 

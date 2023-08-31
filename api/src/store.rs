@@ -24,7 +24,15 @@ impl Store {
     }
 
     pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<AllData>, Error> {
-        let query = format!("%{}%", query.to_lowercase());
+        let mut query = query.to_lowercase();
+        query = query
+            .replace("á", "a")
+            .replace("é", "e")
+            .replace("í", "i")
+            .replace("ó", "o")
+            .replace("ú", "u")
+            ;
+        query = format!("%{}%", query);
         match sqlx::query(
             "SELECT
                *
@@ -37,23 +45,27 @@ impl Store {
                  from
                    contacts.all_data
                  WHERE
-                   LOWER(
-                     CONCAT_WS(
-                       ' ',
-                       name,
-                       surname,
-                       nickname,
-                       phone,
-                       phone_description,
-                       category,
-                       address,
-                       email,
-                       url,
-                       facebook_url,
-                       twitter_handle,
-                       instagram_handle,
-                       note
-                     )
+                   TRANSLATE(
+                     LOWER(
+                       CONCAT_WS(
+                         ' ',
+                         name,
+                         surname,
+                         nickname,
+                         phone,
+                         phone_description,
+                         category,
+                         address,
+                         email,
+                         url,
+                         facebook_url,
+                         twitter_handle,
+                         instagram_handle,
+                         note
+                       )
+                     ),
+                     'áéíóú',
+                     'aeiou'
                    ) LIKE $1
                )
              ORDER BY

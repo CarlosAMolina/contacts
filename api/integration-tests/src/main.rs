@@ -28,7 +28,7 @@ async fn main() -> Result<(), Error> {
     let handler = oneshot(&config, &store).await;
     add_db_schema(&store).await;
     run_migrations(&store).await;
-    insert_db_data(&store).await;
+    test_add_contact_and_insert_db_data(&store).await;
     let url_api = format!(
         "http://{:?}.{:?}.{:?}.{:?}:{:?}",
         config.api_host[0],
@@ -124,9 +124,19 @@ async fn recreate_database(config: &config_api::Config) {
 // TODO
 // This test checks the function add_contact
 // and all data required by other tests is created.
-//async fn test_add_contact() {
-//
-//}
+async fn test_add_contact_and_insert_db_data(store: &Store) {
+    println!("Init test_add_contact");
+    // TODO use api route and assert data inserted matches expected result.
+    println!("Init insert data in db");
+    // TODO use api methods
+    sqlx::query(
+        "INSERT INTO contacts.users (name, surname)
+        VALUES ('John', 'Doe')",
+    )
+    .execute(&store.connection)
+    .await
+    .unwrap();
+}
 
 async fn test_setup_store_returns_expected_error_if_invalid_config() {
     println!(
@@ -231,18 +241,6 @@ async fn assert_migrations_have_correctly_executed(
         );
         panic!("Table names do not match the expected ones");
     }
-}
-
-async fn insert_db_data(store: &Store) {
-    println!("Init insert data in db");
-    // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.users (name, surname)
-        VALUES ('John', 'Doe')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
 }
 
 // TODO use

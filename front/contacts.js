@@ -21,11 +21,12 @@ function run_input_query() {
               setContactsHtml(json);
           }
       )
-      .catch((error) => {
-              console.log(error)
+      .catch(
+          (error) => {
               document.getElementById("response-div").classList.add('hidden');
               document.getElementById("response-error-div").classList.remove('hidden');
-              document.getElementById("error-output").textContent = error;
+              const errorText = getErrorTextToShow(error);
+              document.getElementById("error-output").textContent = errorText;
           }
       );
     ;
@@ -168,6 +169,11 @@ function getStrFromPhone(phone) {
         result = result.concat( ` - ${phone.description}`);
     }
     return result;
+}
+
+function getErrorTextToShow(error) {
+    console.log(error);
+    return error;
 }
 
 // TODO

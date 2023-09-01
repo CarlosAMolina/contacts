@@ -136,9 +136,8 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
             )
         }));
 
-    // TODO add_contact
-    // TODO     .or(get_contacts)
-    get_contacts
+    add_contact
+        .or(get_contacts)
         .or(get_contact_by_id)
         .with(cors)
         .with(warp::trace::request())

@@ -25,8 +25,8 @@ function run_input_query() {
           (error) => {
               document.getElementById("response-div").classList.add('hidden');
               document.getElementById("response-error-div").classList.remove('hidden');
-              const errorText = getErrorTextToShow(error);
-              document.getElementById("error-output").textContent = errorText;
+              const errorMessage = getErrorMessageToShow(error);
+              document.getElementById("error-output").textContent = errorMessage;
           }
       );
     ;
@@ -171,9 +171,15 @@ function getStrFromPhone(phone) {
     return result;
 }
 
-function getErrorTextToShow(error) {
-    console.log(error);
-    return error;
+function getErrorMessageToShow(error) {
+    //console.log(error);
+    let errorMessage;
+    if (error.message == 'NetworkError when attempting to fetch resource.') {
+        errorMessage = 'API connection error.';
+    } else {
+        errorMessage = 'Unknown error: '.concat(error.message);
+    }
+    return 'Error. '.concat(errorMessage);
 }
 
 // TODO

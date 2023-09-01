@@ -1,5 +1,11 @@
 use serde::Serialize;
 
+pub struct User {
+    pub id: i32,
+    pub name: String,
+    pub surname: Option<String>,
+}
+
 #[derive(Clone, Debug, Serialize)]
 pub struct AllData {
     pub user_id: i32,

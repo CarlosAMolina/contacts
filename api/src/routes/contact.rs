@@ -2,10 +2,22 @@ use std::collections::HashMap;
 
 use crate::store::Store;
 use crate::transformers;
+use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
 // TODO use pagination
+//
+pub async fn add_contact(
+    user: database_types::User,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "user={:?}", user);
+    let query = extract_query(params)?;
+    match store.add_user(user).await {
+        Ok(user_db) => Ok(warp::reply::json(&user_db)),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
 
 pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply, warp::Rejection> {
     event!(Level::INFO, "id={}", id);

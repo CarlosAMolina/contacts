@@ -23,6 +23,33 @@ impl Store {
         })
     }
 
+    pub async fn add_user(
+        &self,
+        new_user: database_types::NewUser,
+    ) -> Result<database_types::User, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.user (name, surname)
+           VALUES ($1, $2)
+           RETURNING name, surname",
+        )
+        .bind(new_user.name)
+        .bind(new_user.surname)
+        .map(|row: PgRow| database_types::User {
+            id: row.get("id"),
+            name: row.get("name"),
+            surname: row.get("surname"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(user) => Ok(user),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<database_types::AllData>, Error> {
         let mut query = query.to_lowercase();
         query = query
@@ -126,34 +153,6 @@ impl Store {
             .await
         {
             Ok(all_data) => Ok(all_data),
-            Err(error) => {
-                tracing::event!(tracing::Level::ERROR, "{:?}", error);
-                Err(Error::DatabaseQueryError(error))
-            }
-        }
-    }
-
-    pub async fn add_user(
-        &self,
-        user: database_types::User,
-    ) -> Result<database_types::User, Error> {
-        match sqlx::query(
-            "INSERT INTO contacts.user (id, name, surname)
-           VALUES ($1, $2, $3)
-           RETURNING id, name, surname",
-        )
-        .bind(user.id)
-        .bind(user.name)
-        .bind(user.surname)
-        .map(|row: PgRow| database_types::User {
-            id: row.get("id"),
-            name: row.get("name"),
-            surname: row.get("surname"),
-        })
-        .fetch_one(&self.connection)
-        .await
-        {
-            Ok(user) => Ok(user),
             Err(error) => {
                 tracing::event!(tracing::Level::ERROR, "{:?}", error);
                 Err(Error::DatabaseQueryError(error))

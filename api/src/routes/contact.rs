@@ -9,12 +9,12 @@ use tracing::{event, Level};
 // TODO use pagination
 
 pub async fn add_contact(
-    user: database_types::User,
     store: Store,
+    new_user: database_types::NewUser,
 ) -> Result<impl warp::Reply, warp::Rejection> {
-    event!(Level::INFO, "user={:?}", user);
-    match store.add_user(user).await {
-        Ok(user_db) => Ok(warp::reply::json(&user_db)),
+    event!(Level::INFO, "user={:?}", new_user);
+    match store.add_user(new_user).await {
+        Ok(user) => Ok(warp::reply::json(&user)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

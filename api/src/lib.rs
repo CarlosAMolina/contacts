@@ -86,6 +86,14 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         .allow_any_origin()
         .allow_header("content-type")
         .allow_methods(&[Method::PUT, Method::DELETE, Method::GET, Method::POST]);
+
+    let add_contact = warp::post()
+        .and(warp::path("contacts"))
+        .and(warp::path::end())
+        .and(store_filter.clone())
+        .and(warp::body::json())
+        .and_then(routes::contact::add_contact);
+
     let get_contacts = warp::get()
         .and(warp::path("contacts"))
         .and(warp::path::end())
@@ -107,13 +115,6 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
             )
         }));
 
-    let add_contact= warp::post()
-        .and(warp::path("contacts"))
-        .and(warp::path::end())
-        .and(store_filter.clone())
-        .and(warp::body::json())
-        .and_then(routes::contact::add_contact);
-
     let get_contact_by_id = warp::get()
         .and(warp::path("contacts"))
         .and(warp::path::param::<i32>())
@@ -134,6 +135,9 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
                   id = %info_values.id,
             )
         }));
+
+    // TODO add_contact
+    // TODO     .or(get_contacts)
     get_contacts
         .or(get_contact_by_id)
         .with(cors)

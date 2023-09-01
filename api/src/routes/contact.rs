@@ -7,12 +7,12 @@ use crate::types::query::extract_query;
 use tracing::{event, Level};
 
 // TODO use pagination
-//
+
 pub async fn add_contact(
     user: database_types::User,
+    store: Store,
 ) -> Result<impl warp::Reply, warp::Rejection> {
     event!(Level::INFO, "user={:?}", user);
-    let query = extract_query(params)?;
     match store.add_user(user).await {
         Ok(user_db) => Ok(warp::reply::json(&user_db)),
         Err(e) => return Err(warp::reject::custom(e)),

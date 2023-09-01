@@ -292,11 +292,12 @@ async fn test_get_contacts(url_api: &String) {
 async fn test_get_contacts_if_invalid_path(url_api: &String) {
     println!("Init test_get_contacts_if_invalid_path");
     let client = reqwest::Client::new();
-    let url = format!("{url_api}/contacts/a");
+    //let url = format!("{url_api}/contacts/a"); // TODO assert this query returns MethodNotAllowed
+    let url = format!("{url_api}/invented-path/");
     let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = Error::RouteNotFound.to_string();
     println!("{:?}", response); // TODO rm
-    // TODO assert_eq!(expected_result, response);
+    assert_eq!(expected_result, response);
     println!("✓");
 }
 

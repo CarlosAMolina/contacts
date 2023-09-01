@@ -229,8 +229,8 @@ async fn insert_db_data(store: &Store) {
     println!("Init insert data in db");
     // TODO use api methods
     sqlx::query(
-        "INSERT INTO contacts.users (id, name, surname)
-        VALUES (1, 'John', 'Doe')",
+        "INSERT INTO contacts.users (name, surname)
+        VALUES ('John', 'Doe')",
     )
     .execute(&store.connection)
     .await
@@ -286,8 +286,8 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
     println!("Init insert test data in db");
     // TODO use api methods
     sqlx::query(
-        "INSERT INTO contacts.users (id, name)
-        VALUES (2, 'Boby')",
+        "INSERT INTO contacts.users (name)
+        VALUES ('Boby')",
     )
     .execute(&store.connection)
     .await
@@ -333,8 +333,8 @@ async fn test_get_contacts_with_accents(store: &Store, url_api: &String) {
     println!("Init insert test data in db");
     // TODO use api methods
     sqlx::query(
-        "INSERT INTO contacts.users (id, name)
-        VALUES (3, 'MartínÁÉÍÓÚáéíóú')",
+        "INSERT INTO contacts.users (name)
+        VALUES ('MartínÁÉÍÓÚáéíóú')",
     )
     .execute(&store.connection)
     .await

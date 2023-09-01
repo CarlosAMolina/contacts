@@ -28,9 +28,9 @@ impl Store {
         new_user: database_types::NewUser,
     ) -> Result<database_types::User, Error> {
         match sqlx::query(
-            "INSERT INTO contacts.user (name, surname)
+            "INSERT INTO contacts.users (name, surname)
            VALUES ($1, $2)
-           RETURNING name, surname",
+           RETURNING id, name, surname",
         )
         .bind(new_user.name)
         .bind(new_user.surname)

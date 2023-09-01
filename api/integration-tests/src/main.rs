@@ -126,16 +126,19 @@ async fn recreate_database(config: &config_api::Config) {
 // and all data required by other tests is created.
 async fn test_add_contact_and_insert_db_data(store: &Store) {
     println!("Init test_add_contact");
-    // TODO use api route and assert data inserted matches expected result.
     println!("Init insert data in db");
-    // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.users (name, surname)
-        VALUES ('John', 'Doe')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
+    // TODO use api lib method
+    let new_user = database_types::NewUser {
+        name: "John".to_string(),
+        surname: Some("Doe".to_string()),
+    };
+    let result = store.add_user(new_user).await.unwrap();
+    let expected_result = database_types::User {
+        id: 1,
+        name: "John".to_string(),
+        surname: Some("Doe".to_string()),
+    };
+    assert_eq!(expected_result, result);
 }
 
 async fn test_setup_store_returns_expected_error_if_invalid_config() {

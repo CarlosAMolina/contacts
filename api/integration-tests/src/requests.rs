@@ -30,34 +30,3 @@ pub async fn post_contacts_insert_new(new_contact: contact_types::NewContact) ->
         .await
         .unwrap()
 }
-
-// TODO rm
-pub async fn post_users_insert_new(new_user: database_types::NewUser) -> database_types::User {
-    let url = format!("{URL_API}/users");
-    let client = reqwest::Client::new();
-    client
-        .post(url)
-        .json(&new_user)
-        .send()
-        .await
-        .unwrap()
-        .json::<database_types::User>()
-        .await
-        .unwrap()
-}
-
-pub async fn post_nicknames_insert_new(
-    nickname: database_types::Nickname,
-) -> database_types::Nickname {
-    let url = format!("{URL_API}/nicknames");
-    let client = reqwest::Client::new();
-    client
-        .post(url)
-        .json(&nickname)
-        .send()
-        .await
-        .unwrap()
-        .json::<database_types::Nickname>()
-        .await
-        .unwrap()
-}

@@ -57,7 +57,12 @@ The `contacts.js` file must be edited, change the `urlPrefix` constant with it's
 
 ## Tests
 
-The integration tests require the database to be running.
+The integration tests require:
+
+- `sqlx` must be installed: `cargo install sqlx-cli`.
+- The database must be running.
+
+Run the tests with:
 
 ```bash
 make test

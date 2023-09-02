@@ -36,23 +36,7 @@ pub async fn add_contact (
         }
     }
     // TODO improve previous if-else
-    // TODO use get contact by id
-    let contact = contact_types::Contact {
-        user_id: user_db_ok.id,
-        user_name: user_db_ok.name,
-        user_surname: user_db_ok.surname,
-        nicknames,
-        phones: vec![],
-        categories: vec![],
-        addresses: vec![],
-        emails: vec![],
-        urls: vec![],
-        facebook_urls: vec![],
-        twitter_handles: vec![],
-        instagram_handles: vec![],
-        note: None,
-    };
-    return Ok(warp::reply::json(&contact));
+    get_contact_by_id(user_db_ok.id, store).await
 }
 
 // TODO rm pub

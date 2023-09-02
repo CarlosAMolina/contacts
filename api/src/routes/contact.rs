@@ -24,14 +24,16 @@ pub async fn add_contact (
     }
     let user_db_ok = user_db.unwrap();
     let nicknames = new_contact.nicknames;
-    // TODO manage all nicknames not only the first one
-    let nickname = database_types::Nickname {
-        id_user: user_db_ok.id,
-        nickname: nicknames[0].clone(),
-    };
-    let nickname_db = store.add_nickname(nickname).await;
-    if let Err(e) = nickname_db {
-        return Err(warp::reject::custom(e));
+    // TODO test save more than one nickname.
+    for nickname_value in nicknames.iter().cloned() {
+        let nickname = database_types::Nickname {
+            id_user: user_db_ok.id,
+            nickname: nickname_value,
+        };
+        let nickname_db = store.add_nickname(nickname).await;
+        if let Err(e) = nickname_db {
+            return Err(warp::reject::custom(e));
+        }
     }
     // TODO improve previous if-else
     // TODO use get contact by id

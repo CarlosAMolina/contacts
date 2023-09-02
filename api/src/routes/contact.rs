@@ -25,7 +25,6 @@ pub async fn add_contact (
     }
     let user_db_ok = user_db.unwrap();
     let nicknames = new_contact.nicknames;
-    // TODO test save more than one nickname.
     for nickname_value in nicknames.iter().cloned() {
         let nickname = database_types::Nickname {
             id_user: user_db_ok.id,

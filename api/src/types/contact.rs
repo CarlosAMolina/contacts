@@ -17,6 +17,22 @@ pub struct Contact {
     pub note: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct NewContact {
+    pub user_name: String,
+    pub user_surname: Option<String>,
+    pub nicknames: Vec<String>,
+    pub phones: Vec<Phone>,
+    pub categories: Vec<String>,
+    pub addresses: Vec<String>,
+    pub emails: Vec<String>,
+    pub urls: Vec<String>,
+    pub facebook_urls: Vec<String>,
+    pub twitter_handles: Vec<String>,
+    pub instagram_handles: Vec<String>,
+    pub note: Option<String>,
+}
+
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct Phone {
     pub value: i64,

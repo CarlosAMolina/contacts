@@ -2,11 +2,12 @@ use std::collections::HashMap;
 
 use crate::store::Store;
 use crate::transformers;
+use crate::types::contact as contact_types;
 use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
-
+// TODO rm
 pub async fn add_contact(
     store: Store,
     new_user: database_types::NewUser,
@@ -18,6 +19,34 @@ pub async fn add_contact(
     }
 }
 
+
+// TODO rename to add_contact
+pub async fn add_contact_new(
+    store: Store,
+    new_contact: contact_types::NewContact,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "contact={:?}", new_contact);
+    let new_user = database_types::NewUser {
+        name: new_contact.user_name,
+        surname: new_contact.user_surname,
+    };
+    let user_db = store.add_user(new_user).await;
+    if let Err(e) = user_db {
+        return Err(warp::reject::custom(e));
+    } else {
+        let user_db_ok = user_db.unwrap();
+        let nicknames = new_contact.nicknames;
+        // TODO manage all nicknames not only the first one
+        let nickname = database_types::Nickname {
+            id_user: user_db_ok.id,
+            nickname: nicknames[0].clone(),
+        };
+        // TODO store nickname
+        return Ok(warp::reply::json(&user_db_ok));
+    }
+}
+
+// TODO rm
 pub async fn add_nickname(
     store: Store,
     nickname: database_types::Nickname,

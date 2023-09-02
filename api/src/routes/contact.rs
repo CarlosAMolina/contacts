@@ -34,13 +34,12 @@ pub async fn add_contact (
         return Err(warp::reject::custom(e));
     }
     // TODO improve previous if-else
-    // TODO user previous types values
-    let nickname_db_ok = nickname_db.unwrap();
+    // TODO use get contact by id
     let contact = contact_types::Contact {
         user_id: user_db_ok.id,
         user_name: user_db_ok.name,
         user_surname: user_db_ok.surname,
-        nicknames: vec![nickname_db_ok.nickname],
+        nicknames,
         phones: vec![],
         categories: vec![],
         addresses: vec![],

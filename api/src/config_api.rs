@@ -78,7 +78,7 @@ mod config_tests {
             log_level_api: "info".to_string(),
             log_level_handle_errors: "info".to_string(),
             log_level_warp: "error".to_string(),
-            log_path_name: "/tmp".to_string(),
+            log_path_name: "/logs".to_string(),
         };
         assert_eq!(expected_not_in_docker, Config::new().unwrap());
         std::env::set_var("IS_DOCKER_RUNNING", "true");

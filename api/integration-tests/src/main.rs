@@ -1,4 +1,3 @@
-use std::fmt::format;
 use std::io::{self, Write};
 use std::panic;
 use std::process::Command;
@@ -12,6 +11,8 @@ use futures_util::future::FutureExt; // Required by catch_unwind.
 use sqlx;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::Row;
+
+mod requests;
 
 const RUN_SLOW_TESTS: bool = false;
 
@@ -128,39 +129,13 @@ async fn test_add_contact_and_insert_db_data() {
         name: "John".to_string(),
         surname: Some("Doe".to_string()),
     };
-    let result = post_contacts_insert_new(new_user).await;
+    let result = requests::post_contacts_insert_new(new_user).await;
     let expected_result = database_types::User {
         id: 1,
         name: "John".to_string(),
         surname: Some("Doe".to_string()),
     };
     assert_eq!(expected_result, result);
-}
-
-async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database_types::User {
-    let client = reqwest::Client::new();
-    client
-        .post("http://localhost:3030/contacts")
-        .json(&new_user)
-        .send()
-        .await
-        .unwrap()
-        .json::<database_types::User>()
-        .await
-        .unwrap()
-}
-
-async fn post_nicknames_insert_new(nickname: database_types::Nickname) -> database_types::Nickname {
-    let client = reqwest::Client::new();
-    client
-        .post("http://localhost:3030/nicknames")
-        .json(&nickname)
-        .send()
-        .await
-        .unwrap()
-        .json::<database_types::Nickname>()
-        .await
-        .unwrap()
 }
 
 async fn test_setup_store_returns_expected_error_if_invalid_config() {
@@ -328,17 +303,17 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         name: "Boby".to_string(),
         surname: None,
     };
-    post_contacts_insert_new(new_user).await;
+    requests::post_contacts_insert_new(new_user).await;
     let nickname = database_types::Nickname {
         id_user: 2,
         nickname: "FooNickname".to_string(),
     };
-    post_nicknames_insert_new(nickname).await;
+    requests::post_nicknames_insert_new(nickname).await;
     let nickname = database_types::Nickname {
         id_user: 2,
         nickname: "BarNickname".to_string(),
     };
-    post_nicknames_insert_new(nickname).await;
+    requests::post_nicknames_insert_new(nickname).await;
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts?query=fooNick");
     let response = client
@@ -376,7 +351,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         surname: None,
     };
 
-    post_contacts_insert_new(new_user).await;
+    requests::post_contacts_insert_new(new_user).await;
     let client = reqwest::Client::new();
     // Test search term with accent.
     let url_search_term_with_accent = format!("{url_api}/contacts?query=martínáéíóúáéíóú");

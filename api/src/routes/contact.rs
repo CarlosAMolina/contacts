@@ -17,15 +17,12 @@ pub async fn add_contact (
         name: new_contact.user_name,
         surname: new_contact.user_surname,
     };
-    // TODO use route method
-    // TODO improve if-else blocks
     let add_user_result = add_user(store.clone(), new_user).await;
     if let Err(e) = add_user_result {
         return Err(e);
     }
     let user_db = add_user_result.unwrap();
-    let nicknames = new_contact.nicknames;
-    for nickname_value in nicknames.iter().cloned() {
+    for nickname_value in new_contact.nicknames.iter().cloned() {
         let nickname = database_types::Nickname {
             id_user: user_db.id,
             nickname: nickname_value,

@@ -6,7 +6,6 @@ use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
-// TODO use pagination
 
 pub async fn add_contact(
     store: Store,
@@ -15,6 +14,17 @@ pub async fn add_contact(
     event!(Level::INFO, "user={:?}", new_user);
     match store.add_user(new_user).await {
         Ok(user) => Ok(warp::reply::json(&user)),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+pub async fn add_nickname(
+    store: Store,
+    nickname: database_types::Nickname,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "nickname={:?}", nickname);
+    match store.add_nickname(nickname).await {
+        Ok(nickname_db) => Ok(warp::reply::json(&nickname_db)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
@@ -29,6 +39,7 @@ pub async fn get_contact_by_id(id: i32, store: Store) -> Result<impl warp::Reply
     }
 }
 
+// TODO use pagination
 pub async fn get_contacts(
     params: HashMap<String, String>,
     store: Store,

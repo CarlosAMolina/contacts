@@ -50,6 +50,32 @@ impl Store {
         }
     }
 
+    pub async fn add_nickname(
+        &self,
+        nickname: database_types::Nickname,
+    ) -> Result<database_types::Nickname, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.nicknames (id_user, nickname)
+           VALUES ($1, $2)
+           RETURNING id_user, nickname",
+        )
+        .bind(nickname.id_user)
+        .bind(nickname.nickname)
+        .map(|row: PgRow| database_types::Nickname {
+            id_user: row.get("id_user"),
+            nickname: row.get("nickname"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(nickname_db) => Ok(nickname_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<database_types::AllData>, Error> {
         let mut query = query.to_lowercase();
         query = query

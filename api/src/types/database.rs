@@ -13,6 +13,12 @@ pub struct NewUser {
     pub surname: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Nickname {
+    pub id_user: i32,
+    pub nickname: String,
+}
+
 #[derive(Clone, Debug, Serialize)]
 pub struct AllData {
     pub user_id: i32,

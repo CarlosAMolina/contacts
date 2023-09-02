@@ -40,10 +40,7 @@ async fn main() -> Result<(), Error> {
     test_get_contacts(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
     test_get_contacts_if_nonexistent_path(&url_api).await;
-    test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(
-        &store, &url_api,
-    )
-    .await;
+    test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(&url_api).await;
     test_get_contacts_with_accents(&url_api).await;
     test_get_contacts_if_no_results(&url_api).await;
     test_get_contacts_if_missing_parameters(&url_api).await;
@@ -149,6 +146,19 @@ async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database
         .await
         .unwrap()
         .json::<database_types::User>()
+        .await
+        .unwrap()
+}
+
+async fn post_nicknames_insert_new(nickname: database_types::Nickname) -> database_types::Nickname {
+    let client = reqwest::Client::new();
+    client
+        .post("http://localhost:3030/nicknames")
+        .json(&nickname)
+        .send()
+        .await
+        .unwrap()
+        .json::<database_types::Nickname>()
         .await
         .unwrap()
 }
@@ -310,7 +320,6 @@ async fn test_get_contacts_if_nonexistent_path(url_api: &String) {
 }
 
 async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(
-    store: &Store,
     url_api: &String,
 ) {
     println!("Init test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows");
@@ -320,14 +329,16 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         surname: None,
     };
     post_contacts_insert_new(new_user).await;
-    // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.nicknames (id_user, nickname)
-        VALUES (2, 'FooNickname'), (2, 'BarNickname')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
+    let nickname = database_types::Nickname {
+        id_user: 2,
+        nickname: "FooNickname".to_string(),
+    };
+    post_nicknames_insert_new(nickname).await;
+    let nickname = database_types::Nickname {
+        id_user: 2,
+        nickname: "BarNickname".to_string(),
+    };
+    post_nicknames_insert_new(nickname).await;
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts?query=fooNick");
     let response = client
@@ -364,6 +375,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         name: "MartínÁÉÍÓÚáéíóú".to_string(),
         surname: None,
     };
+
     post_contacts_insert_new(new_user).await;
     let client = reqwest::Client::new();
     // Test search term with accent.

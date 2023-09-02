@@ -1,4 +1,5 @@
 -- Add up migration script here
+-- TODO category must be not null
 CREATE TABLE contacts.categories (
     id integer NOT NULL,
     category character varying(100)

@@ -41,6 +41,11 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for category in new_contact.categories.iter().cloned() {
+        if let Err(e) = add_user_category(store.clone(), user_db.id, category).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -73,6 +78,30 @@ async fn add_phone(
     event!(Level::INFO, "phone={:?}", phone);
     match store.add_phone(phone).await {
         Ok(phone_db) => Ok(phone_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+// TODO allow insert new categories
+
+async fn add_user_category(
+    store: Store,
+    user_id: i32,
+    category: String,
+) -> Result<database_types::UserCategory, warp::Rejection> {
+    event!(Level::INFO, "category={:?}", category);
+    let category_db_result = store.get_category_id(category).await;
+    if let Err(e) = category_db_result {
+        return Err(e);
+    }
+    let category_id = category_db_result.unwrap().id;
+    event!(Level::INFO, "id_category={:?}", category_id);
+    let user_category = database_types::UserCategory {
+        id_user: user_id,
+        id_category: category_id,
+    }
+    match store.add_user_category(user_category).await {
+        Ok(user_category_db) => Ok(user_category_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

@@ -139,7 +139,10 @@ async fn test_add_contact_and_insert_db_data() {
                 description: None,
             }
         ],
-        categories: vec![],
+        categories: vec![
+            "Friends".to_string(),
+            "Work".to_string(),
+        ],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -165,7 +168,10 @@ async fn test_add_contact_and_insert_db_data() {
                 description: None,
             }
         ],
-        categories: vec![],
+        categories: vec![
+            "Friends".to_string(),
+            "Work".to_string(),
+        ],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -310,7 +316,10 @@ async fn test_get_contacts(url_api: &String) {
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
         phones,
-        categories: vec![],
+        categories: vec![
+            "Friends".to_string(),
+            "Work".to_string(),
+        ],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -518,7 +527,10 @@ async fn test_get_contact_by_id(url_api: &String) {
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
         phones,
-        categories: vec![],
+        categories: vec![
+            "Friends".to_string(),
+            "Work".to_string(),
+        ],
         addresses: vec![],
         emails: vec![],
         urls: vec![],

@@ -8,7 +8,7 @@ use crate::types::query::extract_query;
 use tracing::{event, Level};
 
 // TODO rm
-pub async fn add_contact(
+pub async fn add_user(
     store: Store,
     new_user: database_types::NewUser,
 ) -> Result<impl warp::Reply, warp::Rejection> {
@@ -20,8 +20,8 @@ pub async fn add_contact(
 }
 
 
-// TODO rename to add_contact
-pub async fn add_contact_new(
+// TODO use
+pub async fn add_contact (
     store: Store,
     new_contact: contact_types::NewContact,
 ) -> Result<impl warp::Reply, warp::Rejection> {

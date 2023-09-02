@@ -44,7 +44,7 @@ async fn main() -> Result<(), Error> {
         &store, &url_api,
     )
     .await;
-    test_get_contacts_with_accents(&store, &url_api).await;
+    test_get_contacts_with_accents(&url_api).await;
     test_get_contacts_if_no_results(&url_api).await;
     test_get_contacts_if_missing_parameters(&url_api).await;
     test_get_contacts_if_missing_parameters_and_url_ends_in_slash(&url_api).await;
@@ -127,7 +127,11 @@ async fn recreate_database(config: &config_api::Config) {
 async fn test_add_contact_and_insert_db_data() {
     println!("Init test_add_contact");
     println!("Init insert data in db");
-    let result = post_contacts_insert_new("John".to_string(), Some("Doe".to_string())).await;
+    let new_user = database_types::NewUser {
+        name: "John".to_string(),
+        surname: Some("Doe".to_string()),
+    };
+    let result = post_contacts_insert_new(new_user).await;
     let expected_result = database_types::User {
         id: 1,
         name: "John".to_string(),
@@ -137,11 +141,7 @@ async fn test_add_contact_and_insert_db_data() {
     // TODO Insert all tests data here?
 }
 
-async fn post_contacts_insert_new(name: String, surname: Option<String>) -> database_types::User {
-    let new_user = database_types::NewUser {
-        name,
-        surname,
-    };
+async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database_types::User {
     let client = reqwest::Client::new();
     client
         .post("http://localhost:3030/contacts")
@@ -316,14 +316,12 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
 ) {
     println!("Init test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows");
     println!("Init insert test data in db");
+    let new_user = database_types::NewUser {
+        name: "Boby".to_string(),
+        surname: None,
+    };
+    post_contacts_insert_new(new_user).await;
     // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.users (name)
-        VALUES ('Boby')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
     sqlx::query(
         "INSERT INTO contacts.nicknames (id_user, nickname)
         VALUES (2, 'FooNickname'), (2, 'BarNickname')",
@@ -360,17 +358,14 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
     println!("✓");
 }
 
-async fn test_get_contacts_with_accents(store: &Store, url_api: &String) {
+async fn test_get_contacts_with_accents(url_api: &String) {
     println!("Init test_get_contacts_with_accents");
     println!("Init insert test data in db");
-    // TODO use api methods
-    sqlx::query(
-        "INSERT INTO contacts.users (name)
-        VALUES ('MartínÁÉÍÓÚáéíóú')",
-    )
-    .execute(&store.connection)
-    .await
-    .unwrap();
+    let new_user = database_types::NewUser {
+        name: "MartínÁÉÍÓÚáéíóú".to_string(),
+        surname: None,
+    };
+    post_contacts_insert_new(new_user).await;
     let client = reqwest::Client::new();
     // Test search term with accent.
     let url_search_term_with_accent = format!("{url_api}/contacts?query=martínáéíóúáéíóú");

@@ -22,7 +22,7 @@ pub struct Nickname {
 #[derive(Clone, Debug, Serialize)]
 pub struct AllData {
     pub user_id: i32,
-    pub user_name: Option<String>,
+    pub user_name: String,
     pub user_surname: Option<String>,
     pub nickname: Option<String>,
     pub phone: Option<i64>,

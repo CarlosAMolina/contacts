@@ -1,9 +1,27 @@
+use api::types::contact as contact_types;
 use api::types::database as database_types;
 
-pub async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database_types::User {
+// TODO use config file
+static URL_API: &str = "http://localhost:3030";
+
+pub async fn get_contact_by_id(id: u32) -> contact_types::Contact {
+    let url = format!("{URL_API}/contacts/{id}");
     let client = reqwest::Client::new();
     client
-        .post("http://localhost:3030/contacts")
+        .get(url)
+        .send()
+        .await
+        .unwrap()
+        .json::<contact_types::Contact>()
+        .await
+        .unwrap()
+}
+
+pub async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database_types::User {
+    let url = format!("{URL_API}/contacts");
+    let client = reqwest::Client::new();
+    client
+        .post(url)
         .json(&new_user)
         .send()
         .await
@@ -16,9 +34,10 @@ pub async fn post_contacts_insert_new(new_user: database_types::NewUser) -> data
 pub async fn post_nicknames_insert_new(
     nickname: database_types::Nickname,
 ) -> database_types::Nickname {
+    let url = format!("{URL_API}/nicknames");
     let client = reqwest::Client::new();
     client
-        .post("http://localhost:3030/nicknames")
+        .post(url)
         .json(&nickname)
         .send()
         .await

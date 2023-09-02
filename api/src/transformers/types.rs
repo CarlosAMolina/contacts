@@ -107,7 +107,7 @@ mod config_tests {
         let all_data_vec = vec![
             AllData {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
                 phone: Some(666666666),
@@ -124,7 +124,7 @@ mod config_tests {
             // Empty phone
             AllData {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
                 phone: None,
@@ -141,7 +141,7 @@ mod config_tests {
             // Empty phone descrition and twitter handle
             AllData {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
                 phone: Some(666666661),
@@ -189,7 +189,7 @@ mod config_tests {
         let all_data_vec = vec![
             AllData {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
                 phone: Some(666666666),
@@ -206,7 +206,7 @@ mod config_tests {
             // Empty phone
             AllData {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Johnny".to_string()),
                 phone: None,
@@ -223,7 +223,7 @@ mod config_tests {
             // Empty phone descrition and twitter handle
             AllData {
                 user_id: 2,
-                user_name: Some("Jane".to_string()),
+                user_name: "Jane".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nickname: Some("Ja".to_string()),
                 phone: Some(666666661),

@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct Contact {
     pub user_id: i32,
-    pub user_name: Option<String>,
+    pub user_name: String,
     pub user_surname: Option<String>,
     pub nicknames: Vec<String>,
     pub phones: Vec<Phone>,

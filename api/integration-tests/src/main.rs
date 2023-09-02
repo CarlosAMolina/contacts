@@ -4,7 +4,7 @@ use std::process::Command;
 
 use api::handle_errors::Error;
 use api::store::Store;
-use api::types::contact::Contact;
+use api::types::contact as contact_types;
 use api::types::database as database_types;
 use api::{config_api, oneshot, setup_store};
 use futures_util::future::FutureExt; // Required by catch_unwind.
@@ -129,11 +129,27 @@ async fn test_add_contact_and_insert_db_data() {
         name: "John".to_string(),
         surname: Some("Doe".to_string()),
     };
-    let result = requests::post_contacts_insert_new(new_user).await;
-    let expected_result = database_types::User {
-        id: 1,
-        name: "John".to_string(),
-        surname: Some("Doe".to_string()),
+    let user_db = requests::post_contacts_insert_new(new_user).await;
+    let nickname = database_types::Nickname {
+        id_user: user_db.id,
+        nickname: "Johnny".to_string(),
+    };
+    requests::post_nicknames_insert_new(nickname).await;
+    let result = requests::get_contact_by_id(1).await;
+    let expected_result = contact_types::Contact {
+        user_id: 1,
+        user_name: "John".to_string(),
+        user_surname: Some("Doe".to_string()),
+        nicknames: vec!["Johnny".to_string()],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
     };
     assert_eq!(expected_result, result);
 }
@@ -252,14 +268,14 @@ async fn test_get_contacts(url_api: &String) {
         .send()
         .await
         .unwrap()
-        .json::<Vec<Contact>>()
+        .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
-    let expected_result = vec![Contact {
+    let expected_result = vec![contact_types::Contact {
         user_id: 1,
-        user_name: Some("John".to_string()),
+        user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
-        nicknames: vec![],
+        nicknames: vec!["Johnny".to_string()],
         phones: vec![],
         categories: vec![],
         addresses: vec![],
@@ -321,12 +337,12 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         .send()
         .await
         .unwrap()
-        .json::<Vec<Contact>>()
+        .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
-    let expected_result = vec![Contact {
+    let expected_result = vec![contact_types::Contact {
         user_id: 2,
-        user_name: Some("Boby".to_string()),
+        user_name: "Boby".to_string(),
         user_surname: None,
         nicknames: vec!["FooNickname".to_string(), "BarNickname".to_string()],
         phones: vec![],
@@ -360,7 +376,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         .send()
         .await
         .unwrap()
-        .json::<Vec<Contact>>()
+        .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
     // Test search term without accent.
@@ -370,12 +386,12 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         .send()
         .await
         .unwrap()
-        .json::<Vec<Contact>>()
+        .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
-    let expected_result = vec![Contact {
+    let expected_result = vec![contact_types::Contact {
         user_id: 3,
-        user_name: Some("MartínÁÉÍÓÚáéíóú".to_string()),
+        user_name: "MartínÁÉÍÓÚáéíóú".to_string(),
         user_surname: None,
         nicknames: vec![],
         phones: vec![],
@@ -402,7 +418,7 @@ async fn test_get_contacts_if_no_results(url_api: &String) {
         .send()
         .await
         .unwrap()
-        .json::<Vec<Contact>>()
+        .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
     assert!(response.is_empty());
@@ -432,20 +448,21 @@ async fn test_get_contacts_if_missing_parameters_and_url_ends_in_slash(url_api: 
 async fn test_get_contact_by_id(url_api: &String) {
     println!("Init test_get_contact_by_id");
     let client = reqwest::Client::new();
+    // TODO use API
     let url = format!("{url_api}/contacts/1");
     let response = client
         .get(url)
         .send()
         .await
         .unwrap()
-        .json::<Contact>()
+        .json::<contact_types::Contact>()
         .await
         .unwrap();
-    let expected_result = Contact {
+    let expected_result = contact_types::Contact {
         user_id: 1,
-        user_name: Some("John".to_string()),
+        user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
-        nicknames: vec![],
+        nicknames: vec!["Johnny".to_string()],
         phones: vec![],
         categories: vec![],
         addresses: vec![],
@@ -463,13 +480,14 @@ async fn test_get_contact_by_id(url_api: &String) {
 async fn test_get_contact_by_id_if_id_does_not_exist(url_api: &String) {
     println!("Init test_get_contact_by_id_if_id_does_not_exist");
     let client = reqwest::Client::new();
+    // TODO use api
     let url = format!("{url_api}/contacts/999");
     let response = client
         .get(url)
         .send()
         .await
         .unwrap()
-        .json::<Option<Contact>>()
+        .json::<Option<contact_types::Contact>>()
         .await
         .unwrap();
     let expected_result = None;

@@ -20,3 +20,5 @@
 [ ] - lib.rs. Implement error events and improve code like `return_error`
 [x] Front
 [x] - Custom error messages.
+[x] Database
+[x] - Change user table to use serial column

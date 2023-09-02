@@ -21,38 +21,37 @@ pub async fn add_contact (
     let user_db = store.add_user(new_user).await;
     if let Err(e) = user_db {
         return Err(warp::reject::custom(e));
+    }
+    let user_db_ok = user_db.unwrap();
+    let nicknames = new_contact.nicknames;
+    // TODO manage all nicknames not only the first one
+    let nickname = database_types::Nickname {
+        id_user: user_db_ok.id,
+        nickname: nicknames[0].clone(),
+    };
+    let nickname_db = store.add_nickname(nickname).await;
+    if let Err(e) = nickname_db {
+        return Err(warp::reject::custom(e));
     } else {
-        let user_db_ok = user_db.unwrap();
-        let nicknames = new_contact.nicknames;
-        // TODO manage all nicknames not only the first one
-        let nickname = database_types::Nickname {
-            id_user: user_db_ok.id,
-            nickname: nicknames[0].clone(),
+        // TODO improve previous if-else
+        // TODO user previous types values
+        let nickname_db_ok = nickname_db.unwrap();
+        let contact = contact_types::Contact {
+            user_id: user_db_ok.id,
+            user_name: user_db_ok.name,
+            user_surname: user_db_ok.surname,
+            nicknames: vec![nickname_db_ok.nickname],
+            phones: vec![],
+            categories: vec![],
+            addresses: vec![],
+            emails: vec![],
+            urls: vec![],
+            facebook_urls: vec![],
+            twitter_handles: vec![],
+            instagram_handles: vec![],
+            note: None,
         };
-        let nickname_db = store.add_nickname(nickname).await;
-        if let Err(e) = nickname_db {
-            return Err(warp::reject::custom(e));
-        } else {
-            // TODO improve previous if-else
-            // TODO user previous types values
-            let nickname_db_ok = nickname_db.unwrap();
-            let contact = contact_types::Contact {
-                user_id: user_db_ok.id,
-                user_name: user_db_ok.name,
-                user_surname: user_db_ok.surname,
-                nicknames: vec![nickname_db_ok.nickname],
-                phones: vec![],
-                categories: vec![],
-                addresses: vec![],
-                emails: vec![],
-                urls: vec![],
-                facebook_urls: vec![],
-                twitter_handles: vec![],
-                instagram_handles: vec![],
-                note: None,
-            };
-            return Ok(warp::reply::json(&contact));
-        }
+        return Ok(warp::reply::json(&contact));
     }
 }
 

@@ -31,6 +31,7 @@ pub async fn post_contacts_insert_new(new_contact: contact_types::NewContact) ->
         .unwrap()
 }
 
+// TODO rm
 pub async fn post_users_insert_new(new_user: database_types::NewUser) -> database_types::User {
     let url = format!("{URL_API}/users");
     let client = reqwest::Client::new();

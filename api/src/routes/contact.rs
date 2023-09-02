@@ -7,19 +7,6 @@ use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
-// TODO rm
-pub async fn add_user(
-    store: Store,
-    new_user: database_types::NewUser,
-) -> Result<impl warp::Reply, warp::Rejection> {
-    event!(Level::INFO, "user={:?}", new_user);
-    match store.add_user(new_user).await {
-        Ok(user) => Ok(warp::reply::json(&user)),
-        Err(e) => return Err(warp::reject::custom(e)),
-    }
-}
-
-
 // TODO use
 pub async fn add_contact (
     store: Store,
@@ -46,7 +33,20 @@ pub async fn add_contact (
     }
 }
 
-// TODO rm
+// TODO rm pub
+pub async fn add_user(
+    store: Store,
+    new_user: database_types::NewUser,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "user={:?}", new_user);
+    match store.add_user(new_user).await {
+        Ok(user) => Ok(warp::reply::json(&user)),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+
+// TODO rm pub
 pub async fn add_nickname(
     store: Store,
     nickname: database_types::Nickname,

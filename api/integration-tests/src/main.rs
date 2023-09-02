@@ -129,7 +129,7 @@ async fn test_add_contact_and_insert_db_data() {
         name: "John".to_string(),
         surname: Some("Doe".to_string()),
     };
-    let user_db = requests::post_contacts_insert_new(new_user).await;
+    let user_db = requests::post_users_insert_new(new_user).await;
     let nickname = database_types::Nickname {
         id_user: user_db.id,
         nickname: "Johnny".to_string(),
@@ -319,7 +319,7 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         name: "Boby".to_string(),
         surname: None,
     };
-    requests::post_contacts_insert_new(new_user).await;
+    requests::post_users_insert_new(new_user).await;
     let nickname = database_types::Nickname {
         id_user: 2,
         nickname: "FooNickname".to_string(),
@@ -367,7 +367,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         surname: None,
     };
 
-    requests::post_contacts_insert_new(new_user).await;
+    requests::post_users_insert_new(new_user).await;
     let client = reqwest::Client::new();
     // Test search term with accent.
     let url_search_term_with_accent = format!("{url_api}/contacts?query=martínáéíóúáéíóú");

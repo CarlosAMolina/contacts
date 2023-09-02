@@ -158,7 +158,7 @@ mod config_tests {
         ];
         let expected = Contact {
             user_id: 1,
-            user_name: Some("John".to_string()),
+            user_name: "John".to_string(),
             user_surname: Some("Doe".to_string()),
             nicknames: vec![("Johnny".to_string())],
             phones: vec![
@@ -241,7 +241,7 @@ mod config_tests {
         let expected = vec![
             Contact {
                 user_id: 1,
-                user_name: Some("John".to_string()),
+                user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nicknames: vec![("Johnny".to_string())],
                 phones: vec![Phone {
@@ -259,7 +259,7 @@ mod config_tests {
             },
             Contact {
                 user_id: 2,
-                user_name: Some("Jane".to_string()),
+                user_name: "Jane".to_string(),
                 user_surname: Some("Doe".to_string()),
                 nicknames: vec![("Ja".to_string())],
                 phones: vec![Phone {

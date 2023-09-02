@@ -87,9 +87,16 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         .allow_header("content-type")
         .allow_methods(&[Method::PUT, Method::DELETE, Method::GET, Method::POST]);
 
-    // TODO use add_contact
     let add_contact = warp::post()
         .and(warp::path("contacts"))
+        .and(warp::path::end())
+        .and(store_filter.clone())
+        .and(warp::body::json())
+        .and_then(routes::contact::add_contact);
+
+    // TODO rm
+    let add_user = warp::post()
+        .and(warp::path("users"))
         .and(warp::path::end())
         .and(store_filter.clone())
         .and(warp::body::json())
@@ -145,6 +152,7 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         }));
 
     add_contact
+        .or(add_user)
         .or(add_nickname)
         .or(get_contacts)
         .or(get_contact_by_id)

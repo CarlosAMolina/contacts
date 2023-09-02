@@ -17,6 +17,7 @@ pub async fn add_contact (
         name: new_contact.user_name,
         surname: new_contact.user_surname,
     };
+    // TODO user route method
     let user_db = store.add_user(new_user).await;
     if let Err(e) = user_db {
         return Err(warp::reject::custom(e));
@@ -28,8 +29,30 @@ pub async fn add_contact (
             id_user: user_db_ok.id,
             nickname: nicknames[0].clone(),
         };
-        // TODO store nickname
-        return Ok(warp::reply::json(&user_db_ok));
+        let nickname_db = store.add_nickname(nickname).await;
+        if let Err(e) = nickname_db {
+            return Err(warp::reject::custom(e));
+        } else {
+            // TODO improve previous if-else
+            // TODO user previous types values
+            let nickname_db_ok = nickname_db.unwrap();
+            let contact = contact_types::Contact {
+                user_id: user_db_ok.id,
+                user_name: user_db_ok.name,
+                user_surname: user_db_ok.surname,
+                nicknames: vec![nickname_db_ok.nickname],
+                phones: vec![],
+                categories: vec![],
+                addresses: vec![],
+                emails: vec![],
+                urls: vec![],
+                facebook_urls: vec![],
+                twitter_handles: vec![],
+                instagram_handles: vec![],
+                note: None,
+            };
+            return Ok(warp::reply::json(&contact));
+        }
     }
 }
 

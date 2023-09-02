@@ -125,16 +125,22 @@ async fn recreate_database(config: &config_api::Config) {
 async fn test_add_contact_and_insert_db_data() {
     println!("Init test_add_contact");
     println!("Init insert data in db");
-    let new_user = database_types::NewUser {
-        name: "John".to_string(),
-        surname: Some("Doe".to_string()),
+    let new_contact = contact_types::NewContact {
+        user_name: "John".to_string(),
+        user_surname: Some("Doe".to_string()),
+        nicknames: vec!["Johnny".to_string()],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
     };
-    let user_db = requests::post_users_insert_new(new_user).await;
-    let nickname = database_types::Nickname {
-        id_user: user_db.id,
-        nickname: "Johnny".to_string(),
-    };
-    requests::post_nicknames_insert_new(nickname).await;
+    let contact_db = requests::post_contacts_insert_new(new_contact).await;
+    // TODO use contact_db.id_user
     let result = requests::get_contact_by_id(1).await;
     let expected_result = contact_types::Contact {
         user_id: 1,

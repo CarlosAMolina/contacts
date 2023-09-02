@@ -138,7 +138,6 @@ async fn test_add_contact_and_insert_db_data() {
         surname: Some("Doe".to_string()),
     };
     assert_eq!(expected_result, result);
-    // TODO Insert all tests data here?
 }
 
 async fn post_contacts_insert_new(new_user: database_types::NewUser) -> database_types::User {

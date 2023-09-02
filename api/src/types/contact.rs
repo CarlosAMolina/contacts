@@ -33,7 +33,8 @@ pub struct NewContact {
     pub note: Option<String>,
 }
 
-#[derive(Debug, Deserialize, PartialEq, Serialize)]
+// TODO rename value to phone as is the name used in db.
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Phone {
     pub value: i64,
     pub description: Option<String>,

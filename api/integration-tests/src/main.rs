@@ -129,7 +129,16 @@ async fn test_add_contact_and_insert_db_data() {
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones: vec![],
+        phones: vec![
+            contact_types::Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            },
+            contact_types::Phone {
+                value: 666111333,
+                description: None,
+            }
+        ],
         categories: vec![],
         addresses: vec![],
         emails: vec![],
@@ -140,14 +149,22 @@ async fn test_add_contact_and_insert_db_data() {
         note: None,
     };
     let contact_db = requests::post_contacts_insert_new(new_contact).await;
-    // TODO use contact_db.id_user
     let result = requests::get_contact_by_id(1).await;
     let expected_result = contact_types::Contact {
         user_id: 1,
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones: vec![],
+        phones: vec![
+            contact_types::Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            },
+            contact_types::Phone {
+                value: 666111333,
+                description: None,
+            }
+        ],
         categories: vec![],
         addresses: vec![],
         emails: vec![],
@@ -277,12 +294,22 @@ async fn test_get_contacts(url_api: &String) {
         .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
+    let phones = vec![
+        contact_types::Phone {
+            value: 666111222,
+            description: Some("Work".to_string()),
+        },
+        contact_types::Phone {
+            value: 666111333,
+            description: None,
+        }
+    ];
     let expected_result = vec![contact_types::Contact {
         user_id: 1,
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones: vec![],
+        phones,
         categories: vec![],
         addresses: vec![],
         emails: vec![],
@@ -475,12 +502,22 @@ async fn test_get_contact_by_id(url_api: &String) {
         .json::<contact_types::Contact>()
         .await
         .unwrap();
+    let phones = vec![
+        contact_types::Phone {
+            value: 666111222,
+            description: Some("Work".to_string()),
+        },
+        contact_types::Phone {
+            value: 666111333,
+            description: None,
+        }
+    ];
     let expected_result = contact_types::Contact {
         user_id: 1,
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones: vec![],
+        phones,
         categories: vec![],
         addresses: vec![],
         emails: vec![],

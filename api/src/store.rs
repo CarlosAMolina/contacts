@@ -76,15 +76,45 @@ impl Store {
         }
     }
 
-    pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<database_types::AllData>, Error> {
+    pub async fn add_phone(
+        &self,
+        phone: database_types::Phone,
+    ) -> Result<database_types::Phone, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.phones (id_user, phone, description)
+           VALUES ($1, $2, $3)
+           RETURNING id_user, phone, description",
+        )
+        .bind(phone.id_user)
+        .bind(phone.phone)
+        .bind(phone.description)
+        .map(|row: PgRow| database_types::Phone {
+            id_user: row.get("id_user"),
+            phone: row.get("phone"),
+            description: row.get("description"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(phone_db) => Ok(phone_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
+    pub async fn get_all_data_by_query(
+        &self,
+        query: String,
+    ) -> Result<Vec<database_types::AllData>, Error> {
         let mut query = query.to_lowercase();
         query = query
             .replace("á", "a")
             .replace("é", "e")
             .replace("í", "i")
             .replace("ó", "o")
-            .replace("ú", "u")
-            ;
+            .replace("ú", "u");
         query = format!("%{}%", query);
         match sqlx::query(
             "SELECT
@@ -126,7 +156,6 @@ impl Store {
                  CONCAT_WS(' ', name, surname)
                ) ASC;
              ",
-
         )
         .bind(query)
         .map(|row: PgRow| database_types::AllData {
@@ -185,5 +214,4 @@ impl Store {
             }
         }
     }
-
 }

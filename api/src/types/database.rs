@@ -1,6 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
+pub struct Phone {
+    pub id_user: i32,
+    pub phone: i64,
+    pub description: Option<String>,
+}
+
+#[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct User {
     pub id: i32,
     pub name: String,

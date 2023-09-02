@@ -8,7 +8,7 @@ use crate::types::query::extract_query;
 use tracing::{event, Level};
 
 // TODO not use store.clone
-pub async fn add_contact (
+pub async fn add_contact(
     store: Store,
     new_contact: contact_types::NewContact,
 ) -> Result<impl warp::Reply, warp::Rejection> {
@@ -28,6 +28,16 @@ pub async fn add_contact (
             nickname: nickname_value,
         };
         if let Err(e) = add_nickname(store.clone(), nickname).await {
+            return Err(e);
+        }
+    }
+    for phone in new_contact.phones.iter().cloned() {
+        let phone = database_types::Phone {
+            id_user: user_db.id,
+            phone: phone.value,
+            description: phone.description,
+        };
+        if let Err(e) = add_phone(store.clone(), phone).await {
             return Err(e);
         }
     }
@@ -52,6 +62,17 @@ async fn add_nickname(
     event!(Level::INFO, "nickname={:?}", nickname);
     match store.add_nickname(nickname).await {
         Ok(nickname_db) => Ok(nickname_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+async fn add_phone(
+    store: Store,
+    phone: database_types::Phone,
+) -> Result<database_types::Phone, warp::Rejection> {
+    event!(Level::INFO, "phone={:?}", phone);
+    match store.add_phone(phone).await {
+        Ok(phone_db) => Ok(phone_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

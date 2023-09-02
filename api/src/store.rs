@@ -27,7 +27,6 @@ impl Store {
         &self,
         new_user: database_types::NewUser,
     ) -> Result<database_types::User, Error> {
-        println!("init add_user"); // TODO rm
         match sqlx::query(
             "INSERT INTO contacts.users (name, surname)
            VALUES ($1, $2)
@@ -52,7 +51,6 @@ impl Store {
     }
 
     pub async fn get_all_data_by_query(&self, query: String) -> Result<Vec<database_types::AllData>, Error> {
-        println!("init get_all_data_by_query"); // TODO rm
         let mut query = query.to_lowercase();
         query = query
             .replace("á", "a")
@@ -133,7 +131,6 @@ impl Store {
     }
 
     pub async fn get_all_data_by_id(&self, id: i32) -> Result<Vec<database_types::AllData>, Error> {
-        println!("init get_all_data_by_id"); // TODO rm
         match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
             .bind(id)
             .map(|row: PgRow| database_types::AllData {

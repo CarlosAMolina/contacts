@@ -191,6 +191,69 @@ mod config_tests {
     }
 
     #[test]
+    fn get_phones_unique_does_drop_duplicates_if_different_description() {
+        // TODO modify db model in order to avoid situation where the api won't retrieve all the
+        // data.
+        let all_data_1 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: None,
+            phone: Some(666111222),
+            phone_description: Some("Work".to_string()),
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_2 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: None,
+            phone: Some(666111222),
+            phone_description: Some("Work 2".to_string()),
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_2 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: None,
+            phone: Some(666111222),
+            phone_description: None,
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_vec = vec![all_data_1, all_data_2];
+        let expected_result = vec![
+            Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            }
+        ];
+        let result = get_phones_unique(&all_data_vec);
+        assert_eq!(expected_result, result);
+    }
+
+    #[test]
     fn get_contact_from_all_data_manages_duplicates_correctly() {
         let all_data_vec = vec![
             database_types::AllData {

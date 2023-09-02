@@ -62,7 +62,6 @@ pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
         ))
     } else {
         event!(Level::ERROR, "Unknown error: {:?}", r);
-        println!("Unknown error: {:?}", r); //TODO rm
         Ok(warp::reply::with_status(
             Error::Unknown.to_string(),
             StatusCode::INTERNAL_SERVER_ERROR,

@@ -1,8 +1,8 @@
 use crate::types::contact::{Contact, Phone};
-use crate::types::database::AllData;
+use crate::types::database as database_types;
 
 // TODO not use clone or cloned
-pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
+pub fn get_contacts_from_all_data(all_data_vec: Vec<database_types::AllData>) -> Vec<Contact> {
     let mut result = vec![];
     let mut contact_ids: Vec<i32> = all_data_vec.iter().map(|row| row.user_id).collect();
     contact_ids.dedup_by(|a, b| a == b);
@@ -20,22 +20,12 @@ pub fn get_contacts_from_all_data(all_data_vec: Vec<AllData>) -> Vec<Contact> {
 }
 
 // TODO not use clone
-pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> {
+pub fn get_contact_from_all_data(all_data_vec: Vec<database_types::AllData>) -> Option<Contact> {
     if all_data_vec.len() == 0 {
         return None;
     } else {
-        let mut all_data_phone_unique: Vec<_> = all_data_vec
-            .iter()
-            .filter(|row| row.phone.is_some())
-            .collect();
-        all_data_phone_unique.dedup_by(|a, b| a.phone == b.phone);
-        let phones: Vec<Phone> = all_data_phone_unique
-            .iter()
-            .map(|row| Phone {
-                value: row.phone.unwrap(),
-                description: row.phone_description.clone(),
-            })
-            .collect();
+        let all_data_phones: Vec<_> = all_data_vec.iter().filter(|row| row.phone.is_some()).collect();
+        let phones = get_phones_unique(all_data_phones);
         let mut addresses = vec![];
         let mut categories = vec![];
         let mut emails = vec![];
@@ -92,6 +82,23 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<AllData>) -> Option<Contact> 
     }
 }
 
+fn get_phones_unique(all_data_phones: Vec<&database_types::AllData>) -> Vec<Phone> {
+    println!("x: {:?}", all_data_phones); // TODO rm
+    let mut all_data_phone_unique = all_data_phones;
+    println!("x2: {:?}", all_data_phone_unique); // TODO rm
+    all_data_phone_unique.dedup_by(|a, b| a.phone == b.phone);
+    println!("x3: {:?}", all_data_phone_unique); // TODO rm
+    let phones: Vec<Phone> = all_data_phone_unique
+        .iter()
+        .map(|row| Phone {
+            value: row.phone.unwrap(),
+            description: row.phone_description.clone(),
+        })
+        .collect();
+    println!("x4: {:?}", phones); // TODO rm
+    phones
+}
+
 fn push_to_vector_if_new(array: &mut Vec<String>, value: String) {
     if !array.contains(&value) {
         array.push(value);
@@ -105,7 +112,7 @@ mod config_tests {
     #[test]
     fn get_contact_from_all_data_manages_duplicates_correctly() {
         let all_data_vec = vec![
-            AllData {
+            database_types::AllData {
                 user_id: 1,
                 user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
@@ -122,7 +129,7 @@ mod config_tests {
                 note: Some("Foo bar".to_string()),
             },
             // Empty phone
-            AllData {
+            database_types::AllData {
                 user_id: 1,
                 user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
@@ -139,7 +146,7 @@ mod config_tests {
                 note: Some("Foo bar".to_string()),
             },
             // Empty phone descrition and twitter handle
-            AllData {
+            database_types::AllData {
                 user_id: 1,
                 user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
@@ -187,7 +194,7 @@ mod config_tests {
     #[test]
     fn get_contacts_from_all_data_manages_runs_ok() {
         let all_data_vec = vec![
-            AllData {
+            database_types::AllData {
                 user_id: 1,
                 user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
@@ -204,7 +211,7 @@ mod config_tests {
                 note: Some("Foo bar".to_string()),
             },
             // Empty phone
-            AllData {
+            database_types::AllData {
                 user_id: 1,
                 user_name: "John".to_string(),
                 user_surname: Some("Doe".to_string()),
@@ -221,7 +228,7 @@ mod config_tests {
                 note: Some("Foo bar".to_string()),
             },
             // Empty phone descrition and twitter handle
-            AllData {
+            database_types::AllData {
                 user_id: 2,
                 user_name: "Jane".to_string(),
                 user_surname: Some("Doe".to_string()),

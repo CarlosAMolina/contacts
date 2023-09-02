@@ -15,7 +15,6 @@ pub enum Error {
     StartGreaterThanEnd,
     DatabaseQueryError(sqlx::Error),
     NotImplemented,
-    RouteNotFound,
     Unknown,
 }
 
@@ -30,7 +29,6 @@ impl std::fmt::Display for Error {
             Error::StartGreaterThanEnd => write!(f, "The start is greater than the end"),
             Error::DatabaseQueryError(_) => write!(f, "Database query error"),
             Error::NotImplemented => write!(f, "Not implemented"),
-            Error::RouteNotFound => write!(f, "Route not found"),
             Error::Unknown => write!(f, "Unknown error"),
         }
     }
@@ -61,12 +59,6 @@ pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
         Ok(warp::reply::with_status(
             error.to_string(),
             StatusCode::UNPROCESSABLE_ENTITY,
-        ))
-    } else if r.is_not_found() {
-        event!(Level::WARN, "Requested route was not found");
-        Ok(warp::reply::with_status(
-            Error::RouteNotFound.to_string(),
-            StatusCode::NOT_FOUND,
         ))
     } else {
         event!(Level::ERROR, "Unknown error: {:?}", r);

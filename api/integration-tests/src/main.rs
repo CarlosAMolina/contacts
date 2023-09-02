@@ -295,9 +295,7 @@ async fn test_get_contacts_if_invalid_path(url_api: &String) {
     let client = reqwest::Client::new();
     let url = format!("{url_api}/contacts/a");
     let response = client.get(url).send().await.unwrap().text().await.unwrap();
-    // TODO create specific error: MethodNotAllowed
     let expected_result = Error::Unknown.to_string();
-    println!("{:?}", response); // TODO rm
     assert_eq!(expected_result, response);
     println!("✓");
 }
@@ -307,8 +305,7 @@ async fn test_get_contacts_if_nonexistent_path(url_api: &String) {
     let client = reqwest::Client::new();
     let url = format!("{url_api}/nonexistent_path/");
     let response = client.get(url).send().await.unwrap().text().await.unwrap();
-    let expected_result = Error::RouteNotFound.to_string();
-    println!("{:?}", response); // TODO rm
+    let expected_result = Error::Unknown.to_string();
     assert_eq!(expected_result, response);
     println!("✓");
 }

@@ -1,4 +1,5 @@
 -- Add up migration script here
+-- TODO add pk or/and unique columns
 CREATE TABLE contacts.phones (
     id_user integer NOT NULL,
     phone bigint NOT NULL,

@@ -24,7 +24,10 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<database_types::AllData>) -> 
     if all_data_vec.len() == 0 {
         return None;
     } else {
-        let all_data_phones: Vec<_> = all_data_vec.iter().filter(|row| row.phone.is_some()).collect();
+        let all_data_phones: Vec<_> = all_data_vec
+            .iter()
+            .filter(|row| row.phone.is_some())
+            .collect();
         let phones = get_phones_unique(all_data_phones);
         let mut addresses = vec![];
         let mut categories = vec![];
@@ -108,6 +111,87 @@ fn push_to_vector_if_new(array: &mut Vec<String>, value: String) {
 #[cfg(test)]
 mod config_tests {
     use super::*;
+
+    #[test]
+    fn get_phones_unique_drops_duplicates_correctly() {
+        let all_data_1 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: Some("Johnny".to_string()),
+            phone: Some(666111222),
+            phone_description: Some("Work".to_string()),
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_2 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: Some("Johnny".to_string()),
+            phone: Some(666111333),
+            phone_description: None,
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_3 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: Some("Joy".to_string()),
+            phone: Some(666111222),
+            phone_description: Some("Work".to_string()),
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_4 = database_types::AllData {
+            user_id: 1,
+            user_name: "John".to_string(),
+            user_surname: None,
+            nickname: Some("Joy".to_string()),
+            phone: Some(666111333),
+            phone_description: None,
+            category: None,
+            address: None,
+            email: None,
+            url: None,
+            facebook_url: None,
+            twitter_handle: None,
+            instagram_handle: None,
+            note: None,
+        };
+        let all_data_vec = vec![&all_data_1, &all_data_2, &all_data_3, &all_data_4];
+        let expected_result = vec![
+            Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            },
+            Phone {
+                value: 666111333,
+                description: None,
+            },
+        ];
+        let result = get_phones_unique(all_data_vec);
+        assert_eq!(expected_result, result);
+    }
 
     #[test]
     fn get_contact_from_all_data_manages_duplicates_correctly() {

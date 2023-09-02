@@ -17,7 +17,8 @@ pub async fn add_contact (
         name: new_contact.user_name,
         surname: new_contact.user_surname,
     };
-    // TODO user route method
+    // TODO use route method
+    // TODO improve previous if-else
     let user_db = store.add_user(new_user).await;
     if let Err(e) = user_db {
         return Err(warp::reject::custom(e));
@@ -35,7 +36,6 @@ pub async fn add_contact (
             return Err(warp::reject::custom(e));
         }
     }
-    // TODO improve previous if-else
     get_contact_by_id(user_db_ok.id, store).await
 }
 

@@ -24,11 +24,7 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<database_types::AllData>) -> 
     if all_data_vec.len() == 0 {
         return None;
     } else {
-        let all_data_phones: Vec<_> = all_data_vec
-            .iter()
-            .filter(|row| row.phone.is_some())
-            .collect();
-        let phones = get_phones_unique(all_data_phones);
+        let phones = get_phones_unique(&all_data_vec);
         let mut addresses = vec![];
         let mut categories = vec![];
         let mut emails = vec![];
@@ -85,12 +81,14 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<database_types::AllData>) -> 
     }
 }
 
-fn get_phones_unique(all_data_phones: Vec<&database_types::AllData>) -> Vec<Phone> {
-    println!("x: {:?}", all_data_phones); // TODO rm
+fn get_phones_unique(all_data_vec: &Vec<database_types::AllData>) -> Vec<Phone> {
+    let all_data_phones: Vec<_> = all_data_vec
+        .iter()
+        .filter(|row| row.phone.is_some())
+        .collect();
     let mut all_data_phone_unique = all_data_phones;
-    println!("x2: {:?}", all_data_phone_unique); // TODO rm
+    all_data_phone_unique.sort_unstable_by_key(|all_data| all_data.phone);
     all_data_phone_unique.dedup_by(|a, b| a.phone == b.phone);
-    println!("x3: {:?}", all_data_phone_unique); // TODO rm
     let phones: Vec<Phone> = all_data_phone_unique
         .iter()
         .map(|row| Phone {
@@ -98,7 +96,6 @@ fn get_phones_unique(all_data_phones: Vec<&database_types::AllData>) -> Vec<Phon
             description: row.phone_description.clone(),
         })
         .collect();
-    println!("x4: {:?}", phones); // TODO rm
     phones
 }
 
@@ -113,7 +110,7 @@ mod config_tests {
     use super::*;
 
     #[test]
-    fn get_phones_unique_drops_duplicates_correctly() {
+    fn get_phones_unique_drops_duplicates_if_duplicated_values_are_not_consecutive() {
         let all_data_1 = database_types::AllData {
             user_id: 1,
             user_name: "John".to_string(),
@@ -178,7 +175,7 @@ mod config_tests {
             instagram_handle: None,
             note: None,
         };
-        let all_data_vec = vec![&all_data_1, &all_data_2, &all_data_3, &all_data_4];
+        let all_data_vec = vec![all_data_1, all_data_2, all_data_3, all_data_4];
         let expected_result = vec![
             Phone {
                 value: 666111222,
@@ -189,7 +186,7 @@ mod config_tests {
                 description: None,
             },
         ];
-        let result = get_phones_unique(all_data_vec);
+        let result = get_phones_unique(&all_data_vec);
         assert_eq!(expected_result, result);
     }
 
@@ -254,12 +251,12 @@ mod config_tests {
             nicknames: vec![("Johnny".to_string())],
             phones: vec![
                 Phone {
-                    value: 666666666,
-                    description: Some("Work".to_string()),
-                },
-                Phone {
                     value: 666666661,
                     description: None,
+                },
+                Phone {
+                    value: 666666666,
+                    description: Some("Work".to_string()),
                 },
             ],
             categories: vec!["Friends".to_string()],

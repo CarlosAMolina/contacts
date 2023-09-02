@@ -127,7 +127,7 @@ async fn recreate_database(config: &config_api::Config) {
 async fn test_add_contact_and_insert_db_data() {
     println!("Init test_add_contact");
     println!("Init insert data in db");
-    let result = post_contact("John".to_string(), Some("Doe".to_string())).await;
+    let result = post_contacts_insert_new("John".to_string(), Some("Doe".to_string())).await;
     let expected_result = database_types::User {
         id: 1,
         name: "John".to_string(),
@@ -137,7 +137,7 @@ async fn test_add_contact_and_insert_db_data() {
     // TODO Insert all tests data here?
 }
 
-async fn post_contact(name: String, surname: Option<String>) -> database_types::User {
+async fn post_contacts_insert_new(name: String, surname: Option<String>) -> database_types::User {
     let new_user = database_types::NewUser {
         name,
         surname,

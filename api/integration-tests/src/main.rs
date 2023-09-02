@@ -321,22 +321,23 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
 ) {
     println!("Init test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows");
     println!("Init insert test data in db");
-    let new_user = database_types::NewUser {
-        name: "Boby".to_string(),
-        surname: None,
+    let new_contact = contact_types::NewContact {
+        user_name: "Boby".to_string(),
+        user_surname: None,
+        nicknames: vec!["FooNickname".to_string(), "BarNickname".to_string()],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
     };
-    requests::post_users_insert_new(new_user).await;
-    let nickname = database_types::Nickname {
-        id_user: 2,
-        nickname: "FooNickname".to_string(),
-    };
-    requests::post_nicknames_insert_new(nickname).await;
-    let nickname = database_types::Nickname {
-        id_user: 2,
-        nickname: "BarNickname".to_string(),
-    };
-    requests::post_nicknames_insert_new(nickname).await;
+    requests::post_contacts_insert_new(new_contact).await;
     let client = reqwest::Client::new();
+    // TODO user api method
     let url = format!("{url_api}/contacts?query=fooNick");
     let response = client
         .get(url)
@@ -368,13 +369,23 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
 async fn test_get_contacts_with_accents(url_api: &String) {
     println!("Init test_get_contacts_with_accents");
     println!("Init insert test data in db");
-    let new_user = database_types::NewUser {
-        name: "MartínÁÉÍÓÚáéíóú".to_string(),
-        surname: None,
+    let new_contact = contact_types::NewContact {
+        user_name: "MartínÁÉÍÓÚáéíóú".to_string(),
+        user_surname: None,
+        nicknames: vec![],
+        phones: vec![],
+        categories: vec![],
+        addresses: vec![],
+        emails: vec![],
+        urls: vec![],
+        facebook_urls: vec![],
+        twitter_handles: vec![],
+        instagram_handles: vec![],
+        note: None,
     };
-
-    requests::post_users_insert_new(new_user).await;
+    requests::post_contacts_insert_new(new_contact).await;
     let client = reqwest::Client::new();
+    // TODO use api methods
     // Test search term with accent.
     let url_search_term_with_accent = format!("{url_api}/contacts?query=martínáéíóúáéíóú");
     let response_search_term_with_accent = client

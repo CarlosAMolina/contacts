@@ -7,7 +7,7 @@ use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
-// TODO use
+// TODO not use store.clone
 pub async fn add_contact (
     store: Store,
     new_contact: contact_types::NewContact,
@@ -18,47 +18,43 @@ pub async fn add_contact (
         surname: new_contact.user_surname,
     };
     // TODO use route method
-    // TODO improve previous if-else
-    let user_db = store.add_user(new_user).await;
-    if let Err(e) = user_db {
-        return Err(warp::reject::custom(e));
+    // TODO improve if-else blocks
+    let add_user_result = add_user(store.clone(), new_user).await;
+    if let Err(e) = add_user_result {
+        return Err(e);
     }
-    let user_db_ok = user_db.unwrap();
+    let user_db = add_user_result.unwrap();
     let nicknames = new_contact.nicknames;
     for nickname_value in nicknames.iter().cloned() {
         let nickname = database_types::Nickname {
-            id_user: user_db_ok.id,
+            id_user: user_db.id,
             nickname: nickname_value,
         };
-        let nickname_db = store.add_nickname(nickname).await;
-        if let Err(e) = nickname_db {
-            return Err(warp::reject::custom(e));
+        if let Err(e) = add_nickname(store.clone(), nickname).await {
+            return Err(e);
         }
     }
-    get_contact_by_id(user_db_ok.id, store).await
+    get_contact_by_id(user_db.id, store).await
 }
 
-// TODO rm pub
-pub async fn add_user(
+async fn add_user(
     store: Store,
     new_user: database_types::NewUser,
-) -> Result<impl warp::Reply, warp::Rejection> {
+) -> Result<database_types::User, warp::Rejection> {
     event!(Level::INFO, "user={:?}", new_user);
     match store.add_user(new_user).await {
-        Ok(user) => Ok(warp::reply::json(&user)),
+        Ok(user) => Ok(user),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
 
-
-// TODO rm pub
-pub async fn add_nickname(
+async fn add_nickname(
     store: Store,
     nickname: database_types::Nickname,
-) -> Result<impl warp::Reply, warp::Rejection> {
+) -> Result<database_types::Nickname, warp::Rejection> {
     event!(Level::INFO, "nickname={:?}", nickname);
     match store.add_nickname(nickname).await {
-        Ok(nickname_db) => Ok(warp::reply::json(&nickname_db)),
+        Ok(nickname_db) => Ok(nickname_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

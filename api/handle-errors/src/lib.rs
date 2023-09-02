@@ -16,6 +16,7 @@ pub enum Error {
     DatabaseQueryError(sqlx::Error),
     NotImplemented,
     RouteNotFound,
+    Unknown,
 }
 
 impl std::fmt::Display for Error {
@@ -30,6 +31,7 @@ impl std::fmt::Display for Error {
             Error::DatabaseQueryError(_) => write!(f, "Database query error"),
             Error::NotImplemented => write!(f, "Not implemented"),
             Error::RouteNotFound => write!(f, "Route not found"),
+            Error::Unknown => write!(f, "Unknown error"),
         }
     }
 }
@@ -70,7 +72,7 @@ pub async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
         event!(Level::ERROR, "Unknown error: {:?}", r);
         println!("Unknown error: {:?}", r); //TODO rm
         Ok(warp::reply::with_status(
-            "Unknown error".to_string(),
+            Error::Unknown.to_string(),
             StatusCode::INTERNAL_SERVER_ERROR,
         ))
     }

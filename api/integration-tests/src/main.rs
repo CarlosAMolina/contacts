@@ -39,6 +39,7 @@ async fn main() -> Result<(), Error> {
     );
     test_get_contacts(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
+    test_get_contacts_if_nonexistent_path(&url_api).await;
     test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(
         &store, &url_api,
     )
@@ -292,8 +293,19 @@ async fn test_get_contacts(url_api: &String) {
 async fn test_get_contacts_if_invalid_path(url_api: &String) {
     println!("Init test_get_contacts_if_invalid_path");
     let client = reqwest::Client::new();
-    //let url = format!("{url_api}/contacts/a"); // TODO assert this query returns MethodNotAllowed
-    let url = format!("{url_api}/invented-path/");
+    let url = format!("{url_api}/contacts/a");
+    let response = client.get(url).send().await.unwrap().text().await.unwrap();
+    // TODO create specific error: MethodNotAllowed
+    let expected_result = Error::Unknown.to_string();
+    println!("{:?}", response); // TODO rm
+    assert_eq!(expected_result, response);
+    println!("✓");
+}
+
+async fn test_get_contacts_if_nonexistent_path(url_api: &String) {
+    println!("Init test_get_contacts_if_nonexistent_path");
+    let client = reqwest::Client::new();
+    let url = format!("{url_api}/nonexistent_path/");
     let response = client.get(url).send().await.unwrap().text().await.unwrap();
     let expected_result = Error::RouteNotFound.to_string();
     println!("{:?}", response); // TODO rm

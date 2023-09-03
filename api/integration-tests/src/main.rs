@@ -26,9 +26,9 @@ async fn main() -> Result<(), Error> {
     }
     let store = setup_store(&config).await.unwrap();
     println!("Init start the api web server");
-    let handler = oneshot(&config, &store).await;
     add_db_schema(&store).await;
     run_migrations(&store).await;
+    let handler = oneshot(&config, &store).await;
     test_insert_db_data().await;
     test_add_contact().await;
     let url_api = format!(
@@ -250,6 +250,7 @@ async fn add_db_schema(store: &Store) {
 }
 
 async fn run_migrations(store: &Store) {
+    // TODO use trace instead of print
     println!("Init migrations");
     sqlx::migrate!()
         .run(&store.clone().connection)

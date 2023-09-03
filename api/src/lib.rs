@@ -80,7 +80,7 @@ pub async fn setup_store(
         .await
         .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
     add_db_schema(&store).await;
-    run_migrations(&store).await;
+    run_migrations(&store).await?;
     Ok(store)
 }
 
@@ -93,15 +93,15 @@ async fn add_db_schema(store: &store::Store) {
         .unwrap();
 }
 
-async fn run_migrations(store: &store::Store) {
+async fn run_migrations(store: &store::Store) -> Result<(), handle_errors::Error> {
     // TODO use trace instead of print
     println!("Init migrations");
     sqlx::migrate!()
         .run(&store.clone().connection)
         .await
-        .unwrap();
-    // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
+        .map_err(|e| handle_errors::Error::MigrationError(e))?;
     assert_migrations_have_correctly_executed(&store.connection).await;
+    Ok(())
 }
 
 async fn assert_migrations_have_correctly_executed(

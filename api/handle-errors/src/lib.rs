@@ -9,6 +9,7 @@ use warp::{
 
 #[derive(Debug)]
 pub enum Error {
+    MigrationError(sqlx::migrate::MigrateError),
     MissingParameters,
     ParseError(std::num::ParseIntError),
     ContactNotFound,
@@ -22,6 +23,7 @@ impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match *self {
             Error::ContactNotFound => write!(f, "Contact not found"),
+            Error::MigrationError(_) => write!(f, "Cannot migrate data"),
             Error::MissingParameters => write!(f, "Missing parameter"),
             Error::ParseError(ref err) => {
                 write!(f, "Cannot parse parameter: {}", err)

@@ -36,6 +36,12 @@ pub struct Email {
     pub email: String,
 }
 
+#[derive(Debug, Deserialize, PartialEq, Serialize)]
+pub struct Facebook {
+    pub id_user: i32,
+    pub url: String,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NewUser {
     pub name: String,

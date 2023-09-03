@@ -88,6 +88,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for facebook_url in new_contact.facebook_urls.iter().cloned() {
+        let facebook = database_types::Facebook {
+            id_user: user_db.id,
+            url: facebook_url,
+        };
+        if let Err(e) = add_facebook(store.clone(), facebook).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -97,7 +106,7 @@ async fn add_address(
 ) -> Result<database_types::Address, warp::Rejection> {
     event!(Level::INFO, "address={:?}", address);
     match store.add_address(address).await {
-        Ok(address) => Ok(address),
+        Ok(address_db) => Ok(address_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
@@ -108,7 +117,18 @@ async fn add_email(
 ) -> Result<database_types::Email, warp::Rejection> {
     event!(Level::INFO, "email={:?}", email);
     match store.add_email(email).await {
-        Ok(email) => Ok(email),
+        Ok(email_db) => Ok(email_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+pub async fn add_facebook(
+    store: Store,
+    facebook: database_types::Facebook,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "facebook={:?}", facebook);
+    match store.add_facebook(facebook).await {
+        Ok(facebook_db) => Ok(warp::reply::json(&facebook_db)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
@@ -119,7 +139,7 @@ async fn add_user(
 ) -> Result<database_types::User, warp::Rejection> {
     event!(Level::INFO, "user={:?}", new_user);
     match store.add_user(new_user).await {
-        Ok(user) => Ok(user),
+        Ok(user_db) => Ok(user_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

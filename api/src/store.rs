@@ -49,6 +49,32 @@ impl Store {
         }
     }
 
+    pub async fn add_email(
+        &self,
+        email: database_types::Email
+    ) -> Result<database_types::Email, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.emails (id_user, email)
+           VALUES ($1, $2)
+           RETURNING id_user, email",
+        )
+        .bind(email.id_user)
+        .bind(email.email)
+        .map(|row: PgRow| database_types::Email{
+            id_user: row.get("id_user"),
+            email: row.get("email"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(email_db) => Ok(email_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn add_category(
         &self,
         category: database_types::Category

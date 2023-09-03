@@ -31,6 +31,12 @@ pub struct Category {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Email {
+    pub id_user: i32,
+    pub email: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct NewUser {
     pub name: String,
     pub surname: Option<String>,

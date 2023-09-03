@@ -70,6 +70,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for email_value in new_contact.emails.iter().cloned() {
+        let email= database_types::Email {
+            id_user: user_db.id,
+            email: email_value,
+        };
+        if let Err(e) = add_email(store.clone(), email).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -80,6 +89,17 @@ async fn add_address(
     event!(Level::INFO, "address={:?}", address);
     match store.add_address(address).await {
         Ok(address) => Ok(address),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+async fn add_email(
+    store: Store,
+    email: database_types::Email,
+) -> Result<database_types::Email, warp::Rejection> {
+    event!(Level::INFO, "email={:?}", email);
+    match store.add_email(email).await {
+        Ok(email) => Ok(email),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

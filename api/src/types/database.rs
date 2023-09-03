@@ -48,7 +48,6 @@ pub struct Instagram {
     pub handle: String,
 }
 
-
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NewUser {
     pub name: String,
@@ -62,7 +61,7 @@ pub struct Nickname {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Note{
+pub struct Note {
     pub id_user: i32,
     pub note: String,
 }

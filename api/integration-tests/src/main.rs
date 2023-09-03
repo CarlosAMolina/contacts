@@ -154,7 +154,7 @@ async fn test_add_contact() {
             contact_types::Phone {
                 value: 666111333,
                 description: None,
-            }
+            },
         ],
         categories_id: vec![1, 2],
         addresses: vec!["address 1".to_string(), "address 2".to_string()],
@@ -180,12 +180,9 @@ async fn test_add_contact() {
             contact_types::Phone {
                 value: 666111333,
                 description: None,
-            }
+            },
         ],
-        categories: vec![
-            "Family".to_string(),
-            "Work".to_string(),
-        ],
+        categories: vec!["Family".to_string(), "Work".to_string()],
         addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
@@ -327,12 +324,9 @@ async fn test_get_contacts(url_api: &String) {
             contact_types::Phone {
                 value: 666111333,
                 description: None,
-            }
+            },
         ],
-        categories: vec![
-            "Family".to_string(),
-            "Work".to_string(),
-        ],
+        categories: vec!["Family".to_string(), "Work".to_string()],
         addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
@@ -537,12 +531,9 @@ async fn test_get_contact_by_id(url_api: &String) {
             contact_types::Phone {
                 value: 666111333,
                 description: None,
-            }
+            },
         ],
-        categories: vec![
-            "Family".to_string(),
-            "Work".to_string(),
-        ],
+        categories: vec!["Family".to_string(), "Work".to_string()],
         addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],

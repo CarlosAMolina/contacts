@@ -17,7 +17,9 @@ pub async fn get_contact_by_id(id: u32) -> contact_types::Contact {
         .unwrap()
 }
 
-pub async fn post_contacts_insert_new(new_contact: contact_types::NewContact) -> contact_types::Contact {
+pub async fn post_contacts_insert_new(
+    new_contact: contact_types::NewContact,
+) -> contact_types::Contact {
     let url = format!("{URL_API}/contacts");
     let client = reqwest::Client::new();
     client
@@ -31,7 +33,9 @@ pub async fn post_contacts_insert_new(new_contact: contact_types::NewContact) ->
         .unwrap()
 }
 
-pub async fn post_categories_insert_new(category: &database_types::Category) -> database_types::Category {
+pub async fn post_categories_insert_new(
+    category: &database_types::Category,
+) -> database_types::Category {
     let url = format!("{URL_API}/categories");
     let client = reqwest::Client::new();
     client

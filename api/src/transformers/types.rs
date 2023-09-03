@@ -251,12 +251,10 @@ mod config_tests {
             note: None,
         };
         let all_data_vec = vec![all_data_1, all_data_2];
-        let expected_result = vec![
-            Phone {
-                value: 666111222,
-                description: Some("Work".to_string()),
-            }
-        ];
+        let expected_result = vec![Phone {
+            value: 666111222,
+            description: Some("Work".to_string()),
+        }];
         let result = get_phones_unique(&all_data_vec);
         assert_eq!(expected_result, result);
     }

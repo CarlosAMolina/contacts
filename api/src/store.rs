@@ -25,7 +25,7 @@ impl Store {
 
     pub async fn add_address(
         &self,
-        address: database_types::Address
+        address: database_types::Address,
     ) -> Result<database_types::Address, Error> {
         match sqlx::query(
             "INSERT INTO contacts.addresses (id_user, address)
@@ -51,7 +51,7 @@ impl Store {
 
     pub async fn add_email(
         &self,
-        email: database_types::Email
+        email: database_types::Email,
     ) -> Result<database_types::Email, Error> {
         match sqlx::query(
             "INSERT INTO contacts.emails (id_user, email)
@@ -60,7 +60,7 @@ impl Store {
         )
         .bind(email.id_user)
         .bind(email.email)
-        .map(|row: PgRow| database_types::Email{
+        .map(|row: PgRow| database_types::Email {
             id_user: row.get("id_user"),
             email: row.get("email"),
         })
@@ -77,7 +77,7 @@ impl Store {
 
     pub async fn add_category(
         &self,
-        category: database_types::Category
+        category: database_types::Category,
     ) -> Result<database_types::Category, Error> {
         match sqlx::query(
             "INSERT INTO contacts.categories (id, category)
@@ -138,7 +138,7 @@ impl Store {
         )
         .bind(instagram.id_user)
         .bind(instagram.handle)
-        .map(|row: PgRow| database_types::Instagram{
+        .map(|row: PgRow| database_types::Instagram {
             id_user: row.get("id_user"),
             handle: row.get("handle"),
         })
@@ -179,7 +179,6 @@ impl Store {
         }
     }
 
-
     pub async fn add_twitter(
         &self,
         twitter: database_types::Twitter,
@@ -206,10 +205,7 @@ impl Store {
         }
     }
 
-    pub async fn add_url(
-        &self,
-        url: database_types::Url,
-    ) -> Result<database_types::Url, Error> {
+    pub async fn add_url(&self, url: database_types::Url) -> Result<database_types::Url, Error> {
         match sqlx::query(
             "INSERT INTO contacts.urls (id_user, url)
            VALUES ($1, $2)
@@ -261,7 +257,7 @@ impl Store {
 
     pub async fn add_user_category(
         &self,
-        user_category: database_types::UserCategory
+        user_category: database_types::UserCategory,
     ) -> Result<database_types::UserCategory, Error> {
         match sqlx::query(
             "INSERT INTO contacts.users_categories (id_user, id_category)

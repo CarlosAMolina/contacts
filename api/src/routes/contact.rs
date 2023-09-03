@@ -71,7 +71,7 @@ pub async fn add_contact(
         }
     }
     for email_value in new_contact.emails.iter().cloned() {
-        let email= database_types::Email {
+        let email = database_types::Email {
             id_user: user_db.id,
             email: email_value,
         };
@@ -80,7 +80,7 @@ pub async fn add_contact(
         }
     }
     for url_value in new_contact.urls.iter().cloned() {
-        let url= database_types::Url {
+        let url = database_types::Url {
             id_user: user_db.id,
             url: url_value,
         };
@@ -236,7 +236,6 @@ async fn add_user(
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
-
 
 // TODO allow insert new categories
 

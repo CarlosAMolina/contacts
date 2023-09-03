@@ -1,3 +1,5 @@
+use sqlx;
+use sqlx::Row;
 use tokio::sync::{oneshot, oneshot::Sender};
 use warp::{http::Method, Filter, Reply};
 
@@ -77,7 +79,69 @@ pub async fn setup_store(
     let store = store::Store::new(&db_url)
         .await
         .map_err(|e| handle_errors::Error::DatabaseQueryError(e))?;
+    add_db_schema(&store).await;
+    run_migrations(&store).await;
     Ok(store)
+}
+
+async fn add_db_schema(store: &store::Store) {
+    println!("Init create schema");
+    sqlx::query("CREATE SCHEMA IF NOT EXISTS contacts")
+        //.execute(&postgres_connection)
+        .execute(&store.clone().connection)
+        .await
+        .unwrap();
+}
+
+async fn run_migrations(store: &store::Store) {
+    // TODO use trace instead of print
+    println!("Init migrations");
+    sqlx::migrate!()
+        .run(&store.clone().connection)
+        .await
+        .unwrap();
+    // TODO .map_err(|e| handle_errors::Error::MigrationError(e))?;
+    assert_migrations_have_correctly_executed(&store.connection).await;
+}
+
+async fn assert_migrations_have_correctly_executed(
+    postgres_connection: &sqlx::Pool<sqlx::Postgres>,
+) {
+    println!("Init assert migrations have correctly executed");
+    println!("Init get all tables");
+    let query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'contacts'";
+    let mut table_names: Vec<_> = sqlx::query(query)
+        .map(|row: sqlx::postgres::PgRow| row.get::<String, _>("table_name").to_string())
+        .fetch_all(postgres_connection)
+        .await
+        .unwrap();
+    table_names.sort();
+    let expected_table_names = vec![
+        "addresses".to_string(),
+        "all_data".to_string(),
+        "categories".to_string(),
+        "emails".to_string(),
+        "facebook".to_string(),
+        "instagram".to_string(),
+        "nicknames".to_string(),
+        "notes".to_string(),
+        "phones".to_string(),
+        "twitter".to_string(),
+        "urls".to_string(),
+        "users".to_string(),
+        "users_categories".to_string(),
+    ];
+    if expected_table_names == table_names {
+        println!("The tables have been created correctly");
+    } else {
+        println!("Table names ({}): {:?}", table_names.len(), table_names);
+        println!(
+            "Expected table names ({}): {:?}",
+            expected_table_names.len(),
+            expected_table_names
+        );
+        panic!("Table names do not match the expected ones");
+    }
 }
 
 async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> + Clone {

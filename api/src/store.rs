@@ -101,6 +101,32 @@ impl Store {
         }
     }
 
+    pub async fn add_url(
+        &self,
+        url: database_types::Url,
+    ) -> Result<database_types::Url, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.urls (id_user, url)
+           VALUES ($1, $2)
+           RETURNING id_user, url",
+        )
+        .bind(url.id_user)
+        .bind(url.url)
+        .map(|row: PgRow| database_types::Url {
+            id_user: row.get("id_user"),
+            url: row.get("url"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(url) => Ok(url),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn add_user(
         &self,
         new_user: database_types::NewUser,

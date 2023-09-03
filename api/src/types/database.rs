@@ -56,6 +56,12 @@ pub struct Phone {
 }
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
+pub struct Url {
+    pub id_user: i32,
+    pub url: String,
+}
+
+#[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct User {
     pub id: i32,
     pub name: String,

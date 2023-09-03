@@ -79,6 +79,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for url_value in new_contact.urls.iter().cloned() {
+        let url= database_types::Url {
+            id_user: user_db.id,
+            url: url_value,
+        };
+        if let Err(e) = add_url(store.clone(), url).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -133,6 +142,17 @@ async fn add_phone(
     event!(Level::INFO, "phone={:?}", phone);
     match store.add_phone(phone).await {
         Ok(phone_db) => Ok(phone_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+async fn add_url(
+    store: Store,
+    url: database_types::Url,
+) -> Result<database_types::Url, warp::Rejection> {
+    event!(Level::INFO, "url={:?}", url);
+    match store.add_url(url).await {
+        Ok(url_db) => Ok(url_db),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

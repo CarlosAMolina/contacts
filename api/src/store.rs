@@ -23,6 +23,32 @@ impl Store {
         })
     }
 
+    pub async fn add_address(
+        &self,
+        address: database_types::Address
+    ) -> Result<database_types::Address, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.addresses (id_user, address)
+           VALUES ($1, $2)
+           RETURNING id_user, address",
+        )
+        .bind(address.id_user)
+        .bind(address.address)
+        .map(|row: PgRow| database_types::Address {
+            id_user: row.get("id_user"),
+            address: row.get("address"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(address_db) => Ok(address_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn add_category(
         &self,
         category: database_types::Category

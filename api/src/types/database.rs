@@ -1,5 +1,11 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Address {
+    pub id_user: i32,
+    pub address: String,
+}
+
 #[derive(Clone, Debug, Serialize)]
 pub struct AllData {
     pub user_id: i32,

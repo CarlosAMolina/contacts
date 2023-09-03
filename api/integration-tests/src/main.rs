@@ -157,7 +157,7 @@ async fn test_add_contact() {
             }
         ],
         categories_id: vec![1, 2],
-        addresses: vec![],
+        addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec![],
         urls: vec![],
         facebook_urls: vec![],
@@ -186,7 +186,7 @@ async fn test_add_contact() {
             "Family".to_string(),
             "Work".to_string(),
         ],
-        addresses: vec![],
+        addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec![],
         urls: vec![],
         facebook_urls: vec![],
@@ -314,27 +314,26 @@ async fn test_get_contacts(url_api: &String) {
         .json::<Vec<contact_types::Contact>>()
         .await
         .unwrap();
-    let phones = vec![
-        contact_types::Phone {
-            value: 666111222,
-            description: Some("Work".to_string()),
-        },
-        contact_types::Phone {
-            value: 666111333,
-            description: None,
-        }
-    ];
     let expected_result = vec![contact_types::Contact {
         user_id: 1,
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones,
+        phones: vec![
+            contact_types::Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            },
+            contact_types::Phone {
+                value: 666111333,
+                description: None,
+            }
+        ],
         categories: vec![
             "Family".to_string(),
             "Work".to_string(),
         ],
-        addresses: vec![],
+        addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec![],
         urls: vec![],
         facebook_urls: vec![],
@@ -401,7 +400,7 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         user_id: 2,
         user_name: "Boby".to_string(),
         user_surname: None,
-        nicknames: vec!["FooNickname".to_string(), "BarNickname".to_string()],
+        nicknames: vec!["BarNickname".to_string(), "FooNickname".to_string()],
         phones: vec![],
         categories: vec![],
         addresses: vec![],
@@ -525,27 +524,26 @@ async fn test_get_contact_by_id(url_api: &String) {
         .json::<contact_types::Contact>()
         .await
         .unwrap();
-    let phones = vec![
-        contact_types::Phone {
-            value: 666111222,
-            description: Some("Work".to_string()),
-        },
-        contact_types::Phone {
-            value: 666111333,
-            description: None,
-        }
-    ];
     let expected_result = contact_types::Contact {
         user_id: 1,
         user_name: "John".to_string(),
         user_surname: Some("Doe".to_string()),
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
-        phones,
+        phones: vec![
+            contact_types::Phone {
+                value: 666111222,
+                description: Some("Work".to_string()),
+            },
+            contact_types::Phone {
+                value: 666111333,
+                description: None,
+            }
+        ],
         categories: vec![
             "Family".to_string(),
             "Work".to_string(),
         ],
-        addresses: vec![],
+        addresses: vec!["address 1".to_string(), "address 2".to_string()],
         emails: vec![],
         urls: vec![],
         facebook_urls: vec![],

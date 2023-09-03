@@ -53,11 +53,35 @@ pub async fn add_contact(
         }
     }
     for category_id in new_contact.categories_id.iter().cloned() {
-        if let Err(e) = add_user_category(store.clone(), user_db.id, category_id).await {
+        let user_category = database_types::UserCategory {
+            id_user: user_db.id,
+            id_category: category_id,
+        };
+        if let Err(e) = add_user_category(store.clone(), user_category).await {
+            return Err(e);
+        }
+    }
+    for address_value in new_contact.addresses.iter().cloned() {
+        let address = database_types::Address {
+            id_user: user_db.id,
+            address: address_value,
+        };
+        if let Err(e) = add_address(store.clone(), address).await {
             return Err(e);
         }
     }
     get_contact_by_id(user_db.id, store).await
+}
+
+async fn add_address(
+    store: Store,
+    address: database_types::Address,
+) -> Result<database_types::Address, warp::Rejection> {
+    event!(Level::INFO, "address={:?}", address);
+    match store.add_address(address).await {
+        Ok(address) => Ok(address),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
 }
 
 async fn add_user(
@@ -97,14 +121,9 @@ async fn add_phone(
 
 async fn add_user_category(
     store: Store,
-    user_id: i32,
-    category_id: i32,
+    user_category: database_types::UserCategory,
 ) -> Result<database_types::UserCategory, warp::Rejection> {
-    event!(Level::INFO, "category_id={:?}", category_id);
-    let user_category = database_types::UserCategory {
-        id_user: user_id,
-        id_category: category_id,
-    };
+    event!(Level::INFO, "user_category={:?}", user_category);
     match store.add_user_category(user_category).await {
         Ok(user_category_db) => Ok(user_category_db),
         Err(e) => return Err(warp::reject::custom(e)),

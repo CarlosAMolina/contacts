@@ -63,6 +63,14 @@ pub fn get_contact_from_all_data(all_data_vec: Vec<database_types::AllData>) -> 
                 push_to_vector_if_new(&mut urls, value);
             }
         }
+        addresses.sort();
+        categories.sort();
+        emails.sort();
+        facebook_urls.sort();
+        instagram_handles.sort();
+        nicknames.sort();
+        twitter_handles.sort();
+        urls.sort();
         Some(Contact {
             user_id,
             user_name,

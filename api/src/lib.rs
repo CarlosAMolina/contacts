@@ -156,8 +156,23 @@ async fn build_routes(store: store::Store) -> impl Filter<Extract = impl Reply> 
         .and(warp::path::end())
         .and(store_filter.clone())
         .and(warp::body::json())
-        .and_then(routes::contact::add_contact);
+        .and_then(routes::contact::add_contact)
+        .with(warp::trace(|info| {
+            let info_values = TraceInfo::new(&info);
+            tracing::info_span!(
+                  "add_contact request",
+                  method = %info_values.method,
+                  path = %info_values.path,
+                  version = %info_values.version,
+                  referer = %info_values.referer,
+                  user_agent = %info_values.user_agent,
+                  remote_addr = %info_values.remote_addr,
+                  request_headers = %info_values.request_headers,
+                  id = %info_values.id,
+            )
+        }));
 
+    // TODO rm
     let add_category = warp::post()
         .and(warp::path("categories"))
         .and(warp::path::end())

@@ -1,6 +1,7 @@
 use sqlx;
 use sqlx::Row;
 use tokio::sync::{oneshot, oneshot::Sender};
+use tracing::{event, Level};
 use warp::{http::Method, Filter, Reply};
 
 pub use handle_errors;
@@ -85,6 +86,7 @@ pub async fn setup_store(
 }
 
 async fn add_db_schema(store: &store::Store) {
+    // TODO use trace instead of print
     println!("Init create schema");
     sqlx::query("CREATE SCHEMA IF NOT EXISTS contacts")
         //.execute(&postgres_connection)
@@ -96,6 +98,8 @@ async fn add_db_schema(store: &store::Store) {
 async fn run_migrations(store: &store::Store) -> Result<(), handle_errors::Error> {
     // TODO use trace instead of print
     println!("Init migrations");
+    event!(Level::INFO, "Init migrations"); // TODO does not work, initialice the trace in
+                                            // setup_store()
     sqlx::migrate!()
         .run(&store.clone().connection)
         .await

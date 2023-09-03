@@ -51,6 +51,11 @@ call-return-error:
 		-H "Origin: https://not-origin.io" \
 		-verbose
 
+add-account:
+	curl --location --request POST 'localhost:3030/contacts' \
+	--header 'Content-Type: application/json' \
+	--data-raw '{ "user_name": "John", "user_surname": "Doe Do", "nicknames": ["Johnny", "Joy"], "phones": [ {"value": 666111222, "description": "Work"}, {"value": 666111333} ], "categories_id": [1, 2], "addresses": ["address 1", "address 2"], "emails": ["john@mail.com", "john2@mail.com"], "urls": ["john-home.com", "john-music.com"], "facebook_urls": ["facebook/John", "facebook/John2"], "twitter_handles": ["JohnT", "JohnT2"], "instagram_handles": ["JohnnyIns", "JohnnyIns2"], "note": "Jane´s brother" }'
+
 # TODO implement
 #get-contacts-all:
 #	curl "localhost:$(API_PORT)/contacts"
@@ -58,7 +63,6 @@ call-return-error:
 # TODO implement
 #get-contacts-paginated:
 #	curl "localhost:$(API_PORT)/contacts?start=0&end=1"
-
 
 get-invented-route:
 	curl "localhost:$(API_PORT)/invented"

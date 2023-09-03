@@ -115,6 +115,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    if let Some(note_str) = new_contact.note {
+        let note = database_types::Note {
+            id_user: user_db.id,
+            note: note_str,
+        };
+        if let Err(e) = add_note(store.clone(), note).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -169,6 +178,17 @@ async fn add_nickname(
     event!(Level::INFO, "nickname={:?}", nickname);
     match store.add_nickname(nickname).await {
         Ok(nickname_db) => Ok(nickname_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+pub async fn add_note(
+    store: Store,
+    note: database_types::Note,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "note={:?}", note);
+    match store.add_note(note).await {
+        Ok(note_db) => Ok(warp::reply::json(&note_db)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

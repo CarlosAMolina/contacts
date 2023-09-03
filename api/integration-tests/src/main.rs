@@ -163,7 +163,7 @@ async fn test_add_contact() {
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
-        note: None,
+        note: Some("Jane's brother".to_string()),
     };
     requests::post_contacts_insert_new(new_contact).await;
     let result = requests::get_contact_by_id(1).await;
@@ -192,7 +192,7 @@ async fn test_add_contact() {
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
-        note: None,
+        note: Some("Jane's brother".to_string()),
     };
     assert_eq!(expected_result, result);
 }
@@ -339,7 +339,7 @@ async fn test_get_contacts(url_api: &String) {
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
-        note: None,
+        note: Some("Jane's brother".to_string()),
     }];
     assert_eq!(expected_result, response);
     println!("✓");
@@ -549,7 +549,7 @@ async fn test_get_contact_by_id(url_api: &String) {
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
-        note: None,
+        note: Some("Jane's brother".to_string()),
     };
     assert_eq!(expected_result, response);
     println!("✓");

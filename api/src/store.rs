@@ -153,6 +153,32 @@ impl Store {
         }
     }
 
+    pub async fn add_note(
+        &self,
+        note: database_types::Note,
+    ) -> Result<database_types::Note, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.notes (id_user, note)
+           VALUES ($1, $2)
+           RETURNING id_user, note",
+        )
+        .bind(note.id_user)
+        .bind(note.note)
+        .map(|row: PgRow| database_types::Note {
+            id_user: row.get("id_user"),
+            note: row.get("note"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(note_db) => Ok(note_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
 
     pub async fn add_twitter(
         &self,

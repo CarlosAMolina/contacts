@@ -162,7 +162,7 @@ async fn test_add_contact() {
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
-        instagram_handles: vec![],
+        instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
         note: None,
     };
     requests::post_contacts_insert_new(new_contact).await;
@@ -191,7 +191,7 @@ async fn test_add_contact() {
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
-        instagram_handles: vec![],
+        instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
         note: None,
     };
     assert_eq!(expected_result, result);
@@ -338,7 +338,7 @@ async fn test_get_contacts(url_api: &String) {
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
-        instagram_handles: vec![],
+        instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
         note: None,
     }];
     assert_eq!(expected_result, response);
@@ -548,7 +548,7 @@ async fn test_get_contact_by_id(url_api: &String) {
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
-        instagram_handles: vec![],
+        instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
         note: None,
     };
     assert_eq!(expected_result, response);

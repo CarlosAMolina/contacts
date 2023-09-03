@@ -127,6 +127,33 @@ impl Store {
         }
     }
 
+    pub async fn add_instagram(
+        &self,
+        instagram: database_types::Instagram,
+    ) -> Result<database_types::Instagram, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.instagram (id_user, handle)
+           VALUES ($1, $2)
+           RETURNING id_user, handle",
+        )
+        .bind(instagram.id_user)
+        .bind(instagram.handle)
+        .map(|row: PgRow| database_types::Instagram{
+            id_user: row.get("id_user"),
+            handle: row.get("handle"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(instagram_db) => Ok(instagram_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
+
     pub async fn add_twitter(
         &self,
         twitter: database_types::Twitter,
@@ -145,7 +172,7 @@ impl Store {
         .fetch_one(&self.connection)
         .await
         {
-            Ok(url) => Ok(url),
+            Ok(twitter_db) => Ok(twitter_db),
             Err(error) => {
                 tracing::event!(tracing::Level::ERROR, "{:?}", error);
                 Err(Error::DatabaseQueryError(error))

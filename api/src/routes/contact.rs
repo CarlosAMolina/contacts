@@ -106,6 +106,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for instagram_handle in new_contact.instagram_handles.iter().cloned() {
+        let instagram = database_types::Instagram {
+            id_user: user_db.id,
+            handle: instagram_handle,
+        };
+        if let Err(e) = add_instagram(store.clone(), instagram).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -142,13 +151,13 @@ pub async fn add_facebook(
     }
 }
 
-async fn add_user(
+pub async fn add_instagram(
     store: Store,
-    new_user: database_types::NewUser,
-) -> Result<database_types::User, warp::Rejection> {
-    event!(Level::INFO, "user={:?}", new_user);
-    match store.add_user(new_user).await {
-        Ok(user_db) => Ok(user_db),
+    instagram: database_types::Instagram,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "instagram={:?}", instagram);
+    match store.add_instagram(instagram).await {
+        Ok(instagram_db) => Ok(warp::reply::json(&instagram_db)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
@@ -196,6 +205,18 @@ async fn add_url(
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }
+
+async fn add_user(
+    store: Store,
+    new_user: database_types::NewUser,
+) -> Result<database_types::User, warp::Rejection> {
+    event!(Level::INFO, "user={:?}", new_user);
+    match store.add_user(new_user).await {
+        Ok(user_db) => Ok(user_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
 
 // TODO allow insert new categories
 

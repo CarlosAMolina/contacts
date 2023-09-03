@@ -43,6 +43,13 @@ pub struct Facebook {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct Instagram {
+    pub id_user: i32,
+    pub handle: String,
+}
+
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct NewUser {
     pub name: String,
     pub surname: Option<String>,

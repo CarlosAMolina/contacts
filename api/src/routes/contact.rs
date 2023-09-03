@@ -19,6 +19,7 @@ pub async fn add_category(
 }
 
 // TODO not use store.clone
+// TODO if any query fails (example, foreign key category does not exist), undo the other ones to avoid save incomplete data.
 pub async fn add_contact(
     store: Store,
     new_contact: contact_types::NewContact,

@@ -29,7 +29,8 @@ async fn main() -> Result<(), Error> {
     let handler = oneshot(&config, &store).await;
     add_db_schema(&store).await;
     run_migrations(&store).await;
-    test_add_contact_and_insert_db_data().await;
+    test_insert_db_data().await;
+    test_add_contact().await;
     let url_api = format!(
         "http://{:?}.{:?}.{:?}.{:?}:{:?}",
         config.api_host[0],
@@ -120,9 +121,25 @@ async fn recreate_database(config: &config_api::Config) {
     }
 }
 
-// This test checks the function add_contact
-// and all data required by other tests is created.
-async fn test_add_contact_and_insert_db_data() {
+// TODO change id column to serial in the db model?
+// TODO id starts at 0 or 1?
+async fn test_insert_db_data() {
+    let category = database_types::Category {
+        id: 1,
+        category: "Family".to_string(),
+    };
+    let contact_db = requests::post_categories_insert_new(&category).await;
+    assert_eq!(category, contact_db);
+    let category = database_types::Category {
+        id: 2,
+        category: "Work".to_string(),
+    };
+    let contact_db = requests::post_categories_insert_new(&category).await;
+    assert_eq!(category, contact_db);
+    // TODO change assertions with function get table data and compare results.
+}
+
+async fn test_add_contact() {
     println!("Init test_add_contact");
     println!("Init insert data in db");
     let new_contact = contact_types::NewContact {
@@ -139,10 +156,7 @@ async fn test_add_contact_and_insert_db_data() {
                 description: None,
             }
         ],
-        categories: vec![
-            "Friends".to_string(),
-            "Work".to_string(),
-        ],
+        categories_id: vec![1, 2],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -151,7 +165,7 @@ async fn test_add_contact_and_insert_db_data() {
         instagram_handles: vec![],
         note: None,
     };
-    let contact_db = requests::post_contacts_insert_new(new_contact).await;
+    requests::post_contacts_insert_new(new_contact).await;
     let result = requests::get_contact_by_id(1).await;
     let expected_result = contact_types::Contact {
         user_id: 1,
@@ -169,7 +183,7 @@ async fn test_add_contact_and_insert_db_data() {
             }
         ],
         categories: vec![
-            "Friends".to_string(),
+            "Family".to_string(),
             "Work".to_string(),
         ],
         addresses: vec![],
@@ -317,7 +331,7 @@ async fn test_get_contacts(url_api: &String) {
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
         phones,
         categories: vec![
-            "Friends".to_string(),
+            "Family".to_string(),
             "Work".to_string(),
         ],
         addresses: vec![],
@@ -362,7 +376,7 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         user_surname: None,
         nicknames: vec!["FooNickname".to_string(), "BarNickname".to_string()],
         phones: vec![],
-        categories: vec![],
+        categories_id: vec![],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -410,7 +424,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         user_surname: None,
         nicknames: vec![],
         phones: vec![],
-        categories: vec![],
+        categories_id: vec![],
         addresses: vec![],
         emails: vec![],
         urls: vec![],
@@ -528,7 +542,7 @@ async fn test_get_contact_by_id(url_api: &String) {
         nicknames: vec!["Johnny".to_string(), "Joy".to_string()],
         phones,
         categories: vec![
-            "Friends".to_string(),
+            "Family".to_string(),
             "Work".to_string(),
         ],
         addresses: vec![],

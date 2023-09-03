@@ -53,5 +53,5 @@ pub struct User {
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct UserCategory {
     pub id_user: i32,
-    pub id_category: i64,
+    pub id_category: i32,
 }

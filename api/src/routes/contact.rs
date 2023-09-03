@@ -7,6 +7,17 @@ use crate::types::database as database_types;
 use crate::types::query::extract_query;
 use tracing::{event, Level};
 
+pub async fn add_category(
+    store: Store,
+    category: database_types::Category,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "category={:?}", category);
+    match store.add_category(category).await {
+        Ok(category) => Ok(warp::reply::json(&category)),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
 // TODO not use store.clone
 pub async fn add_contact(
     store: Store,
@@ -41,8 +52,8 @@ pub async fn add_contact(
             return Err(e);
         }
     }
-    for category in new_contact.categories.iter().cloned() {
-        if let Err(e) = add_user_category(store.clone(), user_db.id, category).await {
+    for category_id in new_contact.categories_id.iter().cloned() {
+        if let Err(e) = add_user_category(store.clone(), user_db.id, category_id).await {
             return Err(e);
         }
     }
@@ -87,19 +98,13 @@ async fn add_phone(
 async fn add_user_category(
     store: Store,
     user_id: i32,
-    category: String,
+    category_id: i32,
 ) -> Result<database_types::UserCategory, warp::Rejection> {
-    event!(Level::INFO, "category={:?}", category);
-    let category_db_result = store.get_category_id(category).await;
-    if let Err(e) = category_db_result {
-        return Err(e);
-    }
-    let category_id = category_db_result.unwrap().id;
-    event!(Level::INFO, "id_category={:?}", category_id);
+    event!(Level::INFO, "category_id={:?}", category_id);
     let user_category = database_types::UserCategory {
         id_user: user_id,
         id_category: category_id,
-    }
+    };
     match store.add_user_category(user_category).await {
         Ok(user_category_db) => Ok(user_category_db),
         Err(e) => return Err(warp::reject::custom(e)),

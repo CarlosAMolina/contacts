@@ -23,6 +23,32 @@ impl Store {
         })
     }
 
+    pub async fn add_category(
+        &self,
+        category: database_types::Category
+    ) -> Result<database_types::Category, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.categories (id, category)
+           VALUES ($1, $2)
+           RETURNING id, category",
+        )
+        .bind(category.id)
+        .bind(category.category)
+        .map(|row: PgRow| database_types::Category {
+            id: row.get("id"),
+            category: row.get("category"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(category_db) => Ok(category_db),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn add_user(
         &self,
         new_user: database_types::NewUser,
@@ -43,6 +69,32 @@ impl Store {
         .await
         {
             Ok(user) => Ok(user),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
+    pub async fn add_user_category(
+        &self,
+        user_category: database_types::UserCategory
+    ) -> Result<database_types::UserCategory, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.users_categories (id_user, id_category)
+           VALUES ($1, $2)
+           RETURNING id_user, id_category",
+        )
+        .bind(user_category.id_user)
+        .bind(user_category.id_category)
+        .map(|row: PgRow| database_types::UserCategory {
+            id_user: row.get("id_user"),
+            id_category: row.get("id_category"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(user_category_db) => Ok(user_category_db),
             Err(error) => {
                 tracing::event!(tracing::Level::ERROR, "{:?}", error);
                 Err(Error::DatabaseQueryError(error))

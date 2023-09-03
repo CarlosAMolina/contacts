@@ -30,3 +30,17 @@ pub async fn post_contacts_insert_new(new_contact: contact_types::NewContact) ->
         .await
         .unwrap()
 }
+
+pub async fn post_categories_insert_new(category: &database_types::Category) -> database_types::Category {
+    let url = format!("{URL_API}/categories");
+    let client = reqwest::Client::new();
+    client
+        .post(url)
+        .json(&category)
+        .send()
+        .await
+        .unwrap()
+        .json::<database_types::Category>()
+        .await
+        .unwrap()
+}

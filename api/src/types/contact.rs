@@ -23,7 +23,7 @@ pub struct NewContact {
     pub user_surname: Option<String>,
     pub nicknames: Vec<String>,
     pub phones: Vec<Phone>,
-    pub categories: Vec<String>,
+    pub categories_id: Vec<i32>,
     pub addresses: Vec<String>,
     pub emails: Vec<String>,
     pub urls: Vec<String>,

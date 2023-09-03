@@ -127,6 +127,32 @@ impl Store {
         }
     }
 
+    pub async fn add_twitter(
+        &self,
+        twitter: database_types::Twitter,
+    ) -> Result<database_types::Twitter, Error> {
+        match sqlx::query(
+            "INSERT INTO contacts.twitter (id_user, handle)
+           VALUES ($1, $2)
+           RETURNING id_user, handle",
+        )
+        .bind(twitter.id_user)
+        .bind(twitter.handle)
+        .map(|row: PgRow| database_types::Twitter {
+            id_user: row.get("id_user"),
+            handle: row.get("handle"),
+        })
+        .fetch_one(&self.connection)
+        .await
+        {
+            Ok(url) => Ok(url),
+            Err(error) => {
+                tracing::event!(tracing::Level::ERROR, "{:?}", error);
+                Err(Error::DatabaseQueryError(error))
+            }
+        }
+    }
+
     pub async fn add_url(
         &self,
         url: database_types::Url,

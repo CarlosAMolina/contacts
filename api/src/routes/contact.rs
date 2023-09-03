@@ -97,6 +97,15 @@ pub async fn add_contact(
             return Err(e);
         }
     }
+    for twitter_handle in new_contact.twitter_handles.iter().cloned() {
+        let twitter = database_types::Twitter {
+            id_user: user_db.id,
+            handle: twitter_handle,
+        };
+        if let Err(e) = add_twitter(store.clone(), twitter).await {
+            return Err(e);
+        }
+    }
     get_contact_by_id(user_db.id, store).await
 }
 
@@ -162,6 +171,17 @@ async fn add_phone(
     event!(Level::INFO, "phone={:?}", phone);
     match store.add_phone(phone).await {
         Ok(phone_db) => Ok(phone_db),
+        Err(e) => return Err(warp::reject::custom(e)),
+    }
+}
+
+pub async fn add_twitter(
+    store: Store,
+    twitter: database_types::Twitter,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    event!(Level::INFO, "twitter={:?}", twitter);
+    match store.add_twitter(twitter).await {
+        Ok(twitter_db) => Ok(warp::reply::json(&twitter_db)),
         Err(e) => return Err(warp::reject::custom(e)),
     }
 }

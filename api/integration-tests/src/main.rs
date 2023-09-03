@@ -161,7 +161,7 @@ async fn test_add_contact() {
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
-        twitter_handles: vec![],
+        twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec![],
         note: None,
     };
@@ -190,7 +190,7 @@ async fn test_add_contact() {
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
-        twitter_handles: vec![],
+        twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec![],
         note: None,
     };
@@ -337,7 +337,7 @@ async fn test_get_contacts(url_api: &String) {
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
-        twitter_handles: vec![],
+        twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec![],
         note: None,
     }];
@@ -547,7 +547,7 @@ async fn test_get_contact_by_id(url_api: &String) {
         emails: vec!["john2@mail.com".to_string(), "john@mail.com".to_string()],
         urls: vec!["john-home.com".to_string(), "john-music.com".to_string()],
         facebook_urls: vec!["facebook/John".to_string(), "facebook/John2".to_string()],
-        twitter_handles: vec![],
+        twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec![],
         note: None,
     };

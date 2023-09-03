@@ -61,6 +61,12 @@ pub struct Phone {
     pub description: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Twitter {
+    pub id_user: i32,
+    pub handle: String,
+}
+
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct Url {
     pub id_user: i32,

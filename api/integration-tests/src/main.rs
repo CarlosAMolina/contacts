@@ -3,7 +3,6 @@ use std::panic;
 use std::process::Command;
 
 use api::handle_errors::Error;
-use api::store::Store;
 use api::types::contact as contact_types;
 use api::types::database as database_types;
 use api::{config_api, oneshot, setup_store};

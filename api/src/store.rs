@@ -335,7 +335,6 @@ impl Store {
         }
     }
 
-    // TODO test search in each column works ok
     pub async fn get_all_data_by_query(
         &self,
         query: String,

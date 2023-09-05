@@ -37,6 +37,7 @@ async fn main() -> Result<(), Error> {
         config.api_port,
     );
     test_get_contacts(&url_api).await;
+    test_get_contacts_check_search_every_column(&url_api).await;
     test_get_contacts_if_invalid_path(&url_api).await;
     test_get_contacts_if_nonexistent_path(&url_api).await;
     test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_more_rows(&url_api).await;
@@ -272,6 +273,59 @@ async fn test_get_contacts(url_api: &String) {
         twitter_handles: vec!["JohnT".to_string(), "JohnT2".to_string()],
         instagram_handles: vec!["JohnnyIns".to_string(), "JohnnyIns2".to_string()],
         note: Some("Jane's brother".to_string()),
+    }];
+    assert_eq!(expected_result, response);
+    println!("✓");
+}
+
+async fn test_get_contacts_check_search_every_column(url_api: &String) {
+    println!("Init test_get_contacts_check_search_every_column");
+    println!("Init insert data in db");
+    let new_contact = contact_types::NewContact {
+        user_name: "only in column user_name".to_string(),
+        user_surname: Some("only in column user_surname".to_string()),
+        nicknames: vec!["only in column nicknames".to_string()],
+        phones: vec![contact_types::Phone {
+            value: 123456789,
+            description: Some("only in column phone_description".to_string()),
+        }],
+        categories_id: vec![],
+        addresses: vec!["only in column address".to_string()],
+        emails: vec!["only in column emails".to_string()],
+        urls: vec!["only in column urls".to_string()],
+        facebook_urls: vec!["only in column facebook_urls".to_string()],
+        twitter_handles: vec!["only in column twitter_handles".to_string()],
+        instagram_handles: vec!["only in column instagram_handles".to_string()],
+        note: Some("only in column note".to_string()),
+    };
+    requests::post_contacts_insert_new(new_contact).await;
+    let client = reqwest::Client::new();
+    let url = format!("{url_api}/contacts?query=only in column user_name");
+    let response = client
+        .get(url)
+        .send()
+        .await
+        .unwrap()
+        .json::<Vec<contact_types::Contact>>()
+        .await
+        .unwrap();
+    let expected_result = vec![contact_types::Contact {
+        user_id: 2,
+        user_name: "only in column user_name".to_string(),
+        user_surname: Some("only in column user_surname".to_string()),
+        nicknames: vec!["only in column nicknames".to_string()],
+        phones: vec![contact_types::Phone {
+            value: 123456789,
+            description: Some("only in column phone_description".to_string()),
+        }],
+        categories: vec![],
+        addresses: vec!["only in column address".to_string()],
+        emails: vec!["only in column emails".to_string()],
+        urls: vec!["only in column urls".to_string()],
+        facebook_urls: vec!["only in column facebook_urls".to_string()],
+        twitter_handles: vec!["only in column twitter_handles".to_string()],
+        instagram_handles: vec!["only in column instagram_handles".to_string()],
+        note: Some("only in column note".to_string()),
     }];
     assert_eq!(expected_result, response);
     println!("✓");

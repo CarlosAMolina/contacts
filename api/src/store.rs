@@ -335,6 +335,7 @@ impl Store {
         }
     }
 
+    // TODO test search in each column works ok
     pub async fn get_all_data_by_query(
         &self,
         query: String,
@@ -575,26 +576,107 @@ ORDER BY
     }
 
     pub async fn get_all_data_by_id(&self, id: i32) -> Result<Vec<database_types::AllData>, Error> {
-        match sqlx::query("SELECT * from contacts.all_data WHERE id = $1;")
-            .bind(id)
-            .map(|row: PgRow| database_types::AllData {
-                user_id: row.get("id"),
-                user_name: row.get("name"),
-                user_surname: row.get("surname"),
-                nickname: row.get("nickname"),
-                phone: row.get("phone"),
-                phone_description: row.get("phone_description"),
-                category: row.get("category"),
-                address: row.get("address"),
-                email: row.get("email"),
-                url: row.get("url"),
-                facebook_url: row.get("facebook_url"),
-                twitter_handle: row.get("twitter_handle"),
-                instagram_handle: row.get("instagram_handle"),
-                note: row.get("note"),
-            })
-            .fetch_all(&self.connection)
-            .await
+        match sqlx::query(
+            "
+SELECT
+  users.id,
+  users.name,
+  users.surname,
+  nicknames.nickname,
+  phones.phone,
+  phones.description AS phone_description,
+  categories.category,
+  addresses.address,
+  emails.email,
+  urls.url,
+  facebook.url AS facebook_url,
+  twitter.handle AS twitter_handle,
+  instagram.handle AS instagram_handle,
+  notes.note
+FROM
+  (
+    (
+      (
+        (
+          (
+            (
+              (
+                (
+                  (
+                    (
+                      (
+                        contacts.users
+                        LEFT JOIN contacts.addresses ON (
+                          (users.id = addresses.id_user)
+                        )
+                      )
+                      LEFT JOIN contacts.users_categories ON (
+                        (
+                          users.id = users_categories.id_user
+                        )
+                      )
+                    )
+                    LEFT JOIN contacts.categories ON (
+                      (
+                        users_categories.id_category = categories.id
+                      )
+                    )
+                  )
+                  LEFT JOIN contacts.emails ON (
+                    (users.id = emails.id_user)
+                  )
+                )
+                LEFT JOIN contacts.facebook ON (
+                  (users.id = facebook.id_user)
+                )
+              )
+              LEFT JOIN contacts.instagram ON (
+                (users.id = instagram.id_user)
+              )
+            )
+            LEFT JOIN contacts.nicknames ON (
+              (users.id = nicknames.id_user)
+            )
+          )
+          LEFT JOIN contacts.notes ON (
+            (users.id = notes.id_user)
+          )
+        )
+        LEFT JOIN contacts.phones ON (
+          (users.id = phones.id_user)
+        )
+      )
+      LEFT JOIN contacts.twitter ON (
+        (users.id = twitter.id_user)
+      )
+    )
+    LEFT JOIN contacts.urls ON (
+      (users.id = urls.id_user)
+    )
+  )
+where
+  users.id = $1;
+",
+        )
+        .bind(id)
+        .map(|row: PgRow| database_types::AllData {
+            user_id: row.get("id"),
+            user_name: row.get("name"),
+            user_surname: row.get("surname"),
+            nickname: row.get("nickname"),
+            phone: row.get("phone"),
+            phone_description: row.get("phone_description"),
+            category: row.get("category"),
+            address: row.get("address"),
+            email: row.get("email"),
+            url: row.get("url"),
+            facebook_url: row.get("facebook_url"),
+            twitter_handle: row.get("twitter_handle"),
+            instagram_handle: row.get("instagram_handle"),
+            note: row.get("note"),
+        })
+        .fetch_all(&self.connection)
+        .await
         {
             Ok(all_data) => Ok(all_data),
             Err(error) => {

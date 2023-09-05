@@ -383,7 +383,7 @@ async fn test_get_contacts_if_query_has_one_row_result_but_the_contact_id_has_mo
         .await
         .unwrap();
     let expected_result = vec![contact_types::Contact {
-        user_id: 2,
+        user_id: 3,
         user_name: "Boby".to_string(),
         user_surname: None,
         nicknames: vec!["BarNickname".to_string(), "FooNickname".to_string()],
@@ -442,7 +442,7 @@ async fn test_get_contacts_with_accents(url_api: &String) {
         .await
         .unwrap();
     let expected_result = vec![contact_types::Contact {
-        user_id: 3,
+        user_id: 4,
         user_name: "MartínÁÉÍÓÚáéíóú".to_string(),
         user_surname: None,
         nicknames: vec![],

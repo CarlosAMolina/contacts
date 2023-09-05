@@ -122,7 +122,6 @@ async fn assert_migrations_have_correctly_executed(
     table_names.sort();
     let expected_table_names = vec![
         "addresses".to_string(),
-        "all_data".to_string(),
         "categories".to_string(),
         "emails".to_string(),
         "facebook".to_string(),

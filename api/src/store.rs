@@ -348,45 +348,203 @@ impl Store {
             .replace("ú", "u");
         query = format!("%{}%", query);
         match sqlx::query(
-            "SELECT
-               *
-             from
-               contacts.all_data
-             WHERE
-               id IN (
-                 SELECT
-                   id
-                 from
-                   contacts.all_data
-                 WHERE
-                   TRANSLATE(
-                     LOWER(
-                       CONCAT_WS(
-                         ' ',
-                         name,
-                         surname,
-                         nickname,
-                         phone,
-                         phone_description,
-                         category,
-                         address,
-                         email,
-                         url,
-                         facebook_url,
-                         twitter_handle,
-                         instagram_handle,
-                         note
-                       )
-                     ),
-                     'áéíóú',
-                     'aeiou'
-                   ) LIKE $1
-               )
-             ORDER BY
-               LOWER(
-                 CONCAT_WS(' ', name, surname)
-               ) ASC;
-             ",
+            "
+SELECT
+  users.id,
+  users.name,
+  users.surname,
+  nicknames.nickname,
+  phones.phone,
+  phones.description AS phone_description,
+  categories.category,
+  addresses.address,
+  emails.email,
+  urls.url,
+  facebook.url AS facebook_url,
+  twitter.handle AS twitter_handle,
+  instagram.handle AS instagram_handle,
+  notes.note
+FROM
+  (
+    (
+      (
+        (
+          (
+            (
+              (
+                (
+                  (
+                    (
+                      (
+                        contacts.users
+                        LEFT JOIN contacts.addresses ON (
+                          (users.id = addresses.id_user)
+                        )
+                      )
+                      LEFT JOIN contacts.users_categories ON (
+                        (
+                          users.id = users_categories.id_user
+                        )
+                      )
+                    )
+                    LEFT JOIN contacts.categories ON (
+                      (
+                        users_categories.id_category = categories.id
+                      )
+                    )
+                  )
+                  LEFT JOIN contacts.emails ON (
+                    (users.id = emails.id_user)
+                  )
+                )
+                LEFT JOIN contacts.facebook ON (
+                  (users.id = facebook.id_user)
+                )
+              )
+              LEFT JOIN contacts.instagram ON (
+                (users.id = instagram.id_user)
+              )
+            )
+            LEFT JOIN contacts.nicknames ON (
+              (users.id = nicknames.id_user)
+            )
+          )
+          LEFT JOIN contacts.notes ON (
+            (users.id = notes.id_user)
+          )
+        )
+        LEFT JOIN contacts.phones ON (
+          (users.id = phones.id_user)
+        )
+      )
+      LEFT JOIN contacts.twitter ON (
+        (users.id = twitter.id_user)
+      )
+    )
+    LEFT JOIN contacts.urls ON (
+      (users.id = urls.id_user)
+    )
+  )
+where
+  users.id in (
+    SELECT
+      id_user
+    from
+      contacts.addresses
+    WHERE
+      TRANSLATE(
+        LOWER(address),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.emails
+    WHERE
+      TRANSLATE(
+        LOWER(email),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.facebook
+    WHERE
+      TRANSLATE(
+        LOWER(url),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.instagram
+    WHERE
+      TRANSLATE(
+        LOWER(handle),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.nicknames
+    WHERE
+      TRANSLATE(
+        LOWER(nickname),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.notes
+    WHERE
+      TRANSLATE(
+        LOWER(note),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.phones
+    WHERE
+      CAST(phone AS TEXT) LIKE $1
+      or TRANSLATE(
+        LOWER(description),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.twitter
+    WHERE
+      TRANSLATE(
+        LOWER(handle),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id_user
+    from
+      contacts.urls
+    WHERE
+      TRANSLATE(
+        LOWER(url),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+    union
+    SELECT
+      id
+    from
+      contacts.users
+    WHERE
+      TRANSLATE(
+        LOWER(
+          CONCAT_WS(' ', name, surname)
+        ),
+        'áéíóú',
+        'aeiou'
+      ) LIKE $1
+  )
+ORDER BY
+  LOWER(
+    CONCAT_WS(' ', name, surname)
+  ) ASC;
+",
         )
         .bind(query)
         .map(|row: PgRow| database_types::AllData {

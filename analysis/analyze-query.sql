@@ -1,116 +1,263 @@
--- analyze new query -- not use view, get id
--- HashAggregate  (cost=120.07..120.17 rows=10 width=4)
-explain (
-SELECT 
-  id_user 
-from 
-  contacts.addresses 
-WHERE 
+-- analyze new query all data
+-- Hash Right Join  (cost=262.95..280.99 rows=61 width=2227) (actual time=1.712..1.724 rows=15 loops=1)
+explain analyze
+select * from (
+ SELECT users.id,
+    users.name,
+    users.surname,
+    nicknames.nickname,
+    phones.phone,
+    phones.description AS phone_description,
+    categories.category,
+    addresses.address,
+    emails.email,
+    urls.url,
+    facebook.url AS facebook_url,
+    twitter.handle AS twitter_handle,
+    instagram.handle AS instagram_handle,
+    notes.note
+   FROM (((((((((((contacts.users
+     LEFT JOIN contacts.addresses ON ((users.id = addresses.id_user)))
+     LEFT JOIN contacts.users_categories ON ((users.id = users_categories.id_user)))
+     LEFT JOIN contacts.categories ON ((users_categories.id_category = categories.id)))
+     LEFT JOIN contacts.emails ON ((users.id = emails.id_user)))
+     LEFT JOIN contacts.facebook ON ((users.id = facebook.id_user)))
+     LEFT JOIN contacts.instagram ON ((users.id = instagram.id_user)))
+     LEFT JOIN contacts.nicknames ON ((users.id = nicknames.id_user)))
+     LEFT JOIN contacts.notes ON ((users.id = notes.id_user)))
+     LEFT JOIN contacts.phones ON ((users.id = phones.id_user)))
+     LEFT JOIN contacts.twitter ON ((users.id = twitter.id_user)))
+     LEFT JOIN contacts.urls ON ((users.id = urls.id_user)))
+                   ) all_data
+where all_data.id in
+(
+SELECT
+  id_user
+from
+  contacts.addresses
+WHERE
   TRANSLATE(
-    LOWER(address), 
-    'áéíóú', 
+    LOWER(address),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.emails 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.emails
+WHERE
   TRANSLATE(
-    LOWER(email), 
-    'áéíóú', 
+    LOWER(email),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.facebook 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.facebook
+WHERE
   TRANSLATE(
-    LOWER(url), 
-    'áéíóú', 
+    LOWER(url),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.instagram 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.instagram
+WHERE
   TRANSLATE(
-    LOWER(handle), 
-    'áéíóú', 
+    LOWER(handle),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.nicknames 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.nicknames
+WHERE
   TRANSLATE(
-    LOWER(nickname), 
-    'áéíóú', 
+    LOWER(nickname),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.notes 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.notes
+WHERE
   TRANSLATE(
-    LOWER(note), 
-    'áéíóú', 
+    LOWER(note),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.phones 
-WHERE 
-  CAST(phone AS TEXT) LIKE '%arlos%' 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.phones
+WHERE
+  CAST(phone AS TEXT) LIKE '%arlos%'
   or TRANSLATE(
-    LOWER(description), 
-    'áéíóú', 
+    LOWER(description),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.twitter 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.twitter
+WHERE
   TRANSLATE(
-    LOWER(handle), 
-    'áéíóú', 
+    LOWER(handle),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id_user 
-from 
-  contacts.urls 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.urls
+WHERE
   TRANSLATE(
-    LOWER(url), 
-    'áéíóú', 
+    LOWER(url),
+    'áéíóú',
     'aeiou'
-  ) LIKE '%arlos%' 
-union 
-SELECT 
-  id 
-from 
-  contacts.users 
-WHERE 
+  ) LIKE '%arlos%'
+union
+SELECT
+  id
+from
+  contacts.users
+WHERE
   TRANSLATE(
     LOWER(
       CONCAT_WS(' ', name, surname)
-    ), 
-    'áéíóú', 
+    ),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+ );
+
+-- analyze new query -- not use view, get id
+-- HashAggregate  (cost=120.07..120.17 rows=10 width=4)
+explain (
+SELECT
+  id_user
+from
+  contacts.addresses
+WHERE
+  TRANSLATE(
+    LOWER(address),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.emails
+WHERE
+  TRANSLATE(
+    LOWER(email),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.facebook
+WHERE
+  TRANSLATE(
+    LOWER(url),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.instagram
+WHERE
+  TRANSLATE(
+    LOWER(handle),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.nicknames
+WHERE
+  TRANSLATE(
+    LOWER(nickname),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.notes
+WHERE
+  TRANSLATE(
+    LOWER(note),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.phones
+WHERE
+  CAST(phone AS TEXT) LIKE '%arlos%'
+  or TRANSLATE(
+    LOWER(description),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.twitter
+WHERE
+  TRANSLATE(
+    LOWER(handle),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id_user
+from
+  contacts.urls
+WHERE
+  TRANSLATE(
+    LOWER(url),
+    'áéíóú',
+    'aeiou'
+  ) LIKE '%arlos%'
+union
+SELECT
+  id
+from
+  contacts.users
+WHERE
+  TRANSLATE(
+    LOWER(
+      CONCAT_WS(' ', name, surname)
+    ),
+    'áéíóú',
     'aeiou'
   ) LIKE '%arlos%'
  );
@@ -202,7 +349,7 @@ explain (
                  SELECT
                    id
                  from
-                   (  
+                   ( 
  SELECT users.id,
     users.name,
     users.surname,
@@ -228,7 +375,7 @@ explain (
      LEFT JOIN contacts.notes ON ((users.id = notes.id_user)))
      LEFT JOIN contacts.phones ON ((users.id = phones.id_user)))
      LEFT JOIN contacts.twitter ON ((users.id = twitter.id_user)))
-     LEFT JOIN contacts.urls ON ((users.id = urls.id_user)))    
+     LEFT JOIN contacts.urls ON ((users.id = urls.id_user)))
                    ) all_data
                  WHERE
                    TRANSLATE(

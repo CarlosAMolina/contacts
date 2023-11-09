@@ -6,6 +6,9 @@
 [x] - Save API docker logs in volume
 [ ] - Logs rotation
 [ ] Docker compose
+[ ] Models
+[ ] - Discord
+[ ] - Linkedin
 [x] Login
 [ ] - Login errors:
 [ ]   - ArgonLibraryError

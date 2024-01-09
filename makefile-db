@@ -40,7 +40,7 @@ connect-psql:
 	docker exec -it $(CONTAINER_NAME) psql -U $(POSTGRES_USER)
 
 connect-psql-db:
-	docker exec -it $(CONTAINER_NAME) psql -U $(POSTGRES_USER)
+	docker exec -it $(CONTAINER_NAME) psql -U $(POSTGRES_USER) $(DATABASE_NAME)
 
 export-db:
 	# Init dump database

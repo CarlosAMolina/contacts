@@ -6,6 +6,7 @@ LOCAL_DB_DUMP_FILE_PATHNAME=/tmp/$(DB_DUMP_FILE_NAME)
 CONTAINER_NAME=postgres-container
 CONTAINER_VOLUME=db_postgres
 DATABASE_NAME=contacts
+DATABASE_NAME_TEST=test
 IMAGE_NAME=postgres
 IMAGE_VERSION=15.2
 POSTGRES_USER=postgres
@@ -41,6 +42,9 @@ connect-psql:
 
 connect-psql-db:
 	docker exec -it $(CONTAINER_NAME) psql -U $(POSTGRES_USER) $(DATABASE_NAME)
+
+connect-psql-db-test:
+	docker exec -it $(CONTAINER_NAME) psql -U $(POSTGRES_USER) $(DATABASE_NAME_TEST)
 
 export-db:
 	# Init dump database

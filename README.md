@@ -31,6 +31,12 @@ To run the Docker database, read [this file](https://github.com/CarlosAMolina/po
 
 The db makefile is makefile-db.
 
+Command example:
+
+```bash
+make -f makefile-db run-docker
+```
+
 ## VPS configuration
 
 Rotless containers must be able to run after SSH logout.

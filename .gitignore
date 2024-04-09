@@ -6,6 +6,10 @@ contacts/images/*.jpg
 # Binaries
 cli/cli
 
+# Python
+env/
+__pycache__/
+
 # Rust
 target/
 

@@ -1,0 +1,4 @@
+# E203: https://github.com/psf/black/blob/main/docs/the_black_code_style/current_style.md#slices
+[flake8]
+max-line-length = 120
+extend-ignore = E203

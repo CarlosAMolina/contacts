@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sa
@@ -14,24 +12,18 @@ _engine = sa.create_engine(_url)
 _db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
 
 
-def init_db():
-    if _exists_db_file(_db_path_name):
-        print(f"DB already exists: {_db_path_name}. Deleting")
-        _delete_file_path(Path(_db_path_name))
-    print(f"Start creating DB: {_db_path_name}")
-    _create_db(_engine)
+def prepare_db():
+    print(f"Prepartin DB: {_db_path_name}")
+    _drop_db_tables(_engine)
+    _create_db_tables(_engine)
     _insert_db_data(_db_session)
 
 
-def _exists_db_file(db_path_name: str) -> bool:
-    return Path(db_path_name).is_file()
+def _drop_db_tables(engine):
+    models.Base.metadata.drop_all(bind=engine)
 
 
-def _delete_file_path(path: Path):
-    path.unlink()
-
-
-def _create_db(engine):
+def _create_db_tables(engine):
     models.Base.metadata.create_all(bind=engine)
 
 

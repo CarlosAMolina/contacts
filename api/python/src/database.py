@@ -4,6 +4,7 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sa
 
+from src import mock_database_data
 from src import models
 
 
@@ -19,20 +20,7 @@ def init_db():
         _delete_file_path(Path(_db_path_name))
     print(f"Start creating DB: {_db_path_name}")
     _create_db(_engine)
-    _insert_db_data(_db_session, _users_data)
-
-
-_users_data = [
-    {
-        "id": 1,
-        "name": "John",
-        "surname": "Doe",
-    },
-    {
-        "id": 2,
-        "name": "Jane",
-    },
-]
+    _insert_db_data(_db_session)
 
 
 def _exists_db_file(db_path_name: str) -> bool:
@@ -47,15 +35,24 @@ def _create_db(engine):
     models.Base.metadata.create_all(bind=engine)
 
 
-def _insert_db_data(db_session, users_data: list):
+def _insert_db_data(db_session):
     users = [
         models.User(
-            id=user_data["id"],
-            name=user_data["name"],
-            surname=user_data.get("surname"),
+            id=data["id"],
+            name=data["name"],
+            surname=data.get("surname"),
         )
-        for user_data in users_data
+        for data in mock_database_data.users
     ]
-    for row in users:
+    emails = [
+        models.Email(
+            id=data["id"],
+            id_user=data["id_user"],
+            email=data["email"],
+        )
+        for data in mock_database_data.emails
+    ]
+    rows_to_insert = users + emails
+    for row in rows_to_insert:
         db_session.add(row)
     db_session.commit()

@@ -10,6 +10,7 @@ _db_path_name = "/tmp/contacts.sqlite3"
 _url = f"sqlite:///{_db_path_name}"
 _engine = sa.create_engine(_url)
 _db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
+# TODO close the session
 
 
 def prepare_db():

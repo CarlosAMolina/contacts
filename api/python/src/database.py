@@ -36,22 +36,8 @@ def _create_db(engine):
 
 
 def _insert_db_data(db_session):
-    users = [
-        models.User(
-            id=data["id"],
-            name=data["name"],
-            surname=data.get("surname"),
-        )
-        for data in mock_database_data.users
-    ]
-    emails = [
-        models.Email(
-            id=data["id"],
-            id_user=data["id_user"],
-            email=data["email"],
-        )
-        for data in mock_database_data.emails
-    ]
+    users = [models.User(**data) for data in mock_database_data.users]
+    emails = [models.Email(**data) for data in mock_database_data.emails]
     rows_to_insert = users + emails
     for row in rows_to_insert:
         db_session.add(row)

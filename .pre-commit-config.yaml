@@ -14,7 +14,7 @@ repos:
 -   repo: local
     hooks:
     -   id: tests
-        name: run unit tests
+        name: run all tests
         entry: python -m unittest
         language: system
         pass_filenames: false

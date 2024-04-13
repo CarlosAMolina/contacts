@@ -2,8 +2,8 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 import sqlalchemy as sa
 
-from src import mock_database_data
-from src import models
+from src.db import data
+from src.db import models
 
 
 _db_path_name = "/tmp/contacts.sqlite3"
@@ -28,8 +28,8 @@ def _create_db_tables(engine):
 
 
 def _insert_db_data(db_session):
-    users = [models.User(**data) for data in mock_database_data.users]
-    emails = [models.Email(**data) for data in mock_database_data.emails]
+    users = [models.User(**row) for row in data.users]
+    emails = [models.Email(**row) for row in data.emails]
     rows_to_insert = users + emails
     for row in rows_to_insert:
         db_session.add(row)

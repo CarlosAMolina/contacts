@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 
 
-from src import database
+from src.db import database
 
 
 class TestFunction_init_db(unittest.TestCase):

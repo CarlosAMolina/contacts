@@ -59,8 +59,3 @@ def _insert_db_data(db_session, users_data: list):
     for row in users:
         db_session.add(row)
     db_session.commit()
-
-
-def get_true() -> bool:
-    """TODO rm"""
-    return True

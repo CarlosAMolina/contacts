@@ -9,6 +9,7 @@ cli/cli
 # Python
 env/
 __pycache__/
+*.egg-info/
 
 # Rust
 target/

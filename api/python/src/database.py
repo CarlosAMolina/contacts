@@ -7,17 +7,17 @@ import sqlalchemy as sa
 from src import models
 
 
-db_path_name = "/tmp/contacts.sqlite3"
-_url = f"sqlite:///{db_path_name}"
+_db_path_name = "/tmp/contacts.sqlite3"
+_url = f"sqlite:///{_db_path_name}"
 _engine = sa.create_engine(_url)
 _db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
 
 
 def init_db():
-    if _exists_db_file(db_path_name):
-        print(f"DB already exists: {db_path_name}. Deleting")
-        _delete_file_path(Path(db_path_name))
-    print(f"Start creating DB: {db_path_name}")
+    if _exists_db_file(_db_path_name):
+        print(f"DB already exists: {_db_path_name}. Deleting")
+        _delete_file_path(Path(_db_path_name))
+    print(f"Start creating DB: {_db_path_name}")
     _create_db(_engine)
     _insert_db_data(_db_session, _users_data)
 

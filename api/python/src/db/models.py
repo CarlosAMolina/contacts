@@ -9,6 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
+# TODO rename to UserModel
 class User(Base):
     __tablename__ = "users"
 
@@ -18,6 +19,7 @@ class User(Base):
     emails = relationship("Email", back_populates="user")  # Allows query other class values.
 
 
+# TODO rename to EmailModel
 class Email(Base):
     __tablename__ = "emails"
 

@@ -17,6 +17,7 @@ class User(Base):
     name = Column(String, nullable=False)
     surname = Column(String)
     emails = relationship("Email", back_populates="user")  # Allows query other class values.
+    age = Column(Integer, nullable=False)
 
 
 # TODO rename to EmailModel

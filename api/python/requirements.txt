@@ -1,2 +1,4 @@
+Flask==3.0.3
+graphql-server[flask]==3.0.0b7
 graphene==3.3
 SQLAlchemy==2.0.29

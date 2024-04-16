@@ -10,7 +10,7 @@ from graphene import String
 from src.db.data import users
 
 
-class UserType(ObjectType):
+class UserObject(ObjectType):
     id = Int()
     name = String()
     surname = String()
@@ -18,8 +18,8 @@ class UserType(ObjectType):
 
 
 class Query(ObjectType):
-    user = Field(UserType, user_id=Int())
-    users_by_min_age = List(UserType, min_age=Int())
+    user = Field(UserObject, user_id=Int())
+    users_by_min_age = List(UserObject, min_age=Int())
 
     @staticmethod
     def resolve_user(root, info, user_id=Int()) -> dict:

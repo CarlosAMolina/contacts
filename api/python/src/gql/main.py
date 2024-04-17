@@ -32,8 +32,7 @@ class EmailObject(ObjectType):
 
     @staticmethod
     def resolve_user(root, info) -> tp.Optional[dict]:
-        matched_users = [user for user in data.users if user["id"] == root["id_user"]]
-        return matched_users[0] if matched_users else None
+        return _db_session.query(UserModel).filter(UserModel.id == root["id_user"])
 
 
 class Query(ObjectType):

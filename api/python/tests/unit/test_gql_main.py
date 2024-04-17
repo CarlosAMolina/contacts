@@ -50,7 +50,7 @@ class TestSchema(unittest.TestCase):
     # TODO     expected_result = {"id": 2, "name": "Jane", "surname": None, "emails": "TODO"}
     # TODO     self.assertEqual(expected_result, result)
 
-    def test_resolve_users_min_age_returns_expected_result(self):
+    def test_resolve_users_by_min_age_returns_expected_result(self):
         gql = """
         {
           usersByMinAge(minAge: 25) {

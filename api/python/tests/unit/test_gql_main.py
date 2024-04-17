@@ -20,6 +20,20 @@ class TestSchema(unittest.TestCase):
         expected_result = {"id": 2, "name": "Jane", "surname": None}
         self.assertEqual(expected_result, result)
 
+    def test_resolve_user_if_not_result(self):
+        gql = """
+        {
+          user(userId: -5) {
+            id
+            name
+            surname
+          }
+        }
+        """
+        schema_result = main.schema.execute(gql)
+        result = schema_result.data["user"]
+        self.assertIsNone(result)
+
     # TODO def test_resolve_user_with_emails_returns_expected_result(self):
     # TODO     gql = """
     # TODO     {

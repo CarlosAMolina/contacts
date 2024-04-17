@@ -41,7 +41,7 @@ class Query(ObjectType):
     users_by_min_age = List(UserObject, min_age=Int())
 
     @staticmethod
-    def resolve_user(root, info, user_id=Int()) -> tp.Optional[dict]:
+    def resolve_user(root, info, user_id=Int()) -> tp.Optional[UserModel]:
         return db_session.query(UserModel).filter(UserModel.id == user_id).first()
 
     @staticmethod

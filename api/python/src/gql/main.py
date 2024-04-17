@@ -7,7 +7,7 @@ from graphene import Int
 from graphene import Schema
 from graphene import String
 
-from src.db.models import User as UserModel
+from src.db.models import UserModel
 from src.db import data
 from src.db.database import _db_session  # TODO not private
 

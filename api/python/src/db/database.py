@@ -29,8 +29,8 @@ def _create_db_tables(engine):
 
 
 def _insert_db_data(db_session):
-    users = [models.User(**row) for row in data.users]
-    emails = [models.Email(**row) for row in data.emails]
+    users = [models.UserModel(**row) for row in data.users]
+    emails = [models.EmailModel(**row) for row in data.emails]
     rows_to_insert = users + emails
     for row in rows_to_insert:
         db_session.add(row)

@@ -5,7 +5,7 @@ from src.gql import main
 
 
 class TestSchema(unittest.TestCase):
-    def test_resolve_user_returns_expected_result(self):
+    def test_resolve_user_if_result(self):
         gql = """
         {
           user(userId: 2) {

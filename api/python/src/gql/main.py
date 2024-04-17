@@ -3,11 +3,13 @@ import typing as tp
 from graphene import Field
 from graphene import List
 from graphene import ObjectType
-from graphene import Schema
 from graphene import Int
+from graphene import Schema
 from graphene import String
 
+from src.db.models import User as UserModel
 from src.db import data
+from src.db.database import _db_session  # TODO not private
 
 
 class UserObject(ObjectType):
@@ -45,7 +47,7 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.List[dict]:
-        return [user for user in data.users if user["age"] >= min_age]
+        return _db_session.query(UserModel).filter(UserModel.age >= min_age)
 
 
 schema = Schema(query=Query)

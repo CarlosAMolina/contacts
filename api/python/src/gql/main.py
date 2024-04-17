@@ -9,7 +9,7 @@ from graphene import String
 
 from src.db.models import UserModel
 from src.db import data
-from src.db.database import _db_session  # TODO not private
+from src.db.database import db_session
 
 
 class UserObject(ObjectType):
@@ -42,11 +42,11 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_user(root, info, user_id=Int()) -> tp.Optional[dict]:
-        return _db_session.query(UserModel).filter(UserModel.id == user_id).first()
+        return db_session.query(UserModel).filter(UserModel.id == user_id).first()
 
     @staticmethod
     def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.List[UserModel]:
-        return _db_session.query(UserModel).filter(UserModel.age >= min_age).all()
+        return db_session.query(UserModel).filter(UserModel.age >= min_age).all()
 
 
 schema = Schema(query=Query)

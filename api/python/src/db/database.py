@@ -9,7 +9,7 @@ from src.db import models
 _db_path_name = "/tmp/contacts.sqlite3"
 _url = f"sqlite:///{_db_path_name}"
 _engine = sa.create_engine(_url)
-_db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
 # TODO close the session
 
 
@@ -17,7 +17,7 @@ def prepare_db():
     print(f"Preparing DB: {_db_path_name}")
     _drop_db_tables(_engine)
     _create_db_tables(_engine)
-    _insert_db_data(_db_session)
+    _insert_db_data(db_session)
 
 
 def _drop_db_tables(engine):

@@ -45,8 +45,8 @@ class Query(ObjectType):
         return _db_session.query(UserModel).filter(UserModel.id == user_id).first()
 
     @staticmethod
-    def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.List[dict]:
-        return _db_session.query(UserModel).filter(UserModel.age >= min_age)
+    def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.List[UserModel]:
+        return _db_session.query(UserModel).filter(UserModel.age >= min_age).all()
 
 
 schema = Schema(query=Query)

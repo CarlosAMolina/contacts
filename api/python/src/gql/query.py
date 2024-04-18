@@ -44,8 +44,8 @@ class Query(ObjectType):
                     UserModel.name.contains(search_term),
                     UserModel.surname.contains(search_term),
                     UserModel.emails.any(EmailModel.email.contains(search_term)),
+                    UserModel.age.contains(search_term),
                 )
             )
             .all()
         )
-        # TODO query age

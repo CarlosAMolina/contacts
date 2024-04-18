@@ -150,3 +150,20 @@ class TestSchemaQuery(unittest.TestCase):
             }
         ]
         self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_age(self):
+        gql = """
+        {
+          searchUser(searchTerm: \"15\") {
+            id
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [
+            {
+                "id": 3,
+            }
+        ]
+        self.assertEqual(expected_result, result)

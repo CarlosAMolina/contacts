@@ -1,10 +1,10 @@
 import unittest
 
 
-from src.gql import main
+from src.gql.schema import schema
 
 
-class TestSchema(unittest.TestCase):
+class TestSchemaQuery(unittest.TestCase):
     def test_resolve_email_all_fields_returns_expected_result(self):
         gql = """
         {
@@ -18,7 +18,7 @@ class TestSchema(unittest.TestCase):
           }
         }
         """
-        schema_result = main.schema.execute(gql)
+        schema_result = schema.execute(gql)
         result = schema_result.data["email"]
         expected_result = {
             "email": "jane_work@mail.com",
@@ -38,7 +38,7 @@ class TestSchema(unittest.TestCase):
           }
         }
         """
-        schema_result = main.schema.execute(gql)
+        schema_result = schema.execute(gql)
         result = schema_result.data["user"]
         self.assertIsNone(result)
 
@@ -56,7 +56,7 @@ class TestSchema(unittest.TestCase):
           }
         }
         """
-        schema_result = main.schema.execute(gql)
+        schema_result = schema.execute(gql)
         result = schema_result.data["user"]
         expected_result = {
             "age": 30,
@@ -76,7 +76,7 @@ class TestSchema(unittest.TestCase):
           }
         }
         """
-        schema_result = main.schema.execute(gql)
+        schema_result = schema.execute(gql)
         result = schema_result.data["usersByMinAge"]
         expected_result = [{"id": 2, "name": "Jane"}]
         self.assertEqual(expected_result, result)

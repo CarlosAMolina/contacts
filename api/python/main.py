@@ -1,13 +1,12 @@
-# TODO refactor move to files in src
-from src.gql.main import schema
-
-
 """
 https://github.com/graphql-python/graphql-server/blob/master/docs/flask.md
 """
 
+# TODO refactor move to files in src
 from flask import Flask
 from graphql_server.flask import GraphQLView
+
+from src.gql.schema import schema
 
 app = Flask(__name__)
 

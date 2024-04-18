@@ -128,11 +128,11 @@ class TestSchemaQuery(unittest.TestCase):
         {
           searchUser(searchTerm: \"oe\") {
             id
-            name
+            surname
           }
         }
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 1, "name": "John"}]
+        expected_result = [{"id": 1, "surname": "Doe"}]
         self.assertEqual(expected_result, result)

@@ -81,7 +81,21 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = [{"id": 2, "name": "Jane"}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_returns_expected_result(self):
+    def test_resolve_search_user_if_search_value_without_results(self):
+        gql = """
+        {
+          searchUser(searchTerm: \"asdf\") {
+            id
+            name
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = []
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_value_in_name(self):
         gql = """
         {
           searchUser(searchTerm: \"a\") {

@@ -13,6 +13,7 @@ from src.db.models import EmailModel
 from src.db.models import UserModel
 from src.gql.types import EmailObject
 from src.gql.types import UserObject
+from src.utils.unicode import get_string_unicode
 
 
 class Query(ObjectType):
@@ -33,42 +34,16 @@ class Query(ObjectType):
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
-        search_term_unicode = _get_search_term_unicode(search_term)
+        search_term_unicode = get_string_unicode(search_term)
         return (
             db_session.query(UserModel)
             .filter(
                 or_(
-                    UserModel.name.like(search_term_unicode),
-                    UserModel.surname.like(search_term_unicode),
-                    UserModel.emails.any(EmailModel.email.like(search_term_unicode)),
-                    UserModel.addresses.any(AddressModel.address_unicode.like(search_term_unicode)),
+                    UserModel.name.contains(search_term_unicode),
+                    UserModel.surname.contains(search_term_unicode),
+                    UserModel.emails.any(EmailModel.email.contains(search_term_unicode)),
+                    UserModel.addresses.any(AddressModel.address_unicode.contains(search_term_unicode)),
                 )
             )
             .all()
         )
-
-
-def _get_search_term_unicode(string: str) -> str:
-    result = string
-    result = _get_string_to_search_replace_accents(result)
-    result = f"%{result}%"
-    return result
-
-
-def _get_string_to_search_replace_accents(string: str) -> str:
-    replacements = [
-        "á",
-        "Á",
-        "é",
-        "É",
-        "í",
-        "Í",
-        "ó",
-        "Ó",
-        "ú",
-        "Ú",
-    ]
-    result = string
-    for character in replacements:
-        result = result.replace(character, "%")
-    return result

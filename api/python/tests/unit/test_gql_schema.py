@@ -109,13 +109,7 @@ class TestSchemaQuery(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):
-        gql = """
-        {
-          searchUser(searchTerm: \"UNIQUE NAME VAL\") {
-            id
-          }
-        }
-        """
+        gql = self._get_graphql_search_user_query("UNIQUE NAME VAL")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 3}]

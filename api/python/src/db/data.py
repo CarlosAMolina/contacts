@@ -1,3 +1,11 @@
+addresses = [
+    {
+        "id": 1,
+        "id_user": 3,
+        "address": "unique address value",
+    },
+]
+
 emails = [
     {
         "id": 1,

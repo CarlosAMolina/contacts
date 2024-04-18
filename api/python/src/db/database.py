@@ -29,9 +29,10 @@ def _create_db_tables(engine):
 
 
 def _insert_db_data(db_session):
+    addresses = [models.AddressModel(**row) for row in data.addresses]
     users = [models.UserModel(**row) for row in data.users]
     emails = [models.EmailModel(**row) for row in data.emails]
-    rows_to_insert = users + emails
+    rows_to_insert = addresses + users + emails
     for row in rows_to_insert:
         db_session.add(row)
     db_session.commit()

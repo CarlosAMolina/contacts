@@ -8,6 +8,7 @@ from graphene import String
 from sqlalchemy import or_
 
 from src.db.database import db_session
+from src.db.models import AddressModel
 from src.db.models import EmailModel
 from src.db.models import UserModel
 from src.gql.types import EmailObject
@@ -39,6 +40,7 @@ class Query(ObjectType):
                     UserModel.name.contains(search_term),
                     UserModel.surname.contains(search_term),
                     UserModel.emails.any(EmailModel.email.contains(search_term)),
+                    UserModel.addresses.any(AddressModel.address.contains(search_term)),
                 )
             )
             .all()

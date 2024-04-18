@@ -98,7 +98,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_name(self):
         gql = """
         {
-          searchUser(searchTerm: \"only in name\") {
+          searchUser(searchTerm: \"unique name val\") {
             id
           }
         }
@@ -111,7 +111,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):
         gql = """
         {
-          searchUser(searchTerm: \"ONLY IN NAME\") {
+          searchUser(searchTerm: \"UNIQUE NAME VAL\") {
             id
           }
         }
@@ -124,7 +124,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_surname(self):
         gql = """
         {
-          searchUser(searchTerm: \"only in surname\") {
+          searchUser(searchTerm: \"unique surname val\") {
             id
           }
         }
@@ -137,7 +137,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_emails(self):
         gql = """
         {
-          searchUser(searchTerm: \"only_in_mail@m\") {
+          searchUser(searchTerm: \"unique_mail_value@m\") {
             id
           }
         }

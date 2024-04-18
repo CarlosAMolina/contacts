@@ -84,7 +84,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_returns_expected_result(self):
         gql = """
         {
-          searchUser(q: \"a\") {
+          searchUser(searchTerm: \"a\") {
             id
             name
           }

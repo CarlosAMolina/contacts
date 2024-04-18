@@ -17,7 +17,7 @@ class Query(ObjectType):
     email = Field(EmailObject, email_id=Int())
     user = Field(UserObject, user_id=Int())
     users_by_min_age = List(UserObject, min_age=Int())
-    search_user = List(UserObject, q=String())  # List field for search results
+    search_user = List(UserObject, search_term=String())  # List field for search results
 
     @staticmethod
     def resolve_email(root, info, email_id=Int()) -> tp.Optional[EmailModel]:
@@ -28,10 +28,9 @@ class Query(ObjectType):
         return db_session.query(UserModel).filter(UserModel.id == user_id).first()
 
     @staticmethod
-    def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.List[UserModel]:
+    def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.Optional[tp.List[UserModel]]:
         return db_session.query(UserModel).filter(UserModel.age >= min_age).all()
 
     @staticmethod
-    def resolve_search_user(root, info, **args):
-        q = args.get("q")
-        return db_session.query(UserModel).filter(UserModel.name.contains(q)).all()
+    def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[UserModel]]:
+        return db_session.query(UserModel).filter(UserModel.name.contains(search_term)).all()

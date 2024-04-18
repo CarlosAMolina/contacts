@@ -53,6 +53,10 @@ class TestSchemaQuery(unittest.TestCase):
               id
               email
             }
+            addresses {
+              id
+              address
+            }
           }
         }
         """
@@ -71,6 +75,12 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 2,
                     "email": "unique_mail_value_b@mail.com",
                 },
+            ],
+            "addresses": [
+                {
+                    "id": 1,
+                    "address": "unique address value",
+                }
             ],
         }
         self.assertEqual(expected_result, result)

@@ -7,6 +7,17 @@ from graphene import Int
 from graphene import String
 
 
+class AddressObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    address = String()
+    user = Field(lambda: UserObject)
+
+    @staticmethod
+    def resolve_user(root, info) -> tp.Optional[dict]:
+        return root.user
+
+
 class EmailObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -23,6 +34,7 @@ class UserObject(ObjectType):
     name = String()
     surname = String()
     emails = List(lambda: EmailObject)
+    addresses = List(lambda: AddressObject)
 
     @staticmethod
     def resolve_emails(root, info) -> tp.List[dict]:

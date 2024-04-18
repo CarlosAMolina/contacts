@@ -21,7 +21,7 @@ class UserObject(ObjectType):
 
     @staticmethod
     def resolve_emails(root, info) -> tp.List[dict]:
-        return [email for email in data.emails if email["id_user"] == root["id"]]
+        return root.emails
 
 
 class EmailObject(ObjectType):

@@ -7,6 +7,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 
+from src.utils.unicode import ACCENT_TO_NO_ACCENT_MAP
+
 
 Base = declarative_base()
 
@@ -21,20 +23,8 @@ class AddressModel(Base):
 
     @hybrid_property
     def address_unicode(self) -> Column[str]:
-        replacements = {
-            "á": "a",
-            "Á": "A",
-            "é": "e",
-            "É": "E",
-            "í": "i",
-            "Í": "I",
-            "ó": "o",
-            "Ó": "O",
-            "ú": "u",
-            "Ú": "U",
-        }
         result = self.address
-        for old, new in replacements.items():
+        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
             result = func.REPLACE(result, old, new)
         return result
 

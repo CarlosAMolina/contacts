@@ -5,6 +5,7 @@ from graphene import Int
 from graphene import List
 from graphene import ObjectType
 from graphene import String
+from sqlalchemy import or_
 
 from src.db.database import db_session
 from src.db.models import EmailModel
@@ -33,4 +34,13 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[UserModel]]:
-        return db_session.query(UserModel).filter(UserModel.name.contains(search_term)).all()
+        return (
+            db_session.query(UserModel)
+            .filter(
+                or_(
+                    UserModel.name.contains(search_term),
+                    UserModel.surname.contains(search_term),
+                )
+            )
+            .all()
+        )

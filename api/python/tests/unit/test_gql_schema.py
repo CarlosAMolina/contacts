@@ -52,6 +52,7 @@ class TestSchemaQuery(unittest.TestCase):
             age
             emails {
               id
+              email
             }
           }
         }
@@ -63,7 +64,16 @@ class TestSchemaQuery(unittest.TestCase):
             "id": 3,
             "name": "unique name value",
             "surname": "unique surname value",
-            "emails": [{"id": 1}, {"id": 2}],
+            "emails": [
+                {
+                    "id": 1,
+                    "email": "unique_mail_value@mail.com",
+                },
+                {
+                    "id": 2,
+                    "email": "unique_mail_value_b@mail.com",
+                },
+            ],
         }
         self.assertEqual(expected_result, result)
 

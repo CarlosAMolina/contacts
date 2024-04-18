@@ -26,10 +26,6 @@ users = [
         "surname": "Doe",
     },
     {
-        "id": 2,
-        "name": "Jane",
-    },
-    {
         "id": 3,
         "name": "unique name value",
         "surname": "unique surname value",

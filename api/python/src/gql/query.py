@@ -34,12 +34,16 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[UserModel]]:
+        """
+        https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
+        """
         return (
             db_session.query(UserModel)
             .filter(
                 or_(
                     UserModel.name.contains(search_term),
                     UserModel.surname.contains(search_term),
+                    UserModel.emails.any(EmailModel.email.contains(search_term)),
                 )
             )
             .all()

@@ -136,3 +136,27 @@ class TestSchemaQuery(unittest.TestCase):
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 1, "surname": "Doe"}]
         self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_emails(self):
+        gql = """
+        {
+          searchUser(searchTerm: \"ane\") {
+            id
+            emails {
+              email
+            }
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [
+            {
+                "id": 2,
+                "emails": [
+                    {"email": "jane@mail.com"},
+                    {"email": "jane_work@mail.com"},
+                ],
+            }
+        ]
+        self.assertEqual(expected_result, result)

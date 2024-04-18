@@ -28,10 +28,7 @@ class AddressModel(Base):
 
     @hybrid_property
     def address_unicode(self) -> Column[str]:
-        result = self.address
-        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
-            result = func.REPLACE(result, old, new)
-        return result
+        return _get_column_unicode(self.address)
 
 
 class EmailModel(Base):
@@ -44,10 +41,7 @@ class EmailModel(Base):
 
     @hybrid_property
     def email_unicode(self) -> Column[str]:
-        result = self.email
-        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
-            result = func.REPLACE(result, old, new)
-        return result
+        return _get_column_unicode(self.email)
 
 
 class UserModel(Base):
@@ -65,14 +59,15 @@ class UserModel(Base):
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:
-        result = self.name
-        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
-            result = func.REPLACE(result, old, new)
-        return result
+        return _get_column_unicode(self.name)
 
     @hybrid_property
     def surname_unicode(self) -> Column[str]:
-        result = self.surname
-        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
-            result = func.REPLACE(result, old, new)
-        return result
+        return _get_column_unicode(self.surname)
+
+
+def _get_column_unicode(column: Column[str]) -> Column[str]:
+    result = column
+    for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
+        result = func.REPLACE(result, old, new)
+    return result

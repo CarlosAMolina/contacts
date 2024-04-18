@@ -49,7 +49,6 @@ class TestSchemaQuery(unittest.TestCase):
             id
             name
             surname
-            age
             emails {
               id
               email
@@ -60,7 +59,6 @@ class TestSchemaQuery(unittest.TestCase):
         schema_result = schema.execute(gql)
         result = schema_result.data["user"]
         expected_result = {
-            "age": 15,
             "id": 3,
             "name": "unique name value",
             "surname": "unique surname value",
@@ -75,20 +73,6 @@ class TestSchemaQuery(unittest.TestCase):
                 },
             ],
         }
-        self.assertEqual(expected_result, result)
-
-    def test_resolve_users_by_min_age_returns_expected_result(self):
-        gql = """
-        {
-          usersByMinAge(minAge: 25) {
-            id
-            name
-          }
-        }
-        """
-        schema_result = schema.execute(gql)
-        result = schema_result.data["usersByMinAge"]
-        expected_result = [{"id": 2, "name": "Jane"}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_value_without_results(self):
@@ -127,31 +111,6 @@ class TestSchemaQuery(unittest.TestCase):
             {
                 "id": 3,
             }
-        ]
-        self.assertEqual(expected_result, result)
-
-    def test_resolve_search_user_if_search_term_equals_age(self):
-        gql = self._get_graphql_search_user_query("15")
-        schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
-        expected_result = [
-            {
-                "id": 3,
-            }
-        ]
-        self.assertEqual(expected_result, result)
-
-    def test_resolve_search_user_if_search_term_in_age(self):
-        gql = self._get_graphql_search_user_query("1")
-        schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
-        expected_result = [
-            {
-                "id": 1,
-            },
-            {
-                "id": 3,
-            },
         ]
         self.assertEqual(expected_result, result)
 

@@ -17,7 +17,6 @@ from src.gql.types import UserObject
 class Query(ObjectType):
     email = Field(EmailObject, email_id=Int())
     user = Field(UserObject, user_id=Int())
-    users_by_min_age = List(UserObject, min_age=Int())
     search_user = List(UserObject, search_term=String())  # List field for search results
 
     @staticmethod
@@ -27,10 +26,6 @@ class Query(ObjectType):
     @staticmethod
     def resolve_user(root, info, user_id=Int()) -> tp.Optional[UserModel]:
         return db_session.query(UserModel).filter(UserModel.id == user_id).first()
-
-    @staticmethod
-    def resolve_users_by_min_age(root, info, min_age=Int()) -> tp.Optional[tp.List[UserModel]]:
-        return db_session.query(UserModel).filter(UserModel.age >= min_age).all()
 
     @staticmethod
     def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[UserModel]]:
@@ -44,7 +39,6 @@ class Query(ObjectType):
                     UserModel.name.contains(search_term),
                     UserModel.surname.contains(search_term),
                     UserModel.emails.any(EmailModel.email.contains(search_term)),
-                    UserModel.age.contains(search_term),
                 )
             )
             .all()

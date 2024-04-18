@@ -22,7 +22,6 @@ class UserObject(ObjectType):
     id = Int()
     name = String()
     surname = String()
-    age = Int()
     emails = List(lambda: EmailObject)
 
     @staticmethod

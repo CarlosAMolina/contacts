@@ -16,17 +16,14 @@ users = [
         "id": 1,
         "name": "John",
         "surname": "Doe",
-        "age": 21,
     },
     {
         "id": 2,
         "name": "Jane",
-        "age": 30,
     },
     {
         "id": 3,
         "name": "unique name value",
         "surname": "unique surname value",
-        "age": 15,
     },
 ]

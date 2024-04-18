@@ -25,4 +25,3 @@ class UserModel(Base):
     name = Column(String, nullable=False)
     surname = Column(String)
     emails = relationship("EmailModel", back_populates="user")  # Allows query other class values.
-    age = Column(Integer, nullable=False)

@@ -5,34 +5,12 @@ from graphene import List
 from graphene import ObjectType
 from graphene import Int
 from graphene import Schema
-from graphene import String
 
 from src.db.database import db_session
 from src.db.models import EmailModel
 from src.db.models import UserModel
-
-
-class UserObject(ObjectType):
-    id = Int()
-    name = String()
-    surname = String()
-    age = Int()
-    emails = List(lambda: EmailObject)
-
-    @staticmethod
-    def resolve_emails(root, info) -> tp.List[dict]:
-        return root.emails
-
-
-class EmailObject(ObjectType):
-    id = Int()
-    id_user = Int()
-    email = String()
-    user = Field(lambda: UserObject)
-
-    @staticmethod
-    def resolve_user(root, info) -> tp.Optional[dict]:
-        return root.user
+from src.gql.types import EmailObject
+from src.gql.types import UserObject
 
 
 class Query(ObjectType):

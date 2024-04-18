@@ -98,15 +98,14 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_name(self):
         gql = """
         {
-          searchUser(searchTerm: \"a\") {
+          searchUser(searchTerm: \"only in name\") {
             id
-            name
           }
         }
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 2, "name": "Jane"}]
+        expected_result = [{"id": 3}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):

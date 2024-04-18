@@ -111,39 +111,34 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):
         gql = """
         {
-          searchUser(searchTerm: \"AN\") {
+          searchUser(searchTerm: \"ONLY IN NAME\") {
             id
-            name
           }
         }
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 2, "name": "Jane"}]
+        expected_result = [{"id": 3}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_surname(self):
         gql = """
         {
-          searchUser(searchTerm: \"oe\") {
+          searchUser(searchTerm: \"only in surname\") {
             id
-            surname
           }
         }
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 1, "surname": "Doe"}]
+        expected_result = [{"id": 3}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_emails(self):
         gql = """
         {
-          searchUser(searchTerm: \"ane@mail\") {
+          searchUser(searchTerm: \"only_in_mail@m\") {
             id
-            emails {
-              email
-            }
           }
         }
         """
@@ -151,11 +146,7 @@ class TestSchemaQuery(unittest.TestCase):
         result = schema_result.data["searchUser"]
         expected_result = [
             {
-                "id": 2,
-                "emails": [
-                    {"email": "jane@mail.com"},
-                    {"email": "jane_work@mail.com"},
-                ],
+                "id": 3,
             }
         ]
         self.assertEqual(expected_result, result)

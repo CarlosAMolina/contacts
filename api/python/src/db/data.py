@@ -13,6 +13,7 @@ users = [
     {
         "id": 3,
         "name": "value only in name",
+        "surname": "value only in surname",
         "age": 15,
     },
 ]
@@ -27,5 +28,10 @@ emails = [
         "id": 2,
         "id_user": 2,
         "email": "jane_work@mail.com",
+    },
+    {
+        "id": 3,
+        "id_user": 3,
+        "email": "only_in_mail@mail.com",
     },
 ]

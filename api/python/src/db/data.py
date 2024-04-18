@@ -1,7 +1,7 @@
 addresses = [
     {
         "id": 1,
-        "id_user": 3,
+        "id_user": 2,
         "address": "unique address value",
     },
 ]
@@ -9,12 +9,12 @@ addresses = [
 emails = [
     {
         "id": 1,
-        "id_user": 3,
+        "id_user": 2,
         "email": "unique_mail_value@mail.com",
     },
     {
         "id": 2,
-        "id_user": 3,
+        "id_user": 2,
         "email": "unique_mail_value_b@mail.com",
     },
 ]
@@ -26,7 +26,7 @@ users = [
         "surname": "Doe",
     },
     {
-        "id": 3,
+        "id": 2,
         "name": "unique name value",
         "surname": "unique surname value",
     },

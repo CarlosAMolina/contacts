@@ -23,8 +23,8 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = {
             "email": "unique_mail_value_b@mail.com",
             "id": 2,
-            "idUser": 3,
-            "user": {"id": 3},
+            "idUser": 2,
+            "user": {"id": 2},
         }
         self.assertEqual(expected_result, result)
 
@@ -45,7 +45,7 @@ class TestSchemaQuery(unittest.TestCase):
     def test_resolve_user_all_fields_returns_expected_result(self):
         gql = """
         {
-          user(userId: 3) {
+          user(userId: 2) {
             id
             name
             surname
@@ -59,7 +59,7 @@ class TestSchemaQuery(unittest.TestCase):
         schema_result = schema.execute(gql)
         result = schema_result.data["user"]
         expected_result = {
-            "id": 3,
+            "id": 2,
             "name": "unique name value",
             "surname": "unique surname value",
             "emails": [
@@ -86,21 +86,21 @@ class TestSchemaQuery(unittest.TestCase):
         gql = self._get_graphql_search_user_query("unique name val")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 3}]
+        expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):
         gql = self._get_graphql_search_user_query("UNIQUE NAME VAL")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 3}]
+        expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_surname(self):
         gql = self._get_graphql_search_user_query("unique surname val")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        expected_result = [{"id": 3}]
+        expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_emails(self):
@@ -109,7 +109,7 @@ class TestSchemaQuery(unittest.TestCase):
         result = schema_result.data["searchUser"]
         expected_result = [
             {
-                "id": 3,
+                "id": 2,
             }
         ]
         self.assertEqual(expected_result, result)
@@ -120,7 +120,7 @@ class TestSchemaQuery(unittest.TestCase):
         result = schema_result.data["searchUser"]
         expected_result = [
             {
-                "id": 3,
+                "id": 2,
             }
         ]
         self.assertEqual(expected_result, result)

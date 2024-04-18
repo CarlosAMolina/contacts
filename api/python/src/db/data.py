@@ -21,17 +21,12 @@ users = [
 emails = [
     {
         "id": 1,
-        "id_user": 2,
-        "email": "jane@mail.com",
+        "id_user": 3,
+        "email": "unique_mail_value@mail.com",
     },
     {
         "id": 2,
-        "id_user": 2,
-        "email": "jane_work@mail.com",
-    },
-    {
-        "id": 3,
         "id_user": 3,
-        "email": "unique_mail_value@mail.com",
+        "email": "unique_mail_value_b@mail.com",
     },
 ]

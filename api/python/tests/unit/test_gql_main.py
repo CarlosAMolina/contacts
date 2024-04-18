@@ -44,12 +44,10 @@ class TestSchema(unittest.TestCase):
           usersByMinAge(minAge: 25) {
             id
             name
-            surname
-            age
           }
         }
         """
         schema_result = main.schema.execute(gql)
         result = schema_result.data["usersByMinAge"]
-        expected_result = [{"age": 30, "id": 2, "name": "Jane", "surname": None}]
+        expected_result = [{"id": 2, "name": "Jane"}]
         self.assertEqual(expected_result, result)

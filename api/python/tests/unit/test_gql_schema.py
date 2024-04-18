@@ -80,7 +80,11 @@ class TestSchemaQuery(unittest.TestCase):
                 {
                     "id": 1,
                     "address": "unique address value",
-                }
+                },
+                {
+                    "id": 2,
+                    "address": "C/ Camión",
+                },
             ],
         }
         self.assertEqual(expected_result, result)
@@ -126,6 +130,39 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_addresses(self):
         gql = self._get_graphql_search_user_query("unique address val")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [
+            {
+                "id": 2,
+            }
+        ]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_word_with_accent_using_search_term_with_accent(self):
+        gql = self._get_graphql_search_user_query("camión")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [
+            {
+                "id": 2,
+            }
+        ]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_word_without_accent_using_search_term_with_accent(self):
+        gql = self._get_graphql_search_user_query("uniqué address vál")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [
+            {
+                "id": 2,
+            }
+        ]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_word_with_accent_using_search_term_without_accent(self):
+        gql = self._get_graphql_search_user_query("camion")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [

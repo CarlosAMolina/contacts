@@ -33,15 +33,42 @@ class Query(ObjectType):
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
+        search_term_to_use = _get_search_term_to_use(search_term)
         return (
             db_session.query(UserModel)
             .filter(
                 or_(
-                    UserModel.name.contains(search_term),
-                    UserModel.surname.contains(search_term),
-                    UserModel.emails.any(EmailModel.email.contains(search_term)),
-                    UserModel.addresses.any(AddressModel.address.contains(search_term)),
+                    UserModel.name.like(search_term_to_use),
+                    UserModel.surname.like(search_term_to_use),
+                    UserModel.emails.any(EmailModel.email.like(search_term_to_use)),
+                    UserModel.addresses.any(AddressModel.address_unicode.like(search_term_to_use)),
                 )
             )
             .all()
         )
+
+
+def _get_search_term_to_use(string: str) -> str:
+    result = string
+    result = _get_string_to_search_replace_accents(result)
+    result = f"%{result}%"
+    return result
+
+
+def _get_string_to_search_replace_accents(string: str) -> str:
+    replacements = [
+        "á",
+        "Á",
+        "é",
+        "É",
+        "í",
+        "Í",
+        "ó",
+        "Ó",
+        "ú",
+        "Ú",
+    ]
+    result = string
+    for character in replacements:
+        result = result.replace(character, "%")
+    return result

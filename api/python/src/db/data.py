@@ -4,6 +4,11 @@ addresses = [
         "id_user": 2,
         "address": "unique address value",
     },
+    {
+        "id": 2,
+        "id_user": 2,
+        "address": "C/ Camión",
+    },
 ]
 
 emails = [

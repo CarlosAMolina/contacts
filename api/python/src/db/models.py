@@ -1,9 +1,11 @@
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
+from sqlalchemy import func
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 Base = declarative_base()
@@ -16,6 +18,25 @@ class AddressModel(Base):
     id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
     address = Column(String, nullable=False)
     user = relationship("UserModel", back_populates="addresses")
+
+    @hybrid_property
+    def address_unicode(self) -> Column[str]:
+        replacements = {
+            "á": "a",
+            "Á": "A",
+            "é": "e",
+            "É": "E",
+            "í": "i",
+            "Í": "I",
+            "ó": "o",
+            "Ó": "O",
+            "ú": "u",
+            "Ú": "U",
+        }
+        result = self.address
+        for old, new in replacements.items():
+            result = func.REPLACE(result, old, new)
+        return result
 
 
 class EmailModel(Base):

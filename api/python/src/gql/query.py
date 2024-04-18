@@ -39,9 +39,9 @@ class Query(ObjectType):
             db_session.query(UserModel)
             .filter(
                 or_(
-                    UserModel.name.contains(search_term_unicode),
-                    UserModel.surname.contains(search_term_unicode),
-                    UserModel.emails.any(EmailModel.email.contains(search_term_unicode)),
+                    UserModel.name_unicode.contains(search_term_unicode),
+                    UserModel.surname_unicode.contains(search_term_unicode),
+                    UserModel.emails.any(EmailModel.email_unicode.contains(search_term_unicode)),
                     UserModel.addresses.any(AddressModel.address_unicode.contains(search_term_unicode)),
                 )
             )

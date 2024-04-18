@@ -1,3 +1,8 @@
+"""
+TODO refactor ..._unicode, for example using
+https://docs.sqlalchemy.org/en/20/orm/extensions/hybrid.html#reusing-hybrid-properties-across-subclasses
+"""
+
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import func
@@ -37,6 +42,13 @@ class EmailModel(Base):
     email = Column(String, nullable=False)
     user = relationship("UserModel", back_populates="emails")
 
+    @hybrid_property
+    def email_unicode(self) -> Column[str]:
+        result = self.email
+        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
+            result = func.REPLACE(result, old, new)
+        return result
+
 
 class UserModel(Base):
     """
@@ -50,3 +62,17 @@ class UserModel(Base):
     surname = Column(String)
     addresses = relationship("AddressModel", back_populates="user")
     emails = relationship("EmailModel", back_populates="user")
+
+    @hybrid_property
+    def name_unicode(self) -> Column[str]:
+        result = self.name
+        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
+            result = func.REPLACE(result, old, new)
+        return result
+
+    @hybrid_property
+    def surname_unicode(self) -> Column[str]:
+        result = self.surname
+        for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
+            result = func.REPLACE(result, old, new)
+        return result

@@ -5,6 +5,29 @@ from src.gql import main
 
 
 class TestSchema(unittest.TestCase):
+    def test_resolve_email_all_fields_returns_expected_result(self):
+        gql = """
+        {
+          email(emailId: 2) {
+            id
+            idUser
+            email
+            user {
+              id
+            }
+          }
+        }
+        """
+        schema_result = main.schema.execute(gql)
+        result = schema_result.data["email"]
+        expected_result = {
+            "email": "jane_work@mail.com",
+            "id": 2,
+            "idUser": 2,
+            "user": {"id": 2},
+        }
+        self.assertEqual(expected_result, result)
+
     def test_resolve_user_if_not_result(self):
         gql = """
         {

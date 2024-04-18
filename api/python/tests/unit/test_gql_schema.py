@@ -80,3 +80,17 @@ class TestSchemaQuery(unittest.TestCase):
         result = schema_result.data["usersByMinAge"]
         expected_result = [{"id": 2, "name": "Jane"}]
         self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_returns_expected_result(self):
+        gql = """
+        {
+          searchUser(q: \"a\") {
+            id
+            name
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2, "name": "Jane"}]
+        self.assertEqual(expected_result, result)

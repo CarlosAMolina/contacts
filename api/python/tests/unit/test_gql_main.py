@@ -58,7 +58,13 @@ class TestSchema(unittest.TestCase):
         """
         schema_result = main.schema.execute(gql)
         result = schema_result.data["user"]
-        expected_result = {"age": 30, "id": 2, "name": "Jane", "surname": None, "emails": [{"id": 1}, {"id": 2}]}
+        expected_result = {
+            "age": 30,
+            "id": 2,
+            "name": "Jane",
+            "surname": None,
+            "emails": [{"id": 1}, {"id": 2}],
+        }
         self.assertEqual(expected_result, result)
 
     def test_resolve_users_by_min_age_returns_expected_result(self):

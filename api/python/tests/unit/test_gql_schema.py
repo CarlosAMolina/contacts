@@ -135,13 +135,7 @@ class TestSchemaQuery(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_in_emails(self):
-        gql = """
-        {
-          searchUser(searchTerm: \"unique_mail_value@m\") {
-            id
-          }
-        }
-        """
+        gql = self._get_graphql_search_user_query("unique_mail_value@m")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [
@@ -152,13 +146,7 @@ class TestSchemaQuery(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_term_equals_age(self):
-        gql = """
-        {
-          searchUser(searchTerm: \"15\") {
-            id
-          }
-        }
-        """
+        gql = self._get_graphql_search_user_query("15")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [

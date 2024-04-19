@@ -57,6 +57,15 @@ class TestSchemaQuery(unittest.TestCase):
               id
               address
             }
+            discord {
+                id
+                idUser
+                userName
+                discriminator
+                alias
+                globalName
+                legacyUserName
+            }
           }
         }
         """
@@ -85,6 +94,17 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 2,
                     "address": "C/ Camión",
                 },
+            ],
+            "discord": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "userName": "value only in discord user_name",
+                    "discriminator": 111,
+                    "alias": "value only in discord alias",
+                    "globalName": "value only in discord global_name",
+                    "legacyUserName": "value only in discord legacy_user_name",
+                }
             ],
         }
         self.assertEqual(expected_result, result)

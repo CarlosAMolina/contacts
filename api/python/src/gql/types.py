@@ -50,7 +50,7 @@ class UserObject(ObjectType):
     surname = String()
     emails = List(lambda: EmailObject)
     addresses = List(lambda: AddressObject)
-    discords = List(lambda: DiscordObject)
+    discord = List(lambda: DiscordObject)
 
     @staticmethod
     def resolve_emails(root, info) -> tp.List[dict]:

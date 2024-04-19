@@ -168,5 +168,13 @@ class TestSchemaQuery(unittest.TestCase):
                 result = schema_result.data["searchUser"]
                 self.assertEqual(expected_result, result)
 
+    def test_resolve_search_user_if_search_term_in_discord_fields_partial_integer_searched(self):
+        expected_result = [{"id": 2}]
+        search_term = "111"
+        gql = self._get_graphql_search_user_query(search_term)
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        self.assertEqual(expected_result, result)
+
     def _get_graphql_search_user_query(self, search_term: str) -> str:
         return '{ searchUser(searchTerm: "' + str(search_term) + '") { id } }'

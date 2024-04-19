@@ -44,10 +44,10 @@ class Query(ObjectType):
                     UserModel.emails.any(EmailModel.email_unicode.contains(search_term_unicode)),
                     UserModel.addresses.any(AddressModel.address_unicode.contains(search_term_unicode)),
                     UserModel.discord.any(DiscordModel.user_name_unicode.contains(search_term_unicode)),
-                    # UserModel.discord.any(DiscordModel.discriminator.contains(search_term_unicode)),
-                    # UserModel.discord.any(DiscordModel.alias_unicode.contains(search_term_unicode)),
-                    # UserModel.discord.any(DiscordModel.global_name_unicode.contains(search_term_unicode)),
-                    # UserModel.discord.any(DiscordModel.legacy_user_name_unicode.contains(search_term_unicode)),
+                    UserModel.discord.any(DiscordModel.discriminator.contains(search_term_unicode)),
+                    UserModel.discord.any(DiscordModel.alias_unicode.contains(search_term_unicode)),
+                    UserModel.discord.any(DiscordModel.global_name_unicode.contains(search_term_unicode)),
+                    UserModel.discord.any(DiscordModel.legacy_user_name_unicode.contains(search_term_unicode)),
                 )
             )
             .all()

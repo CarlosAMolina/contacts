@@ -152,12 +152,21 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_discord_user_name(self):
-        gql = self._get_graphql_search_user_query("only in discord user_name")
-        schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+    def test_resolve_search_user_if_search_term_in_discord_fields(self):
         expected_result = [{"id": 2}]
-        self.assertEqual(expected_result, result)
+        expected_result_and_search_term_array = [
+            (expected_result, "only in discord user_name"),
+            (expected_result, 1111),
+            (expected_result, "only in discord alias"),
+            (expected_result, "only in discord global_name"),
+            (expected_result, "only in discord legacy_user_name"),
+        ]
+        for expected_result, search_term in expected_result_and_search_term_array:
+            with self.subTest(search_term=search_term):
+                gql = self._get_graphql_search_user_query(search_term)
+                schema_result = schema.execute(gql)
+                result = schema_result.data["searchUser"]
+                self.assertEqual(expected_result, result)
 
     def _get_graphql_search_user_query(self, search_term: str) -> str:
-        return '{ searchUser(searchTerm: "' + search_term + '") { id } }'
+        return '{ searchUser(searchTerm: "' + str(search_term) + '") { id } }'

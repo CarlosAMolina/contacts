@@ -31,6 +31,35 @@ class AddressModel(Base):
         return _get_column_unicode(self.address)
 
 
+class DiscordModel(Base):
+    __tablename__ = "discord"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_name = Column(String, nullable=False)
+    discriminator = Column(Integer)
+    alias = Column(String)
+    global_name = Column(String)
+    legacy_user_name = Column(String)
+    user = relationship("UserModel", back_populates="discord")
+
+    @hybrid_property
+    def user_name_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.user_name)
+
+    @hybrid_property
+    def alias_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.alias)
+
+    @hybrid_property
+    def global_name_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.global_name)
+
+    @hybrid_property
+    def legacy_user_name_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.legacy_user_name)
+
+
 class EmailModel(Base):
     __tablename__ = "emails"
 
@@ -56,6 +85,7 @@ class UserModel(Base):
     surname = Column(String)
     addresses = relationship("AddressModel", back_populates="user")
     emails = relationship("EmailModel", back_populates="user")
+    discord = relationship("DiscordModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

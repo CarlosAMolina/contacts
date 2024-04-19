@@ -18,6 +18,21 @@ class AddressObject(ObjectType):
         return root.user
 
 
+class DiscordObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    user_name = String()
+    discriminator = Int()
+    alias = String()
+    global_name = String()
+    legacy_user_name = String()
+    user = Field(lambda: UserObject)
+
+    @staticmethod
+    def resolve_user(root, info) -> tp.Optional[dict]:
+        return root.user
+
+
 class EmailObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -35,6 +50,7 @@ class UserObject(ObjectType):
     surname = String()
     emails = List(lambda: EmailObject)
     addresses = List(lambda: AddressObject)
+    discords = List(lambda: DiscordObject)
 
     @staticmethod
     def resolve_emails(root, info) -> tp.List[dict]:

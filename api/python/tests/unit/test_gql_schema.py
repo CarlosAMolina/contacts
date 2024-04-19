@@ -172,5 +172,12 @@ class TestSchemaQuery(unittest.TestCase):
         ]
         self.assertEqual(expected_result, result)
 
+    def test_resolve_search_user_if_search_term_in_discord_user_name(self):
+        gql = self._get_graphql_search_user_query("only in discord user_name")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
     def _get_graphql_search_user_query(self, search_term: str) -> str:
         return '{ searchUser(searchTerm: "' + search_term + '") { id } }'

@@ -16,7 +16,7 @@ discord = [
         "id": 1,
         "id_user": 2,
         "user_name": "value only in discord user_name",
-        "discriminator": 1111,
+        "discriminator": 111,
         "alias": "value only in discord alias",
         "global_name": "value only in discord global_name",
         "legacy_user_name": "value only in discord legacy_user_name",

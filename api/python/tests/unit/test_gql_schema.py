@@ -156,7 +156,7 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = [{"id": 2}]
         expected_result_and_search_term_array = [
             (expected_result, "only in discord user_name"),
-            (expected_result, "1111"),
+            (expected_result, "111"),
             (expected_result, "only in discord alias"),
             (expected_result, "only in discord global_name"),
             (expected_result, "only in discord legacy_user_name"),
@@ -170,7 +170,7 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_partial_integer(self):
         expected_result = [{"id": 2}]
-        search_term = "111"
+        search_term = "11"
         gql = self._get_graphql_search_user_query(search_term)
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]

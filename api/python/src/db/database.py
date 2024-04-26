@@ -33,7 +33,8 @@ def _insert_db_data(db_session):
     discord = [models.DiscordModel(**row) for row in data.discord]
     users = [models.UserModel(**row) for row in data.users]
     emails = [models.EmailModel(**row) for row in data.emails]
-    rows_to_insert = addresses + discord + users + emails
+    facebook = [models.FacebookModel(**row) for row in data.facebook]
+    rows_to_insert = addresses + discord + users + emails + facebook
     for row in rows_to_insert:
         db_session.add(row)
     db_session.commit()

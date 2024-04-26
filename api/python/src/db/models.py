@@ -73,6 +73,19 @@ class EmailModel(Base):
         return _get_column_unicode(self.email)
 
 
+class FacebookModel(Base):
+    __tablename__ = "facebook"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    url = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="facebook")
+
+    @hybrid_property
+    def url_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.url)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -86,6 +99,7 @@ class UserModel(Base):
     addresses = relationship("AddressModel", back_populates="user")
     emails = relationship("EmailModel", back_populates="user")
     discord = relationship("DiscordModel", back_populates="user")
+    facebook = relationship("FacebookModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

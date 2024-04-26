@@ -36,6 +36,14 @@ emails = [
     },
 ]
 
+facebook = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "url": "https://www.facebook.com/unique_facebook_user.2/",
+    }
+]
+
 users = [
     {
         "id": 1,

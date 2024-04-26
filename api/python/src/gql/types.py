@@ -33,6 +33,17 @@ class DiscordObject(ObjectType):
         return root.user
 
 
+class FacebookObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    url = String()
+    user = Field(lambda: UserObject)
+
+    @staticmethod
+    def resolve_user(root, info) -> tp.Optional[dict]:
+        return root.user
+
+
 class EmailObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -51,6 +62,7 @@ class UserObject(ObjectType):
     emails = List(lambda: EmailObject)
     addresses = List(lambda: AddressObject)
     discord = List(lambda: DiscordObject)
+    facebook = List(lambda: FacebookObject)
 
     @staticmethod
     def resolve_emails(root, info) -> tp.List[dict]:

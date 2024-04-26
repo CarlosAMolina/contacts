@@ -58,13 +58,18 @@ class TestSchemaQuery(unittest.TestCase):
               address
             }
             discord {
-                id
-                idUser
-                userName
-                discriminator
-                alias
-                globalName
-                legacyUserName
+              id
+              idUser
+              userName
+              discriminator
+              alias
+              globalName
+              legacyUserName
+            }
+            facebook {
+              id
+              idUser
+              url
             }
           }
         }
@@ -104,6 +109,13 @@ class TestSchemaQuery(unittest.TestCase):
                     "alias": "value only in discord alias",
                     "globalName": "value only in discord global_name",
                     "legacyUserName": "value only in discord legacy_user_name",
+                }
+            ],
+            "facebook": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "url": "https://www.facebook.com/unique_facebook_user.2/",
                 }
             ],
         }
@@ -187,6 +199,13 @@ class TestSchemaQuery(unittest.TestCase):
                 schema_result = schema.execute(gql)
                 result = schema_result.data["searchUser"]
                 self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_facebook(self):
+        gql = self._get_graphql_search_user_query("unique_facebook")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
 
     def test_resolve_search_user_if_search_partial_integer(self):
         expected_result = [{"id": 2}]

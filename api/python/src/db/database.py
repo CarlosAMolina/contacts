@@ -29,12 +29,26 @@ def _create_db_tables(engine):
 
 
 def _insert_db_data(db_session):
+    data_variable_and_model = {
+        "addresses": models.AddressModel,
+        "discord": models.DiscordModel,
+        "users": models.UserModel,
+        "emails": models.EmailModel,
+        "facebook": models.FacebookModel,
+    }
+    rows_to_insert_total = []
+    for data_variable, model in data_variable_and_model.items():
+        model_ = getattr(models, model)
+        rows_to_insert = [model_(**row) for row in getattr(data, data_variable)]
+        rows_to_insert_total += rows_to_insert
+
     addresses = [models.AddressModel(**row) for row in data.addresses]
     discord = [models.DiscordModel(**row) for row in data.discord]
     users = [models.UserModel(**row) for row in data.users]
     emails = [models.EmailModel(**row) for row in data.emails]
     facebook = [models.FacebookModel(**row) for row in data.facebook]
     rows_to_insert = addresses + discord + users + emails + facebook
+
     for row in rows_to_insert:
         db_session.add(row)
     db_session.commit()

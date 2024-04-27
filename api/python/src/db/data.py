@@ -85,6 +85,16 @@ notes = [
 ]
 
 
+phones = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "phone": 666666666,
+        "description": "Unique phone description user 2",
+    }
+]
+
+
 users = [
     {
         "id": 1,

@@ -96,6 +96,12 @@ class TestSchemaQuery(unittest.TestCase):
               idUser
               note
             }
+            phones {
+              id
+              idUser
+              phone
+              description
+            }
           }
         }
         """
@@ -176,6 +182,14 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "note": "Unique note user 2",
+                }
+            ],
+            "phones": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "phone": 666666666,
+                    "description": "Unique phone description user 2",
                 }
             ],
         }
@@ -297,6 +311,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_note(self):
         gql = self._get_graphql_search_user_query("unique note")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_phone_description(self):
+        gql = self._get_graphql_search_user_query("unique phone description")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

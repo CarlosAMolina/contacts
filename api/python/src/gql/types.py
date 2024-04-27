@@ -1,8 +1,11 @@
+from graphene import BigInt
 from graphene import Field
 from graphene import List
 from graphene import ObjectType
 from graphene import Int
 from graphene import String
+
+# TODO? use `required`: https://docs.graphene-python.org/en/latest/types/scalars/
 
 
 class AddressObject(ObjectType):
@@ -64,6 +67,13 @@ class NoteObject(ObjectType):
     note = String()
 
 
+class PhoneObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    phone = BigInt()
+    description = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -74,6 +84,7 @@ class UserObject(ObjectType):
     instagram = List(lambda: InstagramObject)
     linkedin = List(lambda: LinkedinObject)
     nicknames = List(lambda: NicknameObject)
+    phones = List(lambda: PhoneObject)
     notes = List(lambda: NoteObject)
     name = String()
     surname = String()

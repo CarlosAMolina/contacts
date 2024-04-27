@@ -6,6 +6,7 @@ https://docs.sqlalchemy.org/en/20/orm/extensions/hybrid.html#reusing-hybrid-prop
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import func
+from sqlalchemy import BigInteger
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
@@ -151,6 +152,20 @@ class NoteModel(Base):
         return _get_column_unicode(self.note)
 
 
+class PhoneModel(Base):
+    __tablename__ = "phones"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    phone = Column(BigInteger, nullable=False)
+    description = Column(String)
+    user = relationship("UserModel", back_populates="phones")
+
+    @hybrid_property
+    def description_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.description)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -170,6 +185,7 @@ class UserModel(Base):
     instagram = relationship("InstagramModel", back_populates="user")
     nicknames = relationship("NicknameModel", back_populates="user")
     notes = relationship("NoteModel", back_populates="user")
+    phones = relationship("PhoneModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

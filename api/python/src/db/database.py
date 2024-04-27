@@ -39,6 +39,7 @@ def _insert_db_data(db_session):
         "linkedin": models.LinkedinModel,
         "nicknames": models.NicknameModel,
         "notes": models.NoteModel,
+        "phones": models.PhoneModel,
         "users": models.UserModel,
     }
     rows_to_insert = []

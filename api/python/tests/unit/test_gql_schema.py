@@ -117,6 +117,12 @@ class TestSchemaQuery(unittest.TestCase):
               idUser
               url
             }
+            wallapop {
+              id
+              idUser
+              url
+              note
+            }
           }
         }
         """
@@ -226,6 +232,14 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "url": "https://unique_url_user_2.com",
+                }
+            ],
+            "wallapop": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "url": "https://unique_wallapop_url_user_2.com",
+                    "note": "Unique wallapop note user 2",
                 }
             ],
         }
@@ -405,6 +419,20 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_url(self):
         gql = self._get_graphql_search_user_query("unique_url")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_wallapop_url(self):
+        gql = self._get_graphql_search_user_query("unique_wallapop_url")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_wallapop_note(self):
+        gql = self._get_graphql_search_user_query("unique wallapop note")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

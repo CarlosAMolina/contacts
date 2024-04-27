@@ -118,6 +118,15 @@ urls = [
     }
 ]
 
+wallapop = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "url": "https://unique_wallapop_url_user_2.com",
+        "note": "Unique wallapop note user 2",
+    }
+]
+
 
 users = [
     {

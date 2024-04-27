@@ -92,6 +92,13 @@ class UrlObject(ObjectType):
     url = String()
 
 
+class WallapopObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    url = String()
+    note = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -107,5 +114,6 @@ class UserObject(ObjectType):
     telegram = List(lambda: TelegramObject)
     twitter = List(lambda: TwitterObject)
     urls = List(lambda: UrlObject)
+    wallapop = List(lambda: WallapopObject)
     name = String()
     surname = String()

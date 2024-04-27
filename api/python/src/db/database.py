@@ -44,6 +44,7 @@ def _insert_db_data(db_session):
         "twitter": models.TwitterModel,
         "urls": models.UrlModel,
         "users": models.UserModel,
+        "wallapop": models.WallapopModel,
     }
     rows_to_insert = []
     for data_variable, model in data_variable_and_model.items():

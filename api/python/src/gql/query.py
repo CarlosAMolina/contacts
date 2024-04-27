@@ -57,6 +57,8 @@ class Query(ObjectType):
                     models.UserModel.telegram.any(models.TelegramModel.user_name_unicode.contains(search_term_unicode)),
                     models.UserModel.twitter.any(models.TwitterModel.handle_unicode.contains(search_term_unicode)),
                     models.UserModel.urls.any(models.UrlModel.url_unicode.contains(search_term_unicode)),
+                    models.UserModel.wallapop.any(models.WallapopModel.url_unicode.contains(search_term_unicode)),
+                    models.UserModel.wallapop.any(models.WallapopModel.note_unicode.contains(search_term_unicode)),
                     models.UserModel.name_unicode.contains(search_term_unicode),
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )

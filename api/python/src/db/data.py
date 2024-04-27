@@ -44,6 +44,14 @@ facebook = [
     }
 ]
 
+github = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "url": "https://github.com/unique_github_user_2/",
+    }
+]
+
 users = [
     {
         "id": 1,

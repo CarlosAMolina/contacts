@@ -86,18 +86,17 @@ class FacebookModel(Base):
         return _get_column_unicode(self.url)
 
 
-# TODO class GitHubModel(Base):
-# TODO     __tablename__ = "github"
-# TODO
-# TODO     id = Column(Integer, primary_key=True)
-# TODO     id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
-# TODO     url = Column(String, nullable=False)
-# TODO     user = relationship("UserModel", back_populates="github")
-# TODO
-# TODO     @hybrid_property
-# TODO     def url_unicode(self) -> Column[str]:
-# TODO         return _get_column_unicode(self.url)
-# TODO
+class GitHubModel(Base):
+    __tablename__ = "github"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    url = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="github")
+
+    @hybrid_property
+    def url_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.url)
 
 
 class UserModel(Base):
@@ -114,7 +113,7 @@ class UserModel(Base):
     emails = relationship("EmailModel", back_populates="user")
     discord = relationship("DiscordModel", back_populates="user")
     facebook = relationship("FacebookModel", back_populates="user")
-    # TODO    github = relationship("GitHubModel", back_populates="user")
+    github = relationship("GitHubModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

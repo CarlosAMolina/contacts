@@ -34,11 +34,18 @@ class FacebookObject(ObjectType):
     url = String()
 
 
+class GitHubObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    url = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
     discord = List(lambda: DiscordObject)
     emails = List(lambda: EmailObject)
     facebook = List(lambda: FacebookObject)
+    github = List(lambda: GitHubObject)
     name = String()
     surname = String()

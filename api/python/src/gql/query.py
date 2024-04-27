@@ -11,6 +11,7 @@ from src.db.database import db_session
 from src.db.models import AddressModel
 from src.db.models import DiscordModel
 from src.db.models import FacebookModel
+from src.db.models import GitHubModel
 from src.db.models import EmailModel
 from src.db.models import UserModel
 from src.gql.types import EmailObject
@@ -49,6 +50,7 @@ class Query(ObjectType):
                     UserModel.discord.any(DiscordModel.user_name_unicode.contains(search_term_unicode)),
                     UserModel.emails.any(EmailModel.email_unicode.contains(search_term_unicode)),
                     UserModel.facebook.any(FacebookModel.url_unicode.contains(search_term_unicode)),
+                    UserModel.github.any(GitHubModel.url_unicode.contains(search_term_unicode)),
                     UserModel.name_unicode.contains(search_term_unicode),
                     UserModel.surname_unicode.contains(search_term_unicode),
                 )

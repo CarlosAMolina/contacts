@@ -52,6 +52,14 @@ github = [
     }
 ]
 
+instagram = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "handle": "unique_instagram_user_2",
+    }
+]
+
 users = [
     {
         "id": 1,

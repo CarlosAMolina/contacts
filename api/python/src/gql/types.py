@@ -42,6 +42,13 @@ class GitHubObject(UrlObject):
     pass
 
 
+class InstagramObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    handle = String()
+    user = Field(lambda: UserObject)
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -49,5 +56,6 @@ class UserObject(ObjectType):
     emails = List(lambda: EmailObject)
     facebook = List(lambda: FacebookObject)
     github = List(lambda: GitHubObject)
+    instagram = List(lambda: InstagramObject)
     name = String()
     surname = String()

@@ -99,6 +99,19 @@ class GitHubModel(Base):
         return _get_column_unicode(self.url)
 
 
+class InstagramModel(Base):
+    __tablename__ = "instagram"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    handle = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="instagram")
+
+    @hybrid_property
+    def handle_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.handle)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -114,6 +127,7 @@ class UserModel(Base):
     discord = relationship("DiscordModel", back_populates="user")
     facebook = relationship("FacebookModel", back_populates="user")
     github = relationship("GitHubModel", back_populates="user")
+    instagram = relationship("InstagramModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

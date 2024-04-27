@@ -323,6 +323,20 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
+    def test_resolve_search_user_if_search_term_is_phone_is_exact_phone(self):
+        gql = self._get_graphql_search_user_query("666666666")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_is_phone_is_partial_phone(self):
+        gql = self._get_graphql_search_user_query("66666")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
     def test_resolve_search_user_if_search_partial_integer(self):
         expected_result = [{"id": 2}]
         search_term = "11"

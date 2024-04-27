@@ -52,6 +52,7 @@ class Query(ObjectType):
                     models.UserModel.linkedin.any(models.LinkedinModel.url_unicode.contains(search_term_unicode)),
                     models.UserModel.nicknames.any(models.NicknameModel.nickname_unicode.contains(search_term_unicode)),
                     models.UserModel.notes.any(models.NoteModel.note_unicode.contains(search_term_unicode)),
+                    models.UserModel.phones.any(models.PhoneModel.phone.contains(search_term_unicode)),
                     models.UserModel.phones.any(models.PhoneModel.description_unicode.contains(search_term_unicode)),
                     models.UserModel.name_unicode.contains(search_term_unicode),
                     models.UserModel.surname_unicode.contains(search_term_unicode),

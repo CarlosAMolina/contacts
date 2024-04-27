@@ -274,6 +274,14 @@ class TestSchemaQuery(unittest.TestCase):
                 result = schema_result.data["searchUser"]
                 self.assertEqual(expected_result, result)
 
+    def test_resolve_search_user_if_search_term_in_discord_is_partial_discriminator(self):
+        expected_result = [{"id": 2}]
+        search_term = "11"
+        gql = self._get_graphql_search_user_query(search_term)
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        self.assertEqual(expected_result, result)
+
     def test_resolve_search_user_if_search_term_in_facebook(self):
         gql = self._get_graphql_search_user_query("unique_facebook")
         schema_result = schema.execute(gql)
@@ -335,14 +343,6 @@ class TestSchemaQuery(unittest.TestCase):
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]
-        self.assertEqual(expected_result, result)
-
-    def test_resolve_search_user_if_search_term_in_discord_is_partial_discriminator(self):
-        expected_result = [{"id": 2}]
-        search_term = "11"
-        gql = self._get_graphql_search_user_query(search_term)
-        schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
         self.assertEqual(expected_result, result)
 
     def _get_graphql_search_user_query(self, search_term: str) -> str:

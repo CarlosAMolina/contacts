@@ -1,5 +1,3 @@
-import typing as tp
-
 from graphene import Field
 from graphene import List
 from graphene import ObjectType
@@ -11,11 +9,6 @@ class AddressObject(ObjectType):
     id = Int()
     id_user = Int()
     address = String()
-    user = Field(lambda: UserObject)
-
-    @staticmethod
-    def resolve_user(root, info) -> tp.Optional[dict]:
-        return root.user
 
 
 class DiscordObject(ObjectType):
@@ -26,22 +19,12 @@ class DiscordObject(ObjectType):
     alias = String()
     global_name = String()
     legacy_user_name = String()
-    user = Field(lambda: UserObject)
-
-    @staticmethod
-    def resolve_user(root, info) -> tp.Optional[dict]:
-        return root.user
 
 
 class FacebookObject(ObjectType):
     id = Int()
     id_user = Int()
     url = String()
-    user = Field(lambda: UserObject)
-
-    @staticmethod
-    def resolve_user(root, info) -> tp.Optional[dict]:
-        return root.user
 
 
 class EmailObject(ObjectType):
@@ -49,10 +32,6 @@ class EmailObject(ObjectType):
     id_user = Int()
     email = String()
     user = Field(lambda: UserObject)
-
-    @staticmethod
-    def resolve_user(root, info) -> tp.Optional[dict]:
-        return root.user
 
 
 class UserObject(ObjectType):
@@ -63,7 +42,3 @@ class UserObject(ObjectType):
     addresses = List(lambda: AddressObject)
     discord = List(lambda: DiscordObject)
     facebook = List(lambda: FacebookObject)
-
-    @staticmethod
-    def resolve_emails(root, info) -> tp.List[dict]:
-        return root.emails

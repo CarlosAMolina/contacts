@@ -337,7 +337,7 @@ class TestSchemaQuery(unittest.TestCase):
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_partial_integer(self):
+    def test_resolve_search_user_if_search_term_in_discord_is_partial_discriminator(self):
         expected_result = [{"id": 2}]
         search_term = "11"
         gql = self._get_graphql_search_user_query(search_term)

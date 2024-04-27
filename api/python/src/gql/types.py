@@ -28,16 +28,18 @@ class EmailObject(ObjectType):
     user = Field(lambda: UserObject)
 
 
-class FacebookObject(ObjectType):
+class UrlObject(ObjectType):
     id = Int()
     id_user = Int()
     url = String()
 
 
-class GitHubObject(ObjectType):
-    id = Int()
-    id_user = Int()
-    url = String()
+class FacebookObject(UrlObject):
+    pass
+
+
+class GitHubObject(UrlObject):
+    pass
 
 
 class UserObject(ObjectType):

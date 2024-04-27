@@ -8,13 +8,7 @@ from graphene import String
 from sqlalchemy import or_
 
 from src.db.database import db_session
-from src.db.models import AddressModel
-from src.db.models import DiscordModel
-from src.db.models import FacebookModel
-from src.db.models import GitHubModel
-from src.db.models import InstagramModel
-from src.db.models import EmailModel
-from src.db.models import UserModel
+from src.db import models
 from src.gql.types import EmailObject
 from src.gql.types import UserObject
 from src.utils.unicode import get_string_unicode
@@ -26,35 +20,37 @@ class Query(ObjectType):
     search_user = List(UserObject, search_term=String())  # List field for search results
 
     @staticmethod
-    def resolve_email(root, info, email_id=Int()) -> tp.Optional[EmailModel]:
-        return db_session.query(EmailModel).filter(EmailModel.id == email_id).first()
+    def resolve_email(root, info, email_id=Int()) -> tp.Optional[models.EmailModel]:
+        return db_session.query(models.EmailModel).filter(models.EmailModel.id == email_id).first()
 
     @staticmethod
-    def resolve_user(root, info, user_id=Int()) -> tp.Optional[UserModel]:
-        return db_session.query(UserModel).filter(UserModel.id == user_id).first()
+    def resolve_user(root, info, user_id=Int()) -> tp.Optional[models.UserModel]:
+        return db_session.query(models.UserModel).filter(models.UserModel.id == user_id).first()
 
     @staticmethod
-    def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[UserModel]]:
+    def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[models.UserModel]]:
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
         search_term_unicode = get_string_unicode(search_term)
         return (
-            db_session.query(UserModel)
+            db_session.query(models.UserModel)
             .filter(
                 or_(
-                    UserModel.addresses.any(AddressModel.address_unicode.contains(search_term_unicode)),
-                    UserModel.discord.any(DiscordModel.alias_unicode.contains(search_term_unicode)),
-                    UserModel.discord.any(DiscordModel.discriminator.contains(search_term_unicode)),
-                    UserModel.discord.any(DiscordModel.global_name_unicode.contains(search_term_unicode)),
-                    UserModel.discord.any(DiscordModel.legacy_user_name_unicode.contains(search_term_unicode)),
-                    UserModel.discord.any(DiscordModel.user_name_unicode.contains(search_term_unicode)),
-                    UserModel.emails.any(EmailModel.email_unicode.contains(search_term_unicode)),
-                    UserModel.facebook.any(FacebookModel.url_unicode.contains(search_term_unicode)),
-                    UserModel.github.any(GitHubModel.url_unicode.contains(search_term_unicode)),
-                    UserModel.instagram.any(InstagramModel.handle_unicode.contains(search_term_unicode)),
-                    UserModel.name_unicode.contains(search_term_unicode),
-                    UserModel.surname_unicode.contains(search_term_unicode),
+                    models.UserModel.addresses.any(models.AddressModel.address_unicode.contains(search_term_unicode)),
+                    models.UserModel.discord.any(models.DiscordModel.alias_unicode.contains(search_term_unicode)),
+                    models.UserModel.discord.any(models.DiscordModel.discriminator.contains(search_term_unicode)),
+                    models.UserModel.discord.any(models.DiscordModel.global_name_unicode.contains(search_term_unicode)),
+                    models.UserModel.discord.any(
+                        models.DiscordModel.legacy_user_name_unicode.contains(search_term_unicode)
+                    ),
+                    models.UserModel.discord.any(models.DiscordModel.user_name_unicode.contains(search_term_unicode)),
+                    models.UserModel.emails.any(models.EmailModel.email_unicode.contains(search_term_unicode)),
+                    models.UserModel.facebook.any(models.FacebookModel.url_unicode.contains(search_term_unicode)),
+                    models.UserModel.github.any(models.GitHubModel.url_unicode.contains(search_term_unicode)),
+                    models.UserModel.instagram.any(models.InstagramModel.handle_unicode.contains(search_term_unicode)),
+                    models.UserModel.name_unicode.contains(search_term_unicode),
+                    models.UserModel.surname_unicode.contains(search_term_unicode),
                 )
             )
             .all()

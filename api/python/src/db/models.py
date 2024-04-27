@@ -206,6 +206,17 @@ class TwitterModel(Base):
         return _get_column_unicode(self.handle)
 
 
+class UserCategoryModel(Base):
+    __tablename__ = "users_categories"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    id_category = Column(Integer, ForeignKey("categories.id"), nullable=False)
+    user = relationship("UserModel", back_populates="categories")
+    # TODO use CategoryModel.category_unicode instead
+    category = relationship("CategoryModel", back_populates="user_category")
+
+
 class UrlModel(Base):
     __tablename__ = "urls"
 
@@ -217,17 +228,6 @@ class UrlModel(Base):
     @hybrid_property
     def url_unicode(self) -> Column[str]:
         return _get_column_unicode(self.url)
-
-
-class UserCategoryModel(Base):
-    __tablename__ = "users_categories"
-
-    id = Column(Integer, primary_key=True)
-    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
-    id_category = Column(Integer, ForeignKey("categories.id"), nullable=False)
-    user = relationship("UserModel", back_populates="categories")
-    # TODO use CategoryModel.category_unicode instead
-    category = relationship("CategoryModel", back_populates="user_category")
 
 
 # TODO note as nullable? change it in db too

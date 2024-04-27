@@ -38,8 +38,9 @@ class Query(ObjectType):
             .filter(
                 or_(
                     models.UserModel.addresses.any(models.AddressModel.address_unicode.contains(search_term_unicode)),
-                    # TODO use category_unicode
-                    models.UserModel.categories.any(models.CategoryModel.category.contains(search_term_unicode)),
+                    models.UserModel.categories.any(
+                        models.CategoryModel.category_unicode.contains(search_term_unicode)
+                    ),
                     models.UserModel.discord.any(models.DiscordModel.alias_unicode.contains(search_term_unicode)),
                     models.UserModel.discord.any(models.DiscordModel.discriminator.contains(search_term_unicode)),
                     models.UserModel.discord.any(models.DiscordModel.global_name_unicode.contains(search_term_unicode)),

@@ -213,7 +213,6 @@ class UserCategoryModel(Base):
     id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
     id_category = Column(Integer, ForeignKey("categories.id"), nullable=False)
     user = relationship("UserModel", back_populates="categories")
-    # TODO use CategoryModel.category_unicode instead
     category = relationship("CategoryModel", back_populates="user_category")
 
 

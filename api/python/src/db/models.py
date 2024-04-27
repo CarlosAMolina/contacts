@@ -125,6 +125,32 @@ class LinkedinModel(Base):
         return _get_column_unicode(self.url)
 
 
+class NicknameModel(Base):
+    __tablename__ = "nicknames"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    nickname = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="nicknames")
+
+    @hybrid_property
+    def nickname_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.nickname)
+
+
+class NoteModel(Base):
+    __tablename__ = "notes"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    note = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="notes")
+
+    @hybrid_property
+    def note_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.note)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -142,6 +168,8 @@ class UserModel(Base):
     github = relationship("GitHubModel", back_populates="user")
     linkedin = relationship("LinkedinModel", back_populates="user")
     instagram = relationship("InstagramModel", back_populates="user")
+    nicknames = relationship("NicknameModel", back_populates="user")
+    notes = relationship("NoteModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

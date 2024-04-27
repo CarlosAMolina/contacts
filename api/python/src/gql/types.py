@@ -52,6 +52,18 @@ class LinkedinObject(UrlObject):
     pass
 
 
+class NicknameObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    nickname = String()
+
+
+class NoteObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    note = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -61,5 +73,7 @@ class UserObject(ObjectType):
     github = List(lambda: GitHubObject)
     instagram = List(lambda: InstagramObject)
     linkedin = List(lambda: LinkedinObject)
+    nicknames = List(lambda: NicknameObject)
+    notes = List(lambda: NoteObject)
     name = String()
     surname = String()

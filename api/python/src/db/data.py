@@ -68,6 +68,22 @@ linkedin = [
     }
 ]
 
+nicknames = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "nickname": "unique_nickname_user_2",
+    }
+]
+
+notes = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "note": "Unique note user 2",
+    }
+]
+
 
 users = [
     {

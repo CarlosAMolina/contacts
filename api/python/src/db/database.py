@@ -31,6 +31,7 @@ def _create_db_tables(engine):
 def _insert_db_data(db_session):
     data_variable_and_model = {
         "addresses": models.AddressModel,
+        "categories": models.CategoryModel,
         "discord": models.DiscordModel,
         "emails": models.EmailModel,
         "facebook": models.FacebookModel,
@@ -43,6 +44,7 @@ def _insert_db_data(db_session):
         "telegram": models.TelegramModel,
         "twitter": models.TwitterModel,
         "urls": models.UrlModel,
+        "users_categories": models.UserCategoryModel,
         "users": models.UserModel,
         "wallapop": models.WallapopModel,
     }

@@ -92,6 +92,14 @@ class UrlObject(ObjectType):
     url = String()
 
 
+class UserCategoryObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    id_category = Int()
+    # TODO use category
+    # TODO category = String()
+
+
 class WallapopObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -102,6 +110,7 @@ class WallapopObject(ObjectType):
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
+    categories = List(lambda: UserCategoryObject)
     discord = List(lambda: DiscordObject)
     emails = List(lambda: EmailObject)
     facebook = List(lambda: FacebookObject)

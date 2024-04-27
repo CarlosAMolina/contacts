@@ -57,6 +57,11 @@ class TestSchemaQuery(unittest.TestCase):
               id
               address
             }
+            categories {
+              id
+              idUser
+              idCategory
+            }
             discord {
               id
               idUser
@@ -150,6 +155,18 @@ class TestSchemaQuery(unittest.TestCase):
                 {
                     "id": 2,
                     "address": "C/ Camión",
+                },
+            ],
+            "categories": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "idCategory": 1,
+                },
+                {
+                    "id": 2,
+                    "idUser": 2,
+                    "idCategory": 2,
                 },
             ],
             "discord": [
@@ -398,6 +415,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_phone_is_partial_phone(self):
         gql = self._get_graphql_search_user_query("66666")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_users_categories(self):
+        gql = self._get_graphql_search_user_query("work")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

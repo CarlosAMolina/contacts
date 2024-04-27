@@ -34,6 +34,18 @@ class AddressModel(Base):
         return _get_column_unicode(self.address)
 
 
+class CategoryModel(Base):
+    __tablename__ = "categories"
+
+    id = Column(Integer, primary_key=True)
+    category = Column(String, nullable=False)
+    user_category = relationship("UserCategoryModel", back_populates="category")
+
+    @hybrid_property
+    def category_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.category)
+
+
 class DiscordModel(Base):
     __tablename__ = "discord"
 
@@ -207,9 +219,18 @@ class UrlModel(Base):
         return _get_column_unicode(self.url)
 
 
-# TODO note as nullable? chante it in db too
+class UserCategoryModel(Base):
+    __tablename__ = "users_categories"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    id_category = Column(Integer, ForeignKey("categories.id"), nullable=False)
+    user = relationship("UserModel", back_populates="categories")
+    # TODO use CategoryModel.category_unicode instead
+    category = relationship("CategoryModel", back_populates="user_category")
 
 
+# TODO note as nullable? change it in db too
 class WallapopModel(Base):
     __tablename__ = "wallapop"
 
@@ -239,6 +260,7 @@ class UserModel(Base):
     name = Column(String, nullable=False)
     surname = Column(String)
     addresses = relationship("AddressModel", back_populates="user")
+    categories = relationship("UserCategoryModel", back_populates="user")
     emails = relationship("EmailModel", back_populates="user")
     discord = relationship("DiscordModel", back_populates="user")
     facebook = relationship("FacebookModel", back_populates="user")

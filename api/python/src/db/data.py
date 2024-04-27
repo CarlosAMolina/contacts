@@ -11,6 +11,17 @@ addresses = [
     },
 ]
 
+categories = [
+    {
+        "id": 1,
+        "category": "Work",
+    },
+    {
+        "id": 2,
+        "category": "Family",
+    },
+]
+
 discord = [
     {
         "id": 1,
@@ -138,5 +149,18 @@ users = [
         "id": 2,
         "name": "unique name value",
         "surname": "unique surname value",
+    },
+]
+
+users_categories = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "id_category": 1,
+    },
+    {
+        "id": 2,
+        "id_user": 2,
+        "id_category": 2,
     },
 ]

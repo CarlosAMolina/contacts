@@ -112,6 +112,11 @@ class TestSchemaQuery(unittest.TestCase):
               idUser
               handle
             }
+            urls {
+              id
+              idUser
+              url
+            }
           }
         }
         """
@@ -214,6 +219,13 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "handle": "unique_twitter_user_2",
+                }
+            ],
+            "urls": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "url": "https://unique_url_user_2.com",
                 }
             ],
         }
@@ -386,6 +398,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_twitter(self):
         gql = self._get_graphql_search_user_query("unique_twitter")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_url(self):
+        gql = self._get_graphql_search_user_query("unique_url")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

@@ -86,6 +86,12 @@ class TwitterObject(ObjectType):
     handle = String()
 
 
+class UrlObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    url = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -100,5 +106,6 @@ class UserObject(ObjectType):
     phones = List(lambda: PhoneObject)
     telegram = List(lambda: TelegramObject)
     twitter = List(lambda: TwitterObject)
+    urls = List(lambda: UrlObject)
     name = String()
     surname = String()

@@ -230,25 +230,6 @@ class UrlModel(Base):
         return _get_column_unicode(self.url)
 
 
-# TODO note as nullable? change it in db too
-class WallapopModel(Base):
-    __tablename__ = "wallapop"
-
-    id = Column(Integer, primary_key=True)
-    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
-    url = Column(String, nullable=False)
-    note = Column(String, nullable=False)
-    user = relationship("UserModel", back_populates="wallapop")
-
-    @hybrid_property
-    def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
-
-    @hybrid_property
-    def note_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.note)
-
-
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -282,6 +263,25 @@ class UserModel(Base):
     @hybrid_property
     def surname_unicode(self) -> Column[str]:
         return _get_column_unicode(self.surname)
+
+
+# TODO note as nullable? change it in db too
+class WallapopModel(Base):
+    __tablename__ = "wallapop"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    url = Column(String, nullable=False)
+    note = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="wallapop")
+
+    @hybrid_property
+    def url_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.url)
+
+    @hybrid_property
+    def note_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.note)
 
 
 def _get_column_unicode(column: Column[str]) -> Column[str]:

@@ -21,12 +21,6 @@ class DiscordObject(ObjectType):
     legacy_user_name = String()
 
 
-class FacebookObject(ObjectType):
-    id = Int()
-    id_user = Int()
-    url = String()
-
-
 class EmailObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -34,11 +28,17 @@ class EmailObject(ObjectType):
     user = Field(lambda: UserObject)
 
 
+class FacebookObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    url = String()
+
+
 class UserObject(ObjectType):
     id = Int()
-    name = String()
-    surname = String()
-    emails = List(lambda: EmailObject)
     addresses = List(lambda: AddressObject)
     discord = List(lambda: DiscordObject)
+    emails = List(lambda: EmailObject)
     facebook = List(lambda: FacebookObject)
+    name = String()
+    surname = String()

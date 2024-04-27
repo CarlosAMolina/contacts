@@ -179,6 +179,19 @@ class TelegramModel(Base):
         return _get_column_unicode(self.user_name)
 
 
+class TwitterModel(Base):
+    __tablename__ = "twitter"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    handle = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="twitter")
+
+    @hybrid_property
+    def handle_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.handle)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -200,6 +213,7 @@ class UserModel(Base):
     notes = relationship("NoteModel", back_populates="user")
     phones = relationship("PhoneModel", back_populates="user")
     telegram = relationship("TelegramModel", back_populates="user")
+    twitter = relationship("TwitterModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

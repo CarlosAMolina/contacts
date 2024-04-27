@@ -80,6 +80,12 @@ class TelegramObject(ObjectType):
     user_name = String()
 
 
+class TwitterObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    handle = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -93,5 +99,6 @@ class UserObject(ObjectType):
     notes = List(lambda: NoteObject)
     phones = List(lambda: PhoneObject)
     telegram = List(lambda: TelegramObject)
+    twitter = List(lambda: TwitterObject)
     name = String()
     surname = String()

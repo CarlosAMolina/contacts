@@ -41,6 +41,7 @@ def _insert_db_data(db_session):
         "notes": models.NoteModel,
         "phones": models.PhoneModel,
         "telegram": models.TelegramModel,
+        "twitter": models.TwitterModel,
         "users": models.UserModel,
     }
     rows_to_insert = []

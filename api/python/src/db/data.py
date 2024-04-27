@@ -102,6 +102,15 @@ telegram = [
     }
 ]
 
+twitter = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "handle": "unique_twitter_user_2",
+    }
+]
+
+
 users = [
     {
         "id": 1,

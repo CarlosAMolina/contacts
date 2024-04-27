@@ -55,6 +55,7 @@ class Query(ObjectType):
                     models.UserModel.phones.any(models.PhoneModel.phone.contains(search_term_unicode)),
                     models.UserModel.phones.any(models.PhoneModel.description_unicode.contains(search_term_unicode)),
                     models.UserModel.telegram.any(models.TelegramModel.user_name_unicode.contains(search_term_unicode)),
+                    models.UserModel.twitter.any(models.TwitterModel.handle_unicode.contains(search_term_unicode)),
                     models.UserModel.name_unicode.contains(search_term_unicode),
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )

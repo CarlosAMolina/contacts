@@ -14,6 +14,11 @@ class AddressObject(ObjectType):
     address = String()
 
 
+class CategoryObject(ObjectType):
+    id = Int()
+    category = String()
+
+
 class DiscordObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -96,8 +101,7 @@ class UserCategoryObject(ObjectType):
     id = Int()
     id_user = Int()
     id_category = Int()
-    # TODO use category
-    # TODO category = String()
+    category = Field(lambda: CategoryObject)
 
 
 class WallapopObject(ObjectType):

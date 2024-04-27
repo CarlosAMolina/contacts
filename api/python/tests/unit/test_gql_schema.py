@@ -61,6 +61,10 @@ class TestSchemaQuery(unittest.TestCase):
               id
               idUser
               idCategory
+              category {
+                id
+                category
+              }
             }
             discord {
               id
@@ -162,11 +166,19 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "idCategory": 1,
+                    "category": {
+                        "id": 1,
+                        "category": "Family",
+                    },
                 },
                 {
                     "id": 2,
                     "idUser": 2,
                     "idCategory": 2,
+                    "category": {
+                        "id": 2,
+                        "category": "Work",
+                    },
                 },
             ],
             "discord": [

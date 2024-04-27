@@ -14,11 +14,11 @@ addresses = [
 categories = [
     {
         "id": 1,
-        "category": "Work",
+        "category": "Family",
     },
     {
         "id": 2,
-        "category": "Family",
+        "category": "Work",
     },
 ]
 

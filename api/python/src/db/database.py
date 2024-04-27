@@ -32,9 +32,9 @@ def _insert_db_data(db_session):
     data_variable_and_model = {
         "addresses": models.AddressModel,
         "discord": models.DiscordModel,
-        "users": models.UserModel,
         "emails": models.EmailModel,
         "facebook": models.FacebookModel,
+        "users": models.UserModel,
     }
     rows_to_insert = []
     for data_variable, model in data_variable_and_model.items():

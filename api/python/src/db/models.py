@@ -3,8 +3,6 @@ TODO refactor ..._unicode, for example using
 https://docs.sqlalchemy.org/en/20/orm/extensions/hybrid.html#reusing-hybrid-properties-across-subclasses
 """
 
-# TODO add users_categories
-
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import func

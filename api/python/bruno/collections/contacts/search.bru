@@ -1,0 +1,74 @@
+meta {
+  name: search
+  type: graphql
+  seq: 2
+}
+
+post {
+  url: http://127.0.0.1:5000/graphql?
+  body: graphql
+  auth: none
+}
+
+body:graphql {
+  {
+    searchUser(searchTerm: "o") {
+      id
+      name
+      surname
+      emails {
+        email
+      }
+      addresses {
+        address
+      }
+      categories {
+        category {
+          category
+        }
+      }
+      discord {
+        userName
+        discriminator
+        alias
+        globalName
+        legacyUserName
+      }
+      facebook {
+        url
+      }
+      github {
+        url
+      }
+      instagram {
+        handle
+      }
+      linkedin {
+        url
+      }
+      nicknames {
+        nickname
+      }
+      notes {
+        note
+      }
+      phones {
+        phone
+        description
+      }
+      telegram {
+        userName
+      }
+      twitter {
+        handle
+      }
+      urls {
+        url
+      }
+      wallapop {
+        url
+        note
+      }
+    }
+  }
+}

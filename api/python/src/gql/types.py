@@ -46,7 +46,10 @@ class InstagramObject(ObjectType):
     id = Int()
     id_user = Int()
     handle = String()
-    user = Field(lambda: UserObject)
+
+
+class LinkedinObject(UrlObject):
+    pass
 
 
 class UserObject(ObjectType):
@@ -57,5 +60,6 @@ class UserObject(ObjectType):
     facebook = List(lambda: FacebookObject)
     github = List(lambda: GitHubObject)
     instagram = List(lambda: InstagramObject)
+    linkedin = List(lambda: LinkedinObject)
     name = String()
     surname = String()

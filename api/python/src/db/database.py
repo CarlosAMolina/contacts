@@ -36,6 +36,7 @@ def _insert_db_data(db_session):
         "facebook": models.FacebookModel,
         "github": models.GitHubModel,
         "instagram": models.InstagramModel,
+        "linkedin": models.LinkedinModel,
         "users": models.UserModel,
     }
     rows_to_insert = []

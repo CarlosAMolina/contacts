@@ -49,6 +49,7 @@ class Query(ObjectType):
                     models.UserModel.facebook.any(models.FacebookModel.url_unicode.contains(search_term_unicode)),
                     models.UserModel.github.any(models.GitHubModel.url_unicode.contains(search_term_unicode)),
                     models.UserModel.instagram.any(models.InstagramModel.handle_unicode.contains(search_term_unicode)),
+                    models.UserModel.linkedin.any(models.LinkedinModel.url_unicode.contains(search_term_unicode)),
                     models.UserModel.name_unicode.contains(search_term_unicode),
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )

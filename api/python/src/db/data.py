@@ -60,6 +60,15 @@ instagram = [
     }
 ]
 
+linkedin = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "url": "https://www.linkedin.com/in/unique_linkedin_user_2",
+    }
+]
+
+
 users = [
     {
         "id": 1,

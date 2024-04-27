@@ -81,6 +81,11 @@ class TestSchemaQuery(unittest.TestCase):
               idUser
               handle
             }
+            linkedin {
+              id
+              idUser
+              url
+            }
           }
         }
         """
@@ -140,6 +145,13 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "handle": "unique_instagram_user_2",
+                }
+            ],
+            "linkedin": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "url": "https://www.linkedin.com/in/unique_linkedin_user_2",
                 }
             ],
         }
@@ -240,6 +252,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_instagram(self):
         gql = self._get_graphql_search_user_query("unique_instagram")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_linkedin(self):
+        gql = self._get_graphql_search_user_query("unique_linkedin")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

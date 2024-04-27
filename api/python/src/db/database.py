@@ -40,6 +40,7 @@ def _insert_db_data(db_session):
         "nicknames": models.NicknameModel,
         "notes": models.NoteModel,
         "phones": models.PhoneModel,
+        "telegram": models.TelegramModel,
         "users": models.UserModel,
     }
     rows_to_insert = []

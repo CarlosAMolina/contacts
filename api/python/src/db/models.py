@@ -166,6 +166,19 @@ class PhoneModel(Base):
         return _get_column_unicode(self.description)
 
 
+class TelegramModel(Base):
+    __tablename__ = "telegram"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_name = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="telegram")
+
+    @hybrid_property
+    def user_name_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.user_name)
+
+
 class UserModel(Base):
     """
     relationship, back_populates: allow query other class values.
@@ -186,6 +199,7 @@ class UserModel(Base):
     nicknames = relationship("NicknameModel", back_populates="user")
     notes = relationship("NoteModel", back_populates="user")
     phones = relationship("PhoneModel", back_populates="user")
+    telegram = relationship("TelegramModel", back_populates="user")
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:

@@ -94,6 +94,13 @@ phones = [
     }
 ]
 
+telegram = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "user_name": "unique_telegram_user_name_user_2",
+    }
+]
 
 users = [
     {

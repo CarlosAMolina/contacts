@@ -74,6 +74,12 @@ class PhoneObject(ObjectType):
     description = String()
 
 
+class TelegramObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    user_name = String()
+
+
 class UserObject(ObjectType):
     id = Int()
     addresses = List(lambda: AddressObject)
@@ -84,7 +90,8 @@ class UserObject(ObjectType):
     instagram = List(lambda: InstagramObject)
     linkedin = List(lambda: LinkedinObject)
     nicknames = List(lambda: NicknameObject)
-    phones = List(lambda: PhoneObject)
     notes = List(lambda: NoteObject)
+    phones = List(lambda: PhoneObject)
+    telegram = List(lambda: TelegramObject)
     name = String()
     surname = String()

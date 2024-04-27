@@ -102,6 +102,11 @@ class TestSchemaQuery(unittest.TestCase):
               phone
               description
             }
+            telegram {
+              id
+              idUser
+              userName
+            }
           }
         }
         """
@@ -190,6 +195,13 @@ class TestSchemaQuery(unittest.TestCase):
                     "idUser": 2,
                     "phone": 666666666,
                     "description": "Unique phone description user 2",
+                }
+            ],
+            "telegram": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "userName": "unique_telegram_user_name_user_2",
                 }
             ],
         }
@@ -348,6 +360,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_phone_is_partial_phone(self):
         gql = self._get_graphql_search_user_query("66666")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_telegram(self):
+        gql = self._get_graphql_search_user_query("unique_telegram")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

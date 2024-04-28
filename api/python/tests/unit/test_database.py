@@ -1,3 +1,4 @@
+import os
 import unittest
 from pathlib import Path
 
@@ -8,4 +9,5 @@ from src.db import database
 class TestFunction_init_db(unittest.TestCase):
     def test_database_is_created(self):
         database.prepare_db()
-        self.assertTrue(Path(database._DB_PATH_NAME).is_file())
+        db_path_name = os.environ["DB_PATH_NAME"]
+        self.assertTrue(Path(db_path_name).is_file())

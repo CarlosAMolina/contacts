@@ -9,6 +9,7 @@ from src.db import models
 
 _DB_PATH_NAME = "/tmp/contacts.sqlite3"
 _DB_URL = f"sqlite:///{_DB_PATH_NAME}"
+os.environ["DB_PATH_NAME"] = _DB_PATH_NAME
 os.environ["DB_URL"] = _DB_URL
 _DB_URL = os.getenv("DB_URL")
 assert _DB_URL is not None, "DB_URL environment variable needed."

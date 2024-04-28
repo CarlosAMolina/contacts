@@ -14,6 +14,31 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind
 # TODO close the session
 
 
+class UnitOfWork:
+    """
+    https://raw.githubusercontent.com/abunuwas/microservice-apis/master/ch14/orders/repository/unit_of_work.py
+    """
+
+    def __init__(self):
+        self.session_maker = sessionmaker(bind=sa.create_engine(_DB_URL))
+
+    def __enter__(self):
+        self.session = self.session_maker()
+        return self
+
+    def __exit__(self, exc_type, exc_val, traceback):
+        if exc_type is not None:
+            self.rollback()
+            self.session.close()
+        self.session.close()
+
+    def commit(self):
+        self.session.commit()
+
+    def rollback(self):
+        self.session.rollback()
+
+
 def prepare_db():
     _drop_db_tables(_engine)
     _create_db_tables(_engine)

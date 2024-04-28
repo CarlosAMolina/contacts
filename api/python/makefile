@@ -1,5 +1,5 @@
 run:
-	python main.py
+	export DB_URL=sqlite:////tmp/contacts.sqlite3 && python main.py
 
 test:
 	python -m unittest discover -s tests

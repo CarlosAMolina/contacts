@@ -14,7 +14,6 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind
 
 
 def prepare_db():
-    print(f"Preparing DB: {_db_path_name}")
     _drop_db_tables(_engine)
     _create_db_tables(_engine)
     _insert_db_data(db_session)

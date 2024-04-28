@@ -1,6 +1,7 @@
+import os
+
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
-import os
 import sqlalchemy as sa
 
 from src.db import data
@@ -12,7 +13,6 @@ assert _DB_URL is not None, "DB_URL environment variable needed."
 _engine = sa.create_engine(_DB_URL)
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
 db_session = scoped_session(_Session)
-# TODO close the session
 
 
 def prepare_db():

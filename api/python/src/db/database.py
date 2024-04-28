@@ -10,7 +10,8 @@ from src.db import models
 _DB_URL = os.getenv("DB_URL")
 assert _DB_URL is not None, "DB_URL environment variable needed."
 _engine = sa.create_engine(_DB_URL)
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
+_Session = sessionmaker(autocommit=False, autoflush=False, bind=_engine)
+db_session = scoped_session(_Session)
 # TODO close the session
 
 

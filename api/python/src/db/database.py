@@ -7,8 +7,8 @@ from src.db import models
 
 
 _db_path_name = "/tmp/contacts.sqlite3"
-_db_url = f"sqlite:///{_db_path_name}"
-_engine = sa.create_engine(_db_url)
+_DB_URL = f"sqlite:///{_db_path_name}"
+_engine = sa.create_engine(_DB_URL)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=_engine))
 # TODO close the session
 

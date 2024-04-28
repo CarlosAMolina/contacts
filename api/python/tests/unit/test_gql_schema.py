@@ -5,6 +5,8 @@ from src.gql.schema import schema
 
 
 class TestSchemaQuery(unittest.TestCase):
+    maxDiff = None
+
     def test_resolve_email_all_fields_returns_expected_result(self):
         gql = """
         {

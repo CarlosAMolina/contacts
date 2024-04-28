@@ -14,6 +14,7 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind
 # TODO close the session
 
 
+# TODO use or remove
 class UnitOfWork:
     """
     https://raw.githubusercontent.com/abunuwas/microservice-apis/master/ch14/orders/repository/unit_of_work.py

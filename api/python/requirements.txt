@@ -1,5 +1,5 @@
 Flask==3.0.3
 graphql-server[flask]==3.0.0b7
 graphene==3.3
-psycopg==3.1.18
+psycopg[binary,pool]==3.1.18
 SQLAlchemy==2.0.29

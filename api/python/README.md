@@ -4,6 +4,14 @@ API created with Python code.
 
 ## Run
 
+### Using sqlite db
+
+First create the db file:
+
 ```bash
-make run
+make test
+```
+
+```bash
+make run-sqlite
 ```

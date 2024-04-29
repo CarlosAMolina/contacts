@@ -1,4 +1,4 @@
-run:
+run-sqlite:
 	export DB_URL=sqlite:////tmp/contacts.sqlite3 && python main.py
 
 test:

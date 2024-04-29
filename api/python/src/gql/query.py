@@ -5,6 +5,7 @@ from graphene import Int
 from graphene import List
 from graphene import ObjectType
 from graphene import String
+from sqlalchemy import and_
 from sqlalchemy import or_
 
 from src.db.database import db_session
@@ -39,7 +40,10 @@ class Query(ObjectType):
                 or_(
                     models.UserModel.addresses.any(models.AddressModel.address_unicode.contains(search_term_unicode)),
                     models.UserModel.categories.any(
-                        models.CategoryModel.category_unicode.contains(search_term_unicode)
+                        and_(
+                            models.CategoryModel.category_unicode.contains(search_term_unicode),
+                            models.CategoryModel.id == models.UserCategoryModel.id_category,
+                        ),
                     ),
                     models.UserModel.discord.any(models.DiscordModel.alias_unicode.contains(search_term_unicode)),
                     models.UserModel.discord.any(models.DiscordModel.discriminator.contains(search_term_unicode)),

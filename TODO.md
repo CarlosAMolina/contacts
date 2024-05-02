@@ -25,3 +25,6 @@
 [x] - Custom error messages.
 [x] Database
 [x] - Change user table to use serial column
+
+## API python
+[ ] Models varchar must specify number of characters, because alembic is creating the columns as `varchar` instead ov `varchar(x)`

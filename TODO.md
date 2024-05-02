@@ -1,6 +1,11 @@
 # TODO
 
-## To implement
+## API python
+
+[ ] Models varchar must specify number of characters, because alembic is creating the columns as `varchar` instead ov `varchar(x)`
+[ ] `id` column of all tables must be autoincrement?
+
+## Rust. To implement
 
 [x] Logs
 [x] - Save API docker logs in volume
@@ -14,7 +19,7 @@
 [ ]   - ArgonLibraryError
 [ ]   - CannotDecryptToken
 [x] CRUD tables
-[ ] - Modify tables 
+[ ] - Modify tables
 [ ] - Error if row not found
 [x] - Search: find accentuated characters if query no accentuated and vice versa.
 [x] Drop
@@ -26,5 +31,3 @@
 [x] Database
 [x] - Change user table to use serial column
 
-## API python
-[ ] Models varchar must specify number of characters, because alembic is creating the columns as `varchar` instead ov `varchar(x)`

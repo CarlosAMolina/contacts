@@ -1,6 +1,9 @@
 alembic-upgrade-sqlite:
 	export DB_URL=sqlite:////tmp/contacts.sqlite3 && alembic upgrade heads
 
+docker-build:
+	docker build -t contacts:1.0 .
+
 run-postgres:
 	export DB_URL=postgresql+psycopg://postgres:pw@localhost:5432/contacts && python main.py
 

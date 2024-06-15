@@ -9,6 +9,7 @@ docker-run:
 		--env IS_DOCKER=true --env DB_URL=sqlite:///contacts.sqlite3 \
 		-v /tmp/contacts.sqlite3:/contacts/contacts.sqlite3 \
 		-p 5000:5000 \
+		-d \
 		-it contacts:1.0
 
 run-postgres:

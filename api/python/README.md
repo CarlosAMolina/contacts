@@ -60,4 +60,4 @@ make alembic-upgrade-sqlite
 
 ## Resources
 
-Alembic tutorial, [chapter 7 of this book](https://www.manning.com/books/microservice-apis).
+Alembic tutorial, [chapter 7 of this book](https://www.manning.com/books/microservice-apis), [book's code](https://github.com/abunuwas/microservice-apis/tree/master).

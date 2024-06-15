@@ -43,16 +43,8 @@ alembic init migrations
 
 Files to modify:
 
-```bash
-# alembic.ini
-sqlalchemy.url = sqlite:////tmp/contacts.sqlite3
-```
-
-```bash
-# migrations/env.py
-from src.db.models import Base
-target_metadata = Base.metadata
-```
+- alembic.ini
+- migrations/env.py
 
 Create alembic version with the current model changes:
 

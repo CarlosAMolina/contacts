@@ -63,7 +63,7 @@ alembic revision --autogenerate -m "Initial migration"
 Apply modifications to the database:
 
 ```bash
-alembic upgrade heads
+make alembic-upgrade-sqlite
 ```
 
 ## Resources

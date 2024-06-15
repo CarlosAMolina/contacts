@@ -31,4 +31,5 @@ def shutdown_session(exception=None):
 
 if __name__ == "__main__":
     print("GraphiQL URL: http://127.0.0.1:5000/graphql")
-    app.run()
+    # https://stackoverflow.com/questions/30323224/deploying-a-minimal-flask-app-in-docker-server-connection-issues
+    app.run(host="0.0.0.0")

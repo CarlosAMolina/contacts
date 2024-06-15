@@ -31,7 +31,7 @@ You can make queries:
 - Using Bruno. See [this folder](bruno/).
 - Using the web browser, open [this url](http://127.0.0.1:5000/graphql).
 
-You have examples queries in the [bruno folder](bruno/) and int the [test file](tests/unit/test_gql_schema.py).
+You have examples queries in the [Bruno folder](bruno/) and in the [test file](tests/unit/test_gql_schema.py).
 
 ## Alembic
 

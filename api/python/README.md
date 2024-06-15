@@ -33,6 +33,8 @@ You can make queries:
 
 You have examples queries in the [Bruno folder](bruno/) and in the [test file](tests/unit/test_gql_schema.py).
 
+You can run the app using docker, see the [makefile](makefile) commands.
+
 ## Alembic
 
 Create initial files:

@@ -6,15 +6,29 @@ API created with Python code.
 
 ### Using sqlite db
 
-First create the db file:
+Do you have the `contacts.sqlite3` file?
 
-```bash
-make test
-```
+- Yes. Save it at `/tmp/` and run:
 
-```bash
-make run-sqlite
-```
+    ```bash
+    make run-sqlite
+    ```
+
+- No. Create the `contacts.test.sqlite3` by running:
+
+    ```bash
+    make test
+    ```
+
+    And run the server with:
+
+    ```bash
+    make run-sqlite-test-db
+    ```
+
+To make queries using the web browser, open [this url](http://127.0.0.1:5000/graphql).
+
+You have examples queries in the [test file](tests/unit/test_gql_schema.py).
 
 ## Alembic
 

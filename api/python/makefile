@@ -4,6 +4,9 @@ run:
 run-sqlite:
 	export DB_URL=sqlite:////tmp/contacts.sqlite3 && python main.py
 
+run-sqlite-test-db:
+	export DB_URL=sqlite:////tmp/contacts.test.sqlite3 && python main.py
+
 test:
 	python -m unittest discover -s tests
 

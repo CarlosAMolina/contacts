@@ -26,9 +26,12 @@ Do you have the `contacts.sqlite3` file?
     make run-sqlite-test-db
     ```
 
-To make queries using the web browser, open [this url](http://127.0.0.1:5000/graphql).
+You can make queries:
 
-You have examples queries in the [test file](tests/unit/test_gql_schema.py).
+- Using Bruno. See [this folder](bruno/).
+- Using the web browser, open [this url](http://127.0.0.1:5000/graphql).
+
+You have examples queries in the [bruno folder](bruno/) and int the [test file](tests/unit/test_gql_schema.py).
 
 ## Alembic
 

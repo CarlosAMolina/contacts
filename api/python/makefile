@@ -1,4 +1,4 @@
-run:
+run-postgres:
 	export DB_URL=postgresql+psycopg://postgres:pw@localhost:5432/contacts && python main.py
 
 run-sqlite:

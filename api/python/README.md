@@ -29,11 +29,11 @@ Do you have the `contacts.sqlite3` file?
 You can make queries:
 
 - Using Bruno. See [this folder](bruno/).
-- Using the web browser, open [this url](http://127.0.0.1:5000/graphql).
+- Using the web browser, open the URL <http://127.0.0.1:5000/graphql>.
 
 You have examples queries in the [Bruno folder](bruno/) and in the [test file](tests/unit/test_gql_schema.py).
 
-You can run the app using docker, see the [makefile](makefile) commands.
+You can run the app using docker, see the [makefile](makefile) commands. The URL is still the specified above.
 
 ## Alembic
 

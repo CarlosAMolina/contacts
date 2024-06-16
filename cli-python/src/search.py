@@ -7,13 +7,13 @@ from src.constants import GRAPHQL_URL
 from src.constants import BODY_TERM_SEARCH
 
 
-class Search(ABC):
+class _Search(ABC):
     @abstractmethod
     def run(*args):
         pass
 
 
-class IdSearch(Search):
+class IdSearch(_Search):
     def run(self):
         print("Start displaying ID")
         print("What ID do you want to see?")
@@ -22,7 +22,7 @@ class IdSearch(Search):
         # TODO
 
 
-class TermSearch(Search):
+class TermSearch(_Search):
     def run(self, search_term: str):
         print("Searching term", search_term)
         body = self._get_body(search_term)

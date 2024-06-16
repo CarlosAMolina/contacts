@@ -39,10 +39,10 @@ class TermSearch(_Search):
 
     def _get_dict_response(self, body: str) -> dict:
         response = requests.post(url=GRAPHQL_URL, json={"query": body})
-        if response.status_code == 200:
-            return response.json()
-        else:
+        if response.status_code != 200 or "errors" in response.json().keys():
             raise ValueError(f"GraphQL response: {response.content}")
+        else:
+            return response.json()
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         users = response_dict["data"]["searchUser"]

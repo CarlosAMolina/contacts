@@ -13,9 +13,8 @@ docker-run:
 		--env FLASK_HOST=172.17.0.2 \
 		-v /tmp/contacts.sqlite3:/contacts/contacts.sqlite3 \
 		-p 5000:5000 \
-		-d \
+		-dit \
 		--rm \
-		-it \
 		--name contacts-api \
 		contacts:1.0
 

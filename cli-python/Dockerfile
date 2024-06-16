@@ -1,10 +1,9 @@
 FROM python:3.12-slim
 
-RUN mkdir /contacts
+RUN useradd --create-home --shell /bin/bash app_user
 
-WORKDIR /contacts
+WORKDIR /home/app_user
 
-COPY main.py /contacts/
+COPY main.py /home/app_user/
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
-CMD ["python", "main.py"]
+CMD ["bash"]

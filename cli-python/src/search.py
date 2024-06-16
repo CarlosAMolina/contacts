@@ -3,8 +3,12 @@ from abc import ABC
 
 import requests
 
-from src.constants import GRAPHQL_URL
-from src.constants import BODY_TERM_SEARCH
+try:
+    from src.constants import GRAPHQL_URL
+    from src.constants import BODY_TERM_SEARCH
+except ModuleNotFoundError:
+    from constants import GRAPHQL_URL
+    from constants import BODY_TERM_SEARCH
 
 
 class _Search(ABC):
@@ -47,4 +51,5 @@ class TermSearch(_Search):
 
 if __name__ == "__main__":
     search_term = "que"
-    body = TermSearch()._get_body(search_term)
+    body = TermSearch().run(search_term)
+    print(body)

@@ -48,13 +48,12 @@ class TermSearch(_Search):
         users = response_dict["data"]["searchUser"]
         result = ""
         for user in users:
-            phones = user["phones"]
-            if len(phones) == 0:
+            if len(user["phones"]) == 0:
                 result += self._get_str_summary_without_phone_from_user(user)
             else:
                 phones_array_str = [
                     "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
-                    for phone in phones
+                    for phone in user["phones"]
                 ]
                 for phone_str in phones_array_str:
                     summary_phone = "{phone_str}  {summary_no_phone}".format(

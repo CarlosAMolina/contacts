@@ -26,7 +26,7 @@ def get_what_to_run_parsing_args():
 
 
 def run_iteractive():
-    print("Starting iteractive mode")
+    print("Starting iteractive mode")  # TODO rm
     print("Welcome to the contacts CLI!")
     show_help()
     while True:

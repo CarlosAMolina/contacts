@@ -46,8 +46,14 @@ body = """
   }
 }
 """
-body = body.replace("{SEARCH_TERM}", "que")
 
+
+def get_body(search_term: str) -> str:
+    return body.replace("{SEARCH_TERM}", search_term)
+
+
+search_term = "que"
+body = get_body(search_term)
 response = requests.post(url=GRAPHQL_URL, json={"query": body})
 print("response status code: ", response.status_code)
 if response.status_code == 200:

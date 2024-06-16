@@ -26,5 +26,5 @@ class TestFunctions(unittest.TestCase):
   }
 }
 """
-        result = m_search.body
+        result = m_search.get_body("que")
         self.assertEqual(expected_result, result)

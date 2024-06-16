@@ -6,15 +6,6 @@ class TerminationId:
     SUCCESSFUL = 0
 
 
-def run_iteractive():
-    print("Starting iteractive mode")
-    print("Welcome to the contacts CLI!")
-    while True:
-        print("What do you want to search?")
-        search_term = input()
-        print("Searching term", search_term)
-
-
 def get_what_to_run_parsing_args():
     if (args_count := len(sys.argv)) == 1:
         run_iteractive()
@@ -32,6 +23,15 @@ def get_what_to_run_parsing_args():
     else:
         print("Unmanaged situation")
         raise SystemExit(TerminationId.ABNORMAL)
+
+
+def run_iteractive():
+    print("Starting iteractive mode")
+    print("Welcome to the contacts CLI!")
+    while True:
+        print("What do you want to search?")
+        search_term = input()
+        print("Searching term", search_term)
 
 
 if __name__ == "__main__":

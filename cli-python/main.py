@@ -7,7 +7,7 @@ class TerminationId:
     SUCCESSFUL = 0
 
 
-def run_iteractive():
+def run_interactive():
     print("Welcome to the contacts CLI!")
     show_help()
     while True:
@@ -48,4 +48,4 @@ class TermSearch(Search):
 
 
 if __name__ == "__main__":
-    run_iteractive()
+    run_interactive()

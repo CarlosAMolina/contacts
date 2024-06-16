@@ -23,7 +23,7 @@ class TermSearch(Search):
         print("Searching term", user_input)
 
 
-URL = "http://127.0.0.1:5000/graphql"
+GRAPHQL_URL = "http://127.0.0.1:5000/graphql"
 
 body = """
 {
@@ -47,7 +47,7 @@ body = """
 }
 """
 
-response = requests.post(url=URL, json={"query": body})
+response = requests.post(url=GRAPHQL_URL, json={"query": body})
 print("response status code: ", response.status_code)
 if response.status_code == 200:
     print("response : ", response.json())

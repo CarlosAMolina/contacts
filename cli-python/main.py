@@ -1,3 +1,7 @@
+from abc import abstractmethod
+from abc import ABC
+
+
 class TerminationId:
     ABNORMAL = 1
     SUCCESSFUL = 0
@@ -17,7 +21,7 @@ def run_iteractive():
             user_input = input()
             print("Retrieving ID", user_input)
         else:
-            print("Searching term", user_input)
+            TermSearch().run(user_input)
 
 
 def show_help():
@@ -25,6 +29,17 @@ def show_help():
     print("- exit | q: exit the CLI")
     print("- -i: show a contact by ID")
     print("- Anything else you write, it will be the searched term")
+
+
+class Search(ABC):
+    @abstractmethod
+    def run(*args):
+        pass
+
+
+class TermSearch(Search):
+    def run(self, user_input: str):
+        print("Searching term", user_input)
 
 
 if __name__ == "__main__":

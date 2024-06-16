@@ -7,3 +7,6 @@ docker-run:
 		-dit \
 		--name contacts-cli \
 		contacts-cli:1.0
+
+docker-connect:
+	docker exec -it contacts-cli python main.py

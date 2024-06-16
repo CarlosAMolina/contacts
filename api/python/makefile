@@ -4,9 +4,13 @@ alembic-upgrade-sqlite:
 docker-build:
 	docker build -t contacts:1.0 .
 
+# FLASK_HOST: to detect IP used by the Docker container, when the container is running,
+# execute `docker network inspect bridge | grep IPv4Address`
+# https://stackoverflow.com/a/58138250
 docker-run:
 	docker run \
-		--env IS_DOCKER=true --env DB_URL=sqlite:///contacts.sqlite3 \
+		--env DB_URL=sqlite:///contacts.sqlite3 \
+		--env FLASK_HOST=172.17.0.2 \
 		-v /tmp/contacts.sqlite3:/contacts/contacts.sqlite3 \
 		-p 5000:5000 \
 		-d \

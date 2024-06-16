@@ -49,16 +49,18 @@ class TermSearch(_Search):
         users = response_dict["data"]["searchUser"]
         result = ""
         for user in users:
+            nicknames_str = ",".join(nickname["nickname"] for nickname in user["nicknames"])
             phones = user["phones"]
             phones_array_str = [
                 "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
                 for phone in phones
             ]
             for phone_str in phones_array_str:
-                summary_phone = "{phone_str}  {name} {surname}. j. Family. ID 16".format(
+                summary_phone = "{phone_str}  {name} {surname}. {nicknames_str}. Family. ID 16".format(
                     phone_str=phone_str,
                     name=user["name"],
                     surname=user["surname"],
+                    nicknames_str=nicknames_str,
                 )
                 result += summary_phone
         return result

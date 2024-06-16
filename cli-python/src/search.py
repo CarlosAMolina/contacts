@@ -46,7 +46,17 @@ class TermSearch(_Search):
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         print(response_dict)  # TODO rm
-        result = "666666661 (personal)  John Doe. j. Family. ID 16"
+        users = response_dict["data"]["searchUser"]
+        result = ""
+        for user in users:
+            phones = user["phones"]
+            phones_array_str = [
+                "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
+                for phone in phones
+            ]
+            for phone_str in phones_array_str:
+                summary_phone = "{phone_str}  John Doe. j. Family. ID 16".format(phone_str=phone_str[0])
+                result += summary_phone
         return result
 
 

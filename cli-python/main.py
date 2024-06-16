@@ -34,4 +34,5 @@ def get_what_to_run_parsing_args():
         raise SystemExit(TerminationId.ABNORMAL)
 
 
-get_what_to_run_parsing_args()
+if __name__ == "__main__":
+    get_what_to_run_parsing_args()

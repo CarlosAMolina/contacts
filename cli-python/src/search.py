@@ -52,7 +52,16 @@ class TermSearch(_Search):
             nicknames_str = ",".join(nickname["nickname"] for nickname in user["nicknames"])
             categories_str = ",".join(category["category"]["category"] for category in user["categories"])
             phones = user["phones"]
-            if len(phones) > 0:
+            if len(phones) == 0:
+                summary = "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
+                    name=user["name"],
+                    surname=user["surname"],
+                    nicknames_str=nicknames_str,
+                    categories_str=categories_str,
+                    id_=user["id"],
+                )
+                result += summary
+            else:
                 phones_array_str = [
                     "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
                     for phone in phones

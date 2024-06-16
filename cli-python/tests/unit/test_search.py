@@ -48,6 +48,25 @@ class TestTermSearch(unittest.TestCase):
         expected_result = "666666661 (personal)  John Doe. j. Family. ID 1"
         self.assertEqual(expected_result, result)
 
+    def test_get_summary_from_response_dict_if_user_with_all_values_and_empty_phone(self):
+        response_dict = {
+            "data": {
+                "searchUser": [
+                    {
+                        "id": 1,
+                        "name": "John",
+                        "surname": "Doe",
+                        "categories": [{"category": {"category": "Family"}}],
+                        "nicknames": [{"nickname": "j"}],
+                        "phones": [],
+                    }
+                ]
+            }
+        }
+        result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
+        expected_result = "John Doe. j. Family. ID 1"
+        self.assertEqual(expected_result, result)
+
     # TODO
     def _test_get_summary_from_response_dict_if_multiple_users(self):
         response_dict = {

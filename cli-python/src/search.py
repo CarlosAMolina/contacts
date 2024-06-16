@@ -27,7 +27,8 @@ class TermSearch(_Search):
         print("Searching term", search_term)
         body = self._get_body(search_term)
         response_dict = self._get_dict_response(body)
-        print(response_dict)
+        summary = self._get_summary_from_response_dict(response_dict)
+        print(summary)
 
     def _get_body(self, search_term: str) -> str:
         return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
@@ -38,6 +39,10 @@ class TermSearch(_Search):
             return response.json()
         else:
             raise ValueError(f"GraphQL response: {response.content}")
+
+    def _get_summary_from_response_dict(self, response_dict: dict) -> str:
+        print(response_dict)  # TODO rm
+        return "TODO"
 
 
 if __name__ == "__main__":

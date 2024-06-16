@@ -28,3 +28,9 @@ class TestTermSearch(unittest.TestCase):
 """
         result = m_search.TermSearch()._get_body("que")
         self.assertEqual(expected_result, result)
+
+    def test_get_summary_from_response_dict(self):
+        expected_result = "TODO"
+        response_dict = {"a": "foo"}
+        result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
+        self.assertEqual(expected_result, result)

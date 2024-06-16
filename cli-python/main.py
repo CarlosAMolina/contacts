@@ -28,14 +28,19 @@ def get_what_to_run_parsing_args():
 def run_iteractive():
     print("Starting iteractive mode")
     print("Welcome to the contacts CLI!")
-    print("- Write `exit` or `q` to exit the CLI")
+    show_help()
     while True:
         print("What do you want to search?")
-        search_term = input()
-        if search_term in ("exit", "q"):
+        user_input = input()
+        if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)
         else:
-            print("Searching term", search_term)
+            print("Searching term", user_input)
+
+
+def show_help():
+    print("Options:")
+    print("- Write `exit` or `q` to exit the CLI")
 
 
 if __name__ == "__main__":

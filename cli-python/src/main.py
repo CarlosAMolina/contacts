@@ -1,5 +1,9 @@
-from src.search import IdSearch
-from src.search import TermSearch
+try:
+    from src.search import IdSearch
+    from src.search import TermSearch
+except ModuleNotFoundError:
+    from search import IdSearch
+    from search import TermSearch
 
 
 class TerminationId:

@@ -3,8 +3,7 @@ docker-build:
 
 docker-run:
 	docker run \
-		-d \
 		--rm \
-		-it \
+		-dit \
 		--name contacts-cli \
 		contacts-cli:1.0

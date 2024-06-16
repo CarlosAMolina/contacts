@@ -4,7 +4,6 @@ class TerminationId:
 
 
 def run_iteractive():
-    print("Starting iteractive mode")  # TODO rm
     print("Welcome to the contacts CLI!")
     show_help()
     while True:

@@ -55,7 +55,7 @@ class TermSearch(_Search):
                 summary = "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
                     name=user["name"],
                     surname=user["surname"],
-                    nicknames_str=self._get_str_nicknames_from_user_dict(user),
+                    nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
                     categories_str=categories_str,
                     id_=user["id"],
                 )
@@ -70,15 +70,15 @@ class TermSearch(_Search):
                         phone_str=phone_str,
                         name=user["name"],
                         surname=user["surname"],
-                        nicknames_str=self._get_str_nicknames_from_user_dict(user),
+                        nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
                         categories_str=categories_str,
                         id_=user["id"],
                     )
                     result += summary_phone
         return result
 
-    def _get_str_nicknames_from_user_dict(self, user_dict: dict) -> str:
-        return ",".join(nickname["nickname"] for nickname in user_dict["nicknames"])
+    def _get_str_nicknames_from_nicknames_dict(self, nicknames_dict: dict) -> str:
+        return ",".join(nickname["nickname"] for nickname in nicknames_dict)
 
 
 if __name__ == "__main__":

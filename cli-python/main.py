@@ -8,7 +8,7 @@ def run_iteractive():
     print("Welcome to the contacts CLI!")
     show_help()
     while True:
-        print("What do you want to search?")
+        print("Write an option or a search term and press enter")
         user_input = input()
         if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)

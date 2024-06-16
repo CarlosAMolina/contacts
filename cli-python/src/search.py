@@ -49,14 +49,13 @@ class TermSearch(_Search):
         users = response_dict["data"]["searchUser"]
         result = ""
         for user in users:
-            categories_str = ",".join(category["category"]["category"] for category in user["categories"])
             phones = user["phones"]
             if len(phones) == 0:
                 summary = "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
                     name=user["name"],
                     surname=user["surname"],
                     nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
-                    categories_str=categories_str,
+                    categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
                     id_=user["id"],
                 )
                 result += summary
@@ -71,7 +70,7 @@ class TermSearch(_Search):
                         name=user["name"],
                         surname=user["surname"],
                         nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
-                        categories_str=categories_str,
+                        categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
                         id_=user["id"],
                     )
                     result += summary_phone
@@ -79,6 +78,9 @@ class TermSearch(_Search):
 
     def _get_str_nicknames_from_nicknames_dict(self, nicknames_dict: dict) -> str:
         return ",".join(nickname["nickname"] for nickname in nicknames_dict)
+
+    def _get_str_categories_from_cateogires_dict(self, categories_dict: dict) -> str:
+        return ",".join(category["category"]["category"] for category in categories_dict)
 
 
 if __name__ == "__main__":

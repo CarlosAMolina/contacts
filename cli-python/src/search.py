@@ -49,14 +49,13 @@ class TermSearch(_Search):
         users = response_dict["data"]["searchUser"]
         result = ""
         for user in users:
-            nicknames_str = ",".join(nickname["nickname"] for nickname in user["nicknames"])
             categories_str = ",".join(category["category"]["category"] for category in user["categories"])
             phones = user["phones"]
             if len(phones) == 0:
                 summary = "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
                     name=user["name"],
                     surname=user["surname"],
-                    nicknames_str=nicknames_str,
+                    nicknames_str=self._get_str_nicknames_from_user_dict(user),
                     categories_str=categories_str,
                     id_=user["id"],
                 )
@@ -71,12 +70,15 @@ class TermSearch(_Search):
                         phone_str=phone_str,
                         name=user["name"],
                         surname=user["surname"],
-                        nicknames_str=nicknames_str,
+                        nicknames_str=self._get_str_nicknames_from_user_dict(user),
                         categories_str=categories_str,
                         id_=user["id"],
                     )
                     result += summary_phone
         return result
+
+    def _get_str_nicknames_from_user_dict(self, user_dict: dict) -> str:
+        return ",".join(nickname["nickname"] for nickname in user_dict["nicknames"])
 
 
 if __name__ == "__main__":

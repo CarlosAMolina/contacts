@@ -2,7 +2,7 @@ alembic-upgrade-sqlite:
 	export DB_URL=sqlite:////tmp/contacts.sqlite3 && alembic upgrade heads
 
 docker-build:
-	docker build -t contacts:1.0 .
+	docker build -t contacts-api:1.0 .
 
 # FLASK_HOST: to detect IP used by the Docker container, when the container is running,
 # execute `docker network inspect bridge | grep IPv4Address`
@@ -16,7 +16,7 @@ docker-run:
 		-dit \
 		--rm \
 		--name contacts-api \
-		contacts:1.0
+		contacts-api:1.0
 
 run-postgres:
 	export DB_URL=postgresql+psycopg://postgres:pw@localhost:5432/contacts && python main.py

@@ -16,10 +16,7 @@ def run_iteractive():
         if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)
         elif user_input in ("-i"):
-            print("Start displaying ID")
-            print("What ID do you want to see?")
-            user_input = input()
-            print("Retrieving ID", user_input)
+            IdSearch().run()
         else:
             TermSearch().run(user_input)
 
@@ -35,6 +32,14 @@ class Search(ABC):
     @abstractmethod
     def run(*args):
         pass
+
+
+class IdSearch(Search):
+    def run(self):
+        print("Start displaying ID")
+        print("What ID do you want to see?")
+        user_input = input()
+        print("Retrieving ID", user_input)
 
 
 class TermSearch(Search):

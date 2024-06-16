@@ -45,7 +45,6 @@ class TermSearch(_Search):
             raise ValueError(f"GraphQL response: {response.content}")
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
-        print(response_dict)  # TODO rm
         users = response_dict["data"]["searchUser"]
         result = ""
         for user in users:

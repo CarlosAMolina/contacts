@@ -3,6 +3,9 @@ from abc import ABC
 
 import requests
 
+from src.constants import GRAPHQL_URL
+from src.constants import BODY_TERM_SEARCH
+
 
 class Search(ABC):
     @abstractmethod
@@ -24,31 +27,6 @@ class TermSearch(Search):
 
     def _get_body(self, search_term: str) -> str:
         return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
-
-
-GRAPHQL_URL = "http://127.0.0.1:5000/graphql"
-
-BODY_TERM_SEARCH = """
-{
-  searchUser(searchTerm: "{SEARCH_TERM}") {
-    id
-    name
-    surname
-    categories {
-      category {
-        category
-      }
-    }
-    nicknames {
-      nickname
-    }
-    phones {
-      phone
-      description
-    }
-  }
-}
-"""
 
 
 search_term = "que"

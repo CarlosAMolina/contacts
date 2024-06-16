@@ -51,8 +51,7 @@ class TermSearch(_Search):
         for user in users:
             phones = user["phones"]
             if len(phones) == 0:
-                summary = self._get_str_summary_without_phone_from_user(user)
-                result += summary
+                result += self._get_str_summary_without_phone_from_user(user)
             else:
                 phones_array_str = [
                     "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])

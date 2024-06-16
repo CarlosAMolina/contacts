@@ -171,33 +171,31 @@ class TestTermSearch(unittest.TestCase):
         expected_result = "John Doe. j. Family. ID 1"
         self.assertEqual(expected_result, result)
 
-    # TODO
-    def _test_get_summary_from_response_dict_if_multiple_users(self):
+    def test_get_summary_from_response_dict_if_multiple_users(self):
         response_dict = {
             "data": {
                 "searchUser": [
                     {
-                        "id": 2,
+                        "id": 1,
                         "name": "John",
                         "surname": "Doe",
-                        "categories": [{"category": {"category": "Family"}}, {"category": {"category": "Work"}}],
-                        "nicknames": [{"nickname": "j"}, {"nickname": "j2"}],
-                        "phones": [
-                            {"phone": 666666661, "description": "personal"},
-                            {"phone": 666666662, "description": "work"},
-                        ],
+                        "categories": [{"category": {"category": "Family"}}],
+                        "nicknames": [{"nickname": "j"}],
+                        "phones": [{"phone": 666666661, "description": "personal"}],
                     },
                     {
-                        "id": 3,
+                        "id": 2,
                         "name": "Jane",
-                        "surname": "Doe",
+                        "surname": "Do",
                         "categories": [{"category": {"category": "Friends"}}],
                         "nicknames": [{"nickname": "ja"}],
-                        "phones": [{"phone": 666666661, "description": "personal"}],
+                        "phones": [{"phone": 666666662, "description": "work"}],
                     },
                 ]
             }
         }
         result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
-        expected_result = "John"
+        expected_result = (
+            "666666661 (personal)  John Doe. j. Family. ID 1" "\n666666662 (work)  Jane Do. ja. Friends. ID 2"
+        )
         self.assertEqual(expected_result, result)

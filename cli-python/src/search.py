@@ -46,10 +46,10 @@ class TermSearch(_Search):
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         users = response_dict["data"]["searchUser"]
-        result = ""
+        summary_users_array = []
         for user in users:
             if len(user["phones"]) == 0:
-                result += self._get_str_summary_without_phone_from_user(user)
+                summary_user = self._get_str_summary_without_phone_from_user(user)
             else:
                 summary_phones_array = []
                 phones_array_str = [
@@ -62,8 +62,9 @@ class TermSearch(_Search):
                         summary_no_phone=self._get_str_summary_without_phone_from_user(user),
                     )
                     summary_phones_array.append(summary_phone)
-                result += "\n".join(summary_phones_array)
-        return result
+                summary_user = "\n".join(summary_phones_array)
+            summary_users_array.append(summary_user)
+        return "\n".join(summary_users_array)
 
     def _get_str_summary_without_phone_from_user(self, user: dict) -> str:
         result = ""

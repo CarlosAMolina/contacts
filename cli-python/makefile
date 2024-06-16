@@ -10,3 +10,7 @@ docker-run:
 
 docker-connect:
 	docker exec -it contacts-cli python main.py
+
+test:
+	python -m unittest discover -s tests
+

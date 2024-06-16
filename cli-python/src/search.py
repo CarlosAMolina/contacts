@@ -51,13 +51,7 @@ class TermSearch(_Search):
         for user in users:
             phones = user["phones"]
             if len(phones) == 0:
-                summary = "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
-                    name=user["name"],
-                    surname=user["surname"],
-                    nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
-                    categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
-                    id_=user["id"],
-                )
+                summary = self._get_str_summary_without_phone_from_user(user)
                 result += summary
             else:
                 phones_array_str = [
@@ -75,6 +69,15 @@ class TermSearch(_Search):
                     )
                     result += summary_phone
         return result
+
+    def _get_str_summary_without_phone_from_user(self, user: dict) -> str:
+        return "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
+            name=user["name"],
+            surname=user["surname"],
+            nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
+            categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
+            id_=user["id"],
+        )
 
     def _get_str_nicknames_from_nicknames_dict(self, nicknames_dict: dict) -> str:
         return ",".join(nickname["nickname"] for nickname in nicknames_dict)

@@ -22,6 +22,9 @@ class TermSearch(Search):
     def run(self, user_input: str):
         print("Searching term", user_input)
 
+    def _get_body(self, search_term: str) -> str:
+        return body.replace("{SEARCH_TERM}", search_term)
+
 
 GRAPHQL_URL = "http://127.0.0.1:5000/graphql"
 
@@ -48,12 +51,8 @@ body = """
 """
 
 
-def get_body(search_term: str) -> str:
-    return body.replace("{SEARCH_TERM}", search_term)
-
-
 search_term = "que"
-body = get_body(search_term)
+body = TermSearch()._get_body(search_term)
 response = requests.post(url=GRAPHQL_URL, json={"query": body})
 print("response status code: ", response.status_code)
 if response.status_code == 200:

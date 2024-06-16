@@ -3,7 +3,7 @@ import unittest
 from src import search as m_search
 
 
-class TestFunctions(unittest.TestCase):
+class TestTermSearch(unittest.TestCase):
     def test_get_body(self):
         expected_result = """
 {
@@ -26,5 +26,5 @@ class TestFunctions(unittest.TestCase):
   }
 }
 """
-        result = m_search.get_body("que")
+        result = m_search.TermSearch()._get_body("que")
         self.assertEqual(expected_result, result)

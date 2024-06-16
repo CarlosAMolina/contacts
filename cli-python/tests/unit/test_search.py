@@ -114,6 +114,28 @@ class TestTermSearch(unittest.TestCase):
         expected_result = "666666661 (personal)  John. j. Family. ID 1"
         self.assertEqual(expected_result, result)
 
+    # TODO verify no surname is returned as None
+    def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_name_surname(
+        self,
+    ):
+        response_dict = {
+            "data": {
+                "searchUser": [
+                    {
+                        "id": 1,
+                        "name": None,
+                        "surname": None,
+                        "categories": [{"category": {"category": "Family"}}],
+                        "nicknames": [{"nickname": "j"}],
+                        "phones": [{"phone": 666666661, "description": "personal"}],
+                    }
+                ]
+            }
+        }
+        result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
+        expected_result = "666666661 (personal)  j. Family. ID 1"
+        self.assertEqual(expected_result, result)
+
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_categories(self):
         response_dict = {
             "data": {

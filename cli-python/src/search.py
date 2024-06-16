@@ -64,10 +64,15 @@ class TermSearch(_Search):
         return result
 
     def _get_str_summary_without_phone_from_user(self, user: dict) -> str:
-        return "{name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
+        result = "{name} {surname}".format(
             name=user["name"],
             surname=user["surname"],
-            nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
+        )
+        nicknames_str = self._get_str_nicknames_from_nicknames_dict(user["nicknames"])
+        if len(nicknames_str) > 0:
+            result += f". {nicknames_str}"
+        return "{result}. {categories_str}. ID {id_}".format(
+            result=result,
             categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
             id_=user["id"],
         )

@@ -59,13 +59,9 @@ class TermSearch(_Search):
                     for phone in phones
                 ]
                 for phone_str in phones_array_str:
-                    summary_phone = "{phone_str}  {name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
+                    summary_phone = "{phone_str}  {summary_no_phone}".format(
                         phone_str=phone_str,
-                        name=user["name"],
-                        surname=user["surname"],
-                        nicknames_str=self._get_str_nicknames_from_nicknames_dict(user["nicknames"]),
-                        categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
-                        id_=user["id"],
+                        summary_no_phone=self._get_str_summary_without_phone_from_user(user),
                     )
                     result += summary_phone
         return result

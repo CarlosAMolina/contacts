@@ -17,9 +17,6 @@ def get_what_to_run_parsing_args():
         if option != "-i":
             print("Invalid option", option)
             raise SystemExit(TerminationId.ABNORMAL)
-        else:
-            search_id = sys.argv[2]
-            print("Start displaying ID", search_id)
     else:
         print("Unmanaged situation")
         raise SystemExit(TerminationId.ABNORMAL)
@@ -34,13 +31,19 @@ def run_iteractive():
         user_input = input()
         if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)
+        elif user_input in ("-i"):
+            print("Start displaying ID")
+            print("What ID do you want to see?")
+            user_input = input()
+            print("Retrieving ID", user_input)
         else:
             print("Searching term", user_input)
 
 
 def show_help():
     print("Options:")
-    print("- Write `exit` or `q` to exit the CLI")
+    print("- exit | q: exit the CLI")
+    print("- -i: show a contact by ID")
 
 
 if __name__ == "__main__":

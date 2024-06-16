@@ -15,7 +15,8 @@ docker-run:
 		-p 5000:5000 \
 		-d \
 		--rm \
-		-it contacts:1.0
+		-it \
+		contacts:1.0
 
 run-postgres:
 	export DB_URL=postgresql+psycopg://postgres:pw@localhost:5432/contacts && python main.py

@@ -46,7 +46,8 @@ class TermSearch(_Search):
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         print(response_dict)  # TODO rm
-        return "TODO"
+        result = "666666661 (personal)  John Doe. j. Family. ID 16"
+        return result
 
 
 if __name__ == "__main__":

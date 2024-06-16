@@ -71,9 +71,11 @@ class TermSearch(_Search):
         nicknames_str = self._get_str_nicknames_from_nicknames_dict(user["nicknames"])
         if len(nicknames_str) > 0:
             result += f". {nicknames_str}"
-        return "{result}. {categories_str}. ID {id_}".format(
+        categories_str = self._get_str_categories_from_cateogires_dict(user["categories"])
+        if len(categories_str) > 0:
+            result += f". {categories_str}"
+        return "{result}. ID {id_}".format(
             result=result,
-            categories_str=self._get_str_categories_from_cateogires_dict(user["categories"]),
             id_=user["id"],
         )
 

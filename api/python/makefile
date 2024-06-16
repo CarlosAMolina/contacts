@@ -14,6 +14,7 @@ docker-run:
 		-v /tmp/contacts.sqlite3:/contacts/contacts.sqlite3 \
 		-p 5000:5000 \
 		-d \
+		--rm \
 		-it contacts:1.0
 
 run-postgres:

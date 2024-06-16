@@ -19,5 +19,6 @@ repos:
         language: system
         pass_filenames: false
         verbose: true
-        args: ["discover", "-s", "api/python/tests"]
+        #args: ["discover", "-s", "api/python/tests"]
+        args: ["discover", "-s", "cli-python/tests"]
 

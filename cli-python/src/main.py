@@ -1,5 +1,5 @@
-from abc import abstractmethod
-from abc import ABC
+from src.search import IdSearch
+from src.search import TermSearch
 
 
 class TerminationId:
@@ -26,25 +26,6 @@ def show_help():
     print("- exit | q: exit the CLI")
     print("- -i: show a contact by ID")
     print("- Anything else you write, it will be the searched term")
-
-
-class Search(ABC):
-    @abstractmethod
-    def run(*args):
-        pass
-
-
-class IdSearch(Search):
-    def run(self):
-        print("Start displaying ID")
-        print("What ID do you want to see?")
-        user_input = input()
-        print("Retrieving ID", user_input)
-
-
-class TermSearch(Search):
-    def run(self, user_input: str):
-        print("Searching term", user_input)
 
 
 if __name__ == "__main__":

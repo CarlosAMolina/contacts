@@ -48,7 +48,7 @@ class TestTermSearch(unittest.TestCase):
         expected_result = "666666661 (personal)  John Doe. j. Family. ID 1"
         self.assertEqual(expected_result, result)
 
-    def test_get_summary_from_response_dict_if_user_with_all_values_and_empty_phone(self):
+    def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_phone(self):
         response_dict = {
             "data": {
                 "searchUser": [

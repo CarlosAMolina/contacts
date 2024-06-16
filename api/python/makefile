@@ -16,6 +16,7 @@ docker-run:
 		-d \
 		--rm \
 		-it \
+		--name contacts-api \
 		contacts:1.0
 
 run-postgres:

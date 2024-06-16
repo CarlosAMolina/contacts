@@ -57,12 +57,13 @@ class TermSearch(_Search):
                 for phone in phones
             ]
             for phone_str in phones_array_str:
-                summary_phone = "{phone_str}  {name} {surname}. {nicknames_str}. {categories_str}. ID 16".format(
+                summary_phone = "{phone_str}  {name} {surname}. {nicknames_str}. {categories_str}. ID {id_}".format(
                     phone_str=phone_str,
                     name=user["name"],
                     surname=user["surname"],
                     nicknames_str=nicknames_str,
                     categories_str=categories_str,
+                    id_=user["id"],
                 )
                 result += summary_phone
         return result

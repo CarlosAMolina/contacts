@@ -45,7 +45,7 @@ class TestTermSearch(unittest.TestCase):
             }
         }
         result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
-        expected_result = "666666661 (personal)  John Doe. j. Family. ID 16"
+        expected_result = "666666661 (personal)  John Doe. j. Family. ID 1"
         self.assertEqual(expected_result, result)
 
     # TODO

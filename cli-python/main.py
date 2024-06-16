@@ -25,6 +25,7 @@ def show_help():
     print("Options:")
     print("- exit | q: exit the CLI")
     print("- -i: show a contact by ID")
+    print("- Anything else you write, it will be the searched term")
 
 
 if __name__ == "__main__":

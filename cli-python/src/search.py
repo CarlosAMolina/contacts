@@ -23,12 +23,12 @@ class TermSearch(Search):
         print("Searching term", user_input)
 
     def _get_body(self, search_term: str) -> str:
-        return body.replace("{SEARCH_TERM}", search_term)
+        return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
 
 
 GRAPHQL_URL = "http://127.0.0.1:5000/graphql"
 
-body = """
+BODY_TERM_SEARCH = """
 {
   searchUser(searchTerm: "{SEARCH_TERM}") {
     id

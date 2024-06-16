@@ -19,7 +19,7 @@ def run_interactive():
         user_input = input()
         if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)
-        elif user_input in ("-i"):
+        elif user_input == "-i":
             IdSearch().run()
         else:
             TermSearch().run(user_input)

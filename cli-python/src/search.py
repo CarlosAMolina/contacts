@@ -27,7 +27,7 @@ GRAPHQL_URL = "http://127.0.0.1:5000/graphql"
 
 body = """
 {
-  searchUser(searchTerm: "que") {
+  searchUser(searchTerm: "{SEARCH_TERM}") {
     id
     name
     surname
@@ -46,6 +46,7 @@ body = """
   }
 }
 """
+body = body.replace("{SEARCH_TERM}", "que")
 
 response = requests.post(url=GRAPHQL_URL, json={"query": body})
 print("response status code: ", response.status_code)

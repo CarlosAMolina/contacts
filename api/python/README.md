@@ -6,6 +6,8 @@ API created with Python code.
 
 ### Using sqlite db
 
+#### Run sqlite without docker
+
 Do you have the `contacts.sqlite3` file?
 
 - Yes. Save it at `/tmp/` and run:
@@ -34,6 +36,19 @@ You can make queries:
 You have examples queries in the [Bruno folder](bruno/) and in the [test file](tests/unit/test_gql_schema.py).
 
 You can run the app using docker, see the [makefile](makefile) commands. The URL is still the specified above.
+
+#### Run sqlite with docker
+
+First, copy the `contacts.sqlite3` file to the `/tmp` folder. See the `run sqlite without docker` to create the file if it does not exist.
+
+After that:
+
+```bash
+make docker-build
+make docker-run
+```
+
+See the `run sqlite without docker` to know how to make queries.
 
 ## Alembic
 

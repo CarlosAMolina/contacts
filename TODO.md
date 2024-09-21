@@ -4,6 +4,7 @@
 
 [ ] Models varchar must specify number of characters, because alembic is creating the columns as `varchar` instead ov `varchar(x)`
 [ ] `id` column of all tables must be autoincrement?
+[ ] add tikok model
 
 ## Rust. To implement
 

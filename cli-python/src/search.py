@@ -13,13 +13,13 @@ except ModuleNotFoundError:
 
 class _Search(ABC):
     @abstractmethod
-    def run(*args):
+    def run(self):
         pass
 
 
 class IdSearch(_Search):
     def run(self):
-        print("Start displaying ID")
+        print("Start search by ID")
         print("What ID do you want to see?")
         user_input = input()
         print("Retrieving ID", user_input)
@@ -27,12 +27,16 @@ class IdSearch(_Search):
 
 
 class TermSearch(_Search):
-    def run(self, search_term: str):
+    def run(self):
+        print("Start search by term")
+        print("Which term would you like to search?")
+        search_term = input()
         print("Searching term", search_term)
         body = self._get_body(search_term)
         response_dict = self._get_dict_response(body)
         summary = self._get_summary_from_response_dict(response_dict)
         print(summary)
+        print()
 
     def _get_body(self, search_term: str) -> str:
         return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
@@ -95,6 +99,4 @@ class TermSearch(_Search):
 
 
 if __name__ == "__main__":
-    search_term = "que"
-    body = TermSearch().run(search_term)
-    print(body)
+    TermSearch().run()

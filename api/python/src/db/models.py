@@ -191,6 +191,19 @@ class TelegramModel(Base):
         return _get_column_unicode(self.user_name)
 
 
+class TiktokModel(Base):
+    __tablename__ = "tiktok"
+
+    id = Column(Integer, primary_key=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_name = Column(String, nullable=False)
+    user = relationship("UserModel", back_populates="tiktok")
+
+    @hybrid_property
+    def user_name_unicode(self) -> Column[str]:
+        return _get_column_unicode(self.user_name)
+
+
 class TwitterModel(Base):
     __tablename__ = "twitter"
 
@@ -249,6 +262,7 @@ class UserModel(Base):
     notes = relationship("NoteModel", back_populates="user")
     phones = relationship("PhoneModel", back_populates="user")
     telegram = relationship("TelegramModel", back_populates="user")
+    tiktok = relationship("TiktokModel", back_populates="user")
     twitter = relationship("TwitterModel", back_populates="user")
     urls = relationship("UrlModel", back_populates="user")
     wallapop = relationship("WallapopModel", back_populates="user")

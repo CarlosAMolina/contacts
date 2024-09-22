@@ -85,6 +85,11 @@ class TelegramObject(ObjectType):
     user_name = String()
 
 
+class TiktokObject(ObjectType):
+    id = Int()
+    id_user = Int()
+    user_name = String()
+
 class TwitterObject(ObjectType):
     id = Int()
     id_user = Int()
@@ -125,6 +130,7 @@ class UserObject(ObjectType):
     notes = List(lambda: NoteObject)
     phones = List(lambda: PhoneObject)
     telegram = List(lambda: TelegramObject)
+    tiktok = List(lambda: TiktokObject)
     twitter = List(lambda: TwitterObject)
     urls = List(lambda: UrlObject)
     wallapop = List(lambda: WallapopObject)

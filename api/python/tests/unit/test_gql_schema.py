@@ -118,6 +118,11 @@ class TestSchemaQuery(unittest.TestCase):
               idUser
               userName
             }
+            tiktok {
+              id
+              idUser
+              userName
+            }
             twitter {
               id
               idUser
@@ -249,6 +254,13 @@ class TestSchemaQuery(unittest.TestCase):
                     "id": 1,
                     "idUser": 2,
                     "userName": "unique_telegram_user_name_user_2",
+                }
+            ],
+            "tiktok": [
+                {
+                    "id": 1,
+                    "idUser": 2,
+                    "userName": "unique_tiktok_user_name_user_2",
                 }
             ],
             "twitter": [
@@ -443,6 +455,13 @@ class TestSchemaQuery(unittest.TestCase):
 
     def test_resolve_search_user_if_search_term_in_telegram(self):
         gql = self._get_graphql_search_user_query("unique_telegram")
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        expected_result = [{"id": 2}]
+        self.assertEqual(expected_result, result)
+
+    def test_resolve_search_user_if_search_term_in_tiktok(self):
+        gql = self._get_graphql_search_user_query("unique_tiktok")
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         expected_result = [{"id": 2}]

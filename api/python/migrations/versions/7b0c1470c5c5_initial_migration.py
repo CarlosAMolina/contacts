@@ -161,6 +161,17 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
+        "tiktok",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("id_user", sa.Integer(), nullable=False),
+        sa.Column("user_name", sa.String(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["id_user"],
+            ["users.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_table(
         "twitter",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("id_user", sa.Integer(), nullable=False),
@@ -218,6 +229,7 @@ def downgrade() -> None:
     op.drop_table("users_categories")
     op.drop_table("urls")
     op.drop_table("twitter")
+    op.drop_table("tiktok")
     op.drop_table("telegram")
     op.drop_table("phones")
     op.drop_table("notes")

@@ -62,6 +62,7 @@ class Query(ObjectType):
                     models.UserModel.phones.any(models.PhoneModel.phone.contains(search_term_unicode)),
                     models.UserModel.phones.any(models.PhoneModel.description_unicode.contains(search_term_unicode)),
                     models.UserModel.telegram.any(models.TelegramModel.user_name_unicode.contains(search_term_unicode)),
+                    models.UserModel.tiktok.any(models.TiktokModel.user_name_unicode.contains(search_term_unicode)),
                     models.UserModel.twitter.any(models.TwitterModel.handle_unicode.contains(search_term_unicode)),
                     models.UserModel.urls.any(models.UrlModel.url_unicode.contains(search_term_unicode)),
                     models.UserModel.wallapop.any(models.WallapopModel.url_unicode.contains(search_term_unicode)),

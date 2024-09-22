@@ -113,6 +113,14 @@ telegram = [
     }
 ]
 
+tiktok = [
+    {
+        "id": 1,
+        "id_user": 2,
+        "user_name": "unique_tiktok_user_name_user_2",
+    }
+]
+
 twitter = [
     {
         "id": 1,

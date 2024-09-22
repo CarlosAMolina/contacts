@@ -43,6 +43,7 @@ def _insert_db_data(db_session):
         "notes": models.NoteModel,
         "phones": models.PhoneModel,
         "telegram": models.TelegramModel,
+        "tiktok": models.TiktokModel,
         "twitter": models.TwitterModel,
         "urls": models.UrlModel,
         "users_categories": models.UserCategoryModel,

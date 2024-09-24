@@ -72,7 +72,8 @@ class TermSearch(_Search):
         result = ""
         if user["name"] is not None:
             result += "{name}".format(name=user["name"])
-        if user["surname"] is not None:
+        # TODO modify the db to convert empty strings to nulls
+        if user["surname"] is not None and len(user["surname"]) > 0:
             if len(result) > 0:
                 result += " "
             result += "{surname}".format(surname=user["surname"])

@@ -66,7 +66,27 @@ class TermSearch(_Search):
 
     # TODO implement this in GraphQL
     def _get_users_sorted(self, users: list[dict]) -> list[dict]:
-        return sorted(users, key=lambda k: k["name"])
+        users_to_sort = [
+            {
+                "value_to_sort": self._get_value_as_ascii(user["name"]),
+                **user,
+            }
+            for user in users
+        ]
+        users_sorted = sorted(users_to_sort, key=lambda k: k["value_to_sort"])
+        for user in users_sorted:
+            del user["value_to_sort"]
+        return users_sorted
+
+    @staticmethod
+    def _get_value_as_ascii(value: str | None) -> str | None:
+        if value is None:
+            return None
+        result = value.lower()
+        replacements = {"á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u"}
+        for old_value, new_value in replacements.items():
+            result = result.replace(old_value, new_value)
+        return result
 
     def _get_summary_from_user(self, user: dict) -> str:
         if len(user["phones"]) == 0:

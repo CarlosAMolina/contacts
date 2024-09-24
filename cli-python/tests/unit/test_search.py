@@ -271,3 +271,27 @@ class TestTermSearch(unittest.TestCase):
             },
         ]
         self.assertEqual(expected_result, result)
+
+    def test_get_users_sorted_if_no_ascii_characters(self):
+        users = [
+            {
+                "id": 1,
+                "name": "Álvaro",
+            },
+            {
+                "id": 2,
+                "name": "John",
+            },
+        ]
+        result = m_search.TermSearch()._get_users_sorted(users)
+        expected_result = [
+            {
+                "id": 1,
+                "name": "Álvaro",
+            },
+            {
+                "id": 2,
+                "name": "John",
+            },
+        ]
+        self.assertEqual(expected_result, result)

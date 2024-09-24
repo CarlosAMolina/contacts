@@ -240,6 +240,34 @@ class TestTermSearch(unittest.TestCase):
         }
         result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
         expected_result = (
-            "666666661 (personal)  John Doe. j. Family. ID 1" "\n666666662 (work)  Jane Do. ja. Friends. ID 2"
+            "666666662 (work)  Jane Do. ja. Friends. ID 2\n666666661 (personal)  John Doe. j. Family. ID 1"
         )
+        self.assertEqual(expected_result, result)
+
+    def test_get_users_sorted(self):
+        users = [
+            {
+                "id": 1,
+                "name": "John",
+                "surname": "Doe",
+            },
+            {
+                "id": 2,
+                "name": "Jane",
+                "surname": "Do",
+            },
+        ]
+        result = m_search.TermSearch()._get_users_sorted(users)
+        expected_result = [
+            {
+                "id": 2,
+                "name": "Jane",
+                "surname": "Do",
+            },
+            {
+                "id": 1,
+                "name": "John",
+                "surname": "Doe",
+            },
+        ]
         self.assertEqual(expected_result, result)

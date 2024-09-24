@@ -60,8 +60,13 @@ class TermSearch(_Search):
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         users = response_dict["data"]["searchUser"]
+        users = self._get_users_sorted(users)
         summary_users_array = [self._get_summary_from_user(user) for user in users]
         return "\n".join(summary_users_array)
+
+    # TODO implement this in GraphQL
+    def _get_users_sorted(self, users: list[dict]) -> list[dict]:
+        return sorted(users, key=lambda k: k["name"])
 
     def _get_summary_from_user(self, user: dict) -> str:
         if len(user["phones"]) == 0:

@@ -1,3 +1,5 @@
+import sys
+
 try:
     from src.search import IdSearch
     from src.search import TermSearch
@@ -12,7 +14,14 @@ class TerminationId:
 
 
 def run():
-    run_interactive()
+    if len(sys.argv) == 1:
+        run_interactive()
+    elif sys.argv[1] == "-h":
+        show_help()
+    elif sys.argv[1] == "-i":
+        IdSearch().run_search_value(sys.argv[2])
+    else:
+        TermSearch().run_search_value(sys.argv[1])
 
 
 def run_interactive():
@@ -25,9 +34,9 @@ def run_interactive():
             raise SystemExit(TerminationId.SUCCESSFUL)
         else:
             if user_input == "-i":
-                IdSearch().run()
+                IdSearch().run_ask_input()
             else:
-                TermSearch().run()
+                TermSearch().run_ask_input()
 
 
 def show_help():

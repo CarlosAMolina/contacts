@@ -11,6 +11,10 @@ class TerminationId:
     SUCCESSFUL = 0
 
 
+def run():
+    run_interactive()
+
+
 def run_interactive():
     print("Welcome to the contacts CLI!")
     while True:
@@ -30,8 +34,10 @@ def show_help():
     print("Options:")
     print("- exit | q: exit the CLI")
     print("- -i: search a contact by ID. All the contact information will be shown")
-    print("- No input, just press Enter: search for contacts by a search term. A summary of the information will appear")
+    print(
+        "- No input, just press Enter: search for contacts by a search term. A summary of the information will appear"
+    )
 
 
 if __name__ == "__main__":
-    run_interactive()
+    run()

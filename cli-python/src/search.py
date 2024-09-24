@@ -31,12 +31,15 @@ class TermSearch(_Search):
         print("Start search by term")
         print("Which term would you like to search?")
         search_term = input()
+        summary = self._get_summary_from_search_term(search_term)
+        print(summary)
+        print()
+
+    def _get_summary_from_search_term(self, search_term: str) -> str:
         print("Searching term", search_term)
         body = self._get_body(search_term)
         response_dict = self._get_dict_response(body)
-        summary = self._get_summary_from_response_dict(response_dict)
-        print(summary)
-        print()
+        return self._get_summary_from_response_dict(response_dict)
 
     def _get_body(self, search_term: str) -> str:
         return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)

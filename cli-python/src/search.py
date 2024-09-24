@@ -52,23 +52,27 @@ class TermSearch(_Search):
         users = response_dict["data"]["searchUser"]
         summary_users_array = []
         for user in users:
-            if len(user["phones"]) == 0:
-                summary_user = self._get_str_summary_without_phone_from_user(user)
-            else:
-                summary_phones_array = []
-                phones_array_str = [
-                    "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
-                    for phone in user["phones"]
-                ]
-                for phone_str in phones_array_str:
-                    summary_phone = "{phone_str}  {summary_no_phone}".format(
-                        phone_str=phone_str,
-                        summary_no_phone=self._get_str_summary_without_phone_from_user(user),
-                    )
-                    summary_phones_array.append(summary_phone)
-                summary_user = "\n".join(summary_phones_array)
+            summary_user = self._get_summary_from_user(user)
             summary_users_array.append(summary_user)
         return "\n".join(summary_users_array)
+
+    def _get_summary_from_user(self, user: dict) -> str:
+        if len(user["phones"]) == 0:
+            summary_user = self._get_str_summary_without_phone_from_user(user)
+        else:
+            summary_phones_array = []
+            phones_array_str = [
+                "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
+                for phone in user["phones"]
+            ]
+            for phone_str in phones_array_str:
+                summary_phone = "{phone_str}  {summary_no_phone}".format(
+                    phone_str=phone_str,
+                    summary_no_phone=self._get_str_summary_without_phone_from_user(user),
+                )
+                summary_phones_array.append(summary_phone)
+            summary_user = "\n".join(summary_phones_array)
+        return summary_user
 
     def _get_str_summary_without_phone_from_user(self, user: dict) -> str:
         result = ""

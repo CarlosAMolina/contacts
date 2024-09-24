@@ -50,10 +50,7 @@ class TermSearch(_Search):
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         users = response_dict["data"]["searchUser"]
-        summary_users_array = []
-        for user in users:
-            summary_user = self._get_summary_from_user(user)
-            summary_users_array.append(summary_user)
+        summary_users_array = [self._get_summary_from_user(user) for user in users]
         return "\n".join(summary_users_array)
 
     def _get_summary_from_user(self, user: dict) -> str:

@@ -58,10 +58,7 @@ class TermSearch(_Search):
             summary_user = self._get_str_summary_without_phone_from_user(user)
         else:
             summary_phones_array = []
-            phones_array_str = [
-                "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
-                for phone in user["phones"]
-            ]
+            phones_array_str = [self._get_str_summary_from_phone(phone) for phone in user["phones"]]
             for phone_str in phones_array_str:
                 summary_phone = "{phone_str}  {summary_no_phone}".format(
                     phone_str=phone_str,
@@ -91,6 +88,11 @@ class TermSearch(_Search):
             result=result,
             id_=user["id"],
         )
+
+    def _get_str_summary_from_phone(self, phone: dict) -> str:
+        if len(phone["description"]) == 0:
+            return str(phone["phone"])
+        return "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
 
     def _get_str_nicknames_from_nicknames_dict(self, nicknames_dict: dict) -> str:
         return ", ".join(nickname["nickname"] for nickname in nicknames_dict)

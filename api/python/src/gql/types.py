@@ -90,16 +90,11 @@ class TiktokObject(ObjectType):
     id_user = Int()
     user_name = String()
 
+
 class TwitterObject(ObjectType):
     id = Int()
     id_user = Int()
     handle = String()
-
-
-class UrlObject(ObjectType):
-    id = Int()
-    id_user = Int()
-    url = String()
 
 
 class UserCategoryObject(ObjectType):

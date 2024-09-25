@@ -5,7 +5,6 @@ https://docs.sqlalchemy.org/en/20/orm/extensions/hybrid.html#reusing-hybrid-prop
 
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
-from sqlalchemy import func
 from sqlalchemy import BigInteger
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -13,7 +12,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from src.utils.unicode import ACCENT_TO_NO_ACCENT_MAP
+from src.utils.unicode import get_column_unicode
 
 
 Base = declarative_base()
@@ -29,7 +28,7 @@ class AddressModel(Base):
 
     @hybrid_property
     def address_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.address)
+        return get_column_unicode(self.address)
 
 
 class CategoryModel(Base):
@@ -41,7 +40,7 @@ class CategoryModel(Base):
 
     @hybrid_property
     def category_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.category)
+        return get_column_unicode(self.category)
 
 
 class DiscordModel(Base):
@@ -58,19 +57,19 @@ class DiscordModel(Base):
 
     @hybrid_property
     def user_name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.user_name)
+        return get_column_unicode(self.user_name)
 
     @hybrid_property
     def alias_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.alias)
+        return get_column_unicode(self.alias)
 
     @hybrid_property
     def global_name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.global_name)
+        return get_column_unicode(self.global_name)
 
     @hybrid_property
     def legacy_user_name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.legacy_user_name)
+        return get_column_unicode(self.legacy_user_name)
 
 
 class EmailModel(Base):
@@ -83,7 +82,7 @@ class EmailModel(Base):
 
     @hybrid_property
     def email_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.email)
+        return get_column_unicode(self.email)
 
 
 class FacebookModel(Base):
@@ -96,7 +95,7 @@ class FacebookModel(Base):
 
     @hybrid_property
     def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
+        return get_column_unicode(self.url)
 
 
 class GitHubModel(Base):
@@ -109,7 +108,7 @@ class GitHubModel(Base):
 
     @hybrid_property
     def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
+        return get_column_unicode(self.url)
 
 
 class InstagramModel(Base):
@@ -122,7 +121,7 @@ class InstagramModel(Base):
 
     @hybrid_property
     def handle_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.handle)
+        return get_column_unicode(self.handle)
 
 
 class LinkedinModel(Base):
@@ -135,7 +134,7 @@ class LinkedinModel(Base):
 
     @hybrid_property
     def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
+        return get_column_unicode(self.url)
 
 
 class NicknameModel(Base):
@@ -148,7 +147,7 @@ class NicknameModel(Base):
 
     @hybrid_property
     def nickname_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.nickname)
+        return get_column_unicode(self.nickname)
 
 
 class NoteModel(Base):
@@ -161,7 +160,7 @@ class NoteModel(Base):
 
     @hybrid_property
     def note_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.note)
+        return get_column_unicode(self.note)
 
 
 class PhoneModel(Base):
@@ -175,7 +174,7 @@ class PhoneModel(Base):
 
     @hybrid_property
     def description_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.description)
+        return get_column_unicode(self.description)
 
 
 class TelegramModel(Base):
@@ -188,7 +187,7 @@ class TelegramModel(Base):
 
     @hybrid_property
     def user_name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.user_name)
+        return get_column_unicode(self.user_name)
 
 
 class TiktokModel(Base):
@@ -201,7 +200,7 @@ class TiktokModel(Base):
 
     @hybrid_property
     def user_name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.user_name)
+        return get_column_unicode(self.user_name)
 
 
 class TwitterModel(Base):
@@ -214,7 +213,7 @@ class TwitterModel(Base):
 
     @hybrid_property
     def handle_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.handle)
+        return get_column_unicode(self.handle)
 
 
 class UrlModel(Base):
@@ -227,7 +226,7 @@ class UrlModel(Base):
 
     @hybrid_property
     def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
+        return get_column_unicode(self.url)
 
 
 class UserCategoryModel(Base):
@@ -269,11 +268,11 @@ class UserModel(Base):
 
     @hybrid_property
     def name_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.name)
+        return get_column_unicode(self.name)
 
     @hybrid_property
     def surname_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.surname)
+        return get_column_unicode(self.surname)
 
 
 # TODO note as nullable? change it in db too
@@ -288,15 +287,8 @@ class WallapopModel(Base):
 
     @hybrid_property
     def url_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.url)
+        return get_column_unicode(self.url)
 
     @hybrid_property
     def note_unicode(self) -> Column[str]:
-        return _get_column_unicode(self.note)
-
-
-def _get_column_unicode(column: Column[str]) -> Column[str]:
-    result = column
-    for old, new in ACCENT_TO_NO_ACCENT_MAP.items():
-        result = func.REPLACE(result, old, new)
-    return result
+        return get_column_unicode(self.note)

@@ -71,5 +71,10 @@ class Query(ObjectType):
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )
             )
+            .order_by(models.UserModel.name_unicode.asc())
             .all()
         )
+
+
+# TODO add test: .order_by(models.UserModel.name_unicode.asc())
+# TODO drop sort code in the api

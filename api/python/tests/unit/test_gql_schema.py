@@ -1,6 +1,5 @@
 import unittest
 
-
 from src.gql.schema import schema
 
 
@@ -298,7 +297,7 @@ class TestSchemaQuery(unittest.TestCase):
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        self.assertEqual([{"name": "John"}, {"name": "unique name value"}], result)
+        self.assertEqual([{"name": "Ájohn"}, {"name": "unique name value"}], result)
 
     def test_resolve_search_user_sorts_results_by_ascending_name_unicode_using_arguments(self):
         gql = """
@@ -310,7 +309,7 @@ class TestSchemaQuery(unittest.TestCase):
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        self.assertEqual([{"name": "John"}, {"name": "unique name value"}], result)
+        self.assertEqual([{"name": "Ájohn"}, {"name": "unique name value"}], result)
 
     def test_resolve_search_user_sorts_results_by_descending_name_unicode(self):
         gql = """
@@ -322,7 +321,7 @@ class TestSchemaQuery(unittest.TestCase):
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        self.assertEqual([{"name": "unique name value"}, {"name": "John"}], result)
+        self.assertEqual([{"name": "unique name value"}, {"name": "Ájohn"}], result)
 
     def test_resolve_search_user_if_search_value_without_results(self):
         gql = self._get_graphql_search_user_query("asdf")

@@ -150,7 +150,7 @@ wallapop = [
 users = [
     {
         "id": 1,
-        "name": "John",
+        "name": "Ájohn",
         "surname": "Doe",
     },
     {

@@ -4,11 +4,9 @@ from abc import ABC
 import requests
 
 try:
-    from src.constants import GRAPHQL_URL
-    from src.constants import BODY_TERM_SEARCH
+    from src import constants
 except ModuleNotFoundError:
-    from constants import GRAPHQL_URL
-    from constants import BODY_TERM_SEARCH
+    import constants
 
 
 class _Search(ABC):
@@ -20,6 +18,13 @@ class _Search(ABC):
     def run_search_value(self, search_value: str):
         pass
 
+    def _get_dict_response(self, body: str) -> dict:
+        response = requests.post(url=constants.GRAPHQL_URL, json={"query": body})
+        if response.status_code != 200 or "errors" in response.json().keys():
+            raise ValueError(f"GraphQL response: {response.content}")
+        else:
+            return response.json()
+
 
 class IdSearch(_Search):
     def run_ask_input(self):
@@ -29,8 +34,24 @@ class IdSearch(_Search):
         self.run_search_value(user_input)
 
     def run_search_value(self, search_value: str):
-        print("Retrieving ID", search_value)
-        # TODO
+        print("Searching ID", search_value)
+        body = self._get_body(search_value)
+        response_dict = self._get_dict_response(body)
+        summary = self._get_summary_from_response_dict(response_dict)
+        print(summary)
+        print()
+        print(response_dict)  # TODO rm
+
+    def _get_body(self, search_term: str) -> str:
+        return constants.BODY_ID_SEARCH.replace("{SEARCH_TERM}", search_term)
+
+    def _get_summary_from_response_dict(self, response_dict: dict) -> str:
+        user = response_dict["data"]["user"]
+        result = user["name"]
+        # TODO check how no value is returned
+        if user["surname"] is not None and len(user["surname"]) > 0:
+            result += f" {user['surname']}"
+        return result
 
 
 class TermSearch(_Search):
@@ -49,14 +70,7 @@ class TermSearch(_Search):
         print()
 
     def _get_body(self, search_term: str) -> str:
-        return BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
-
-    def _get_dict_response(self, body: str) -> dict:
-        response = requests.post(url=GRAPHQL_URL, json={"query": body})
-        if response.status_code != 200 or "errors" in response.json().keys():
-            raise ValueError(f"GraphQL response: {response.content}")
-        else:
-            return response.json()
+        return constants.BODY_TERM_SEARCH.replace("{SEARCH_TERM}", search_term)
 
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         users = response_dict["data"]["usersWithTerm"]

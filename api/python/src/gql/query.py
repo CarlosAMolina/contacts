@@ -38,8 +38,8 @@ class Query(ObjectType):
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
         search_term_unicode = get_string_unicode(search_term)
-        function_how_order_by_config = {"ASCENDING": "asc", "DESCENDING": "desc"}
-        order_by = getattr(getattr(models.UserModel, sort_by), function_how_order_by_config[sort])()
+        sort_function_config = {"ASCENDING": "asc", "DESCENDING": "desc"}
+        order_by = getattr(getattr(models.UserModel, sort_by), sort_function_config[sort])()
         return (
             db_session.query(models.UserModel)
             .filter(

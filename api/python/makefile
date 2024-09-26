@@ -31,5 +31,5 @@ test:
 	python -m unittest discover -s tests
 
 test-filter:
-	python -m unittest discover -s tests -k test_resolve_search_user_if_search_term_in_users_categories
+	python -m unittest discover -s tests -k test_resolve_users_with_term_if_search_term_in_users_categories
 

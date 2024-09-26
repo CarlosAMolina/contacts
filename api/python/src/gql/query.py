@@ -18,7 +18,7 @@ from src.utils.unicode import get_string_unicode
 class Query(ObjectType):
     email = Field(EmailObject, email_id=Int())
     user = Field(UserObject, user_id=Int())
-    search_user = List(
+    users_with_term = List(
         UserObject, search_term=String(), sort=String(), sort_by=String()
     )  # List field for search results
 
@@ -31,7 +31,7 @@ class Query(ObjectType):
         return db_session.query(models.UserModel).filter(models.UserModel.id == user_id).first()
 
     @staticmethod
-    def resolve_search_user(
+    def resolve_users_with_term(
         root, info, search_term=String(), sort="ASCENDING", sort_by="name_unicode"
     ) -> tp.Optional[tp.List[models.UserModel]]:
         """

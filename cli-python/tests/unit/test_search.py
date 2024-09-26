@@ -7,7 +7,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_body(self):
         expected_result = """
 {
-  searchUser(searchTerm: "que") {
+  usersWithTerm(searchTerm: "que") {
     id
     name
     surname
@@ -32,7 +32,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -51,7 +51,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_multiple_values_for_each(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -78,7 +78,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_name(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": None,
@@ -98,7 +98,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_surname(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -120,7 +120,7 @@ class TestTermSearch(unittest.TestCase):
     ):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": None,
@@ -139,7 +139,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_categories(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -158,7 +158,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_nickname(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -177,7 +177,7 @@ class TestTermSearch(unittest.TestCase):
     def test_get_summary_from_response_dict_if_user_with_all_values_only_one_value_for_each_and_empty_phone(self):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -199,7 +199,7 @@ class TestTermSearch(unittest.TestCase):
     ):
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",
@@ -219,7 +219,7 @@ class TestTermSearch(unittest.TestCase):
         # Note. Sort is done in the API.
         response_dict = {
             "data": {
-                "searchUser": [
+                "usersWithTerm": [
                     {
                         "id": 1,
                         "name": "John",

@@ -287,106 +287,106 @@ class TestSchemaQuery(unittest.TestCase):
         }
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_sorts_results_by_ascending_name_unicode_using_default_args(self):
+    def test_resolve_users_with_term_sorts_results_by_ascending_name_unicode_using_default_args(self):
         gql = """
         {
-          searchUser(searchTerm: "") {
+          usersWithTerm(searchTerm: "") {
             name
           }
         }
         """
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         self.assertEqual([{"name": "Ájohn"}, {"name": "unique name value"}], result)
 
-    def test_resolve_search_user_sorts_results_by_ascending_name_unicode_using_arguments(self):
+    def test_resolve_users_with_term_sorts_results_by_ascending_name_unicode_using_arguments(self):
         gql = """
         {
-          searchUser(searchTerm: "", sort: "ASCENDING", sortBy: "name_unicode" ) {
+          usersWithTerm(searchTerm: "", sort: "ASCENDING", sortBy: "name_unicode" ) {
             name
           }
         }
         """
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         self.assertEqual([{"name": "Ájohn"}, {"name": "unique name value"}], result)
 
-    def test_resolve_search_user_sorts_results_by_descending_name_unicode(self):
+    def test_resolve_users_with_term_sorts_results_by_descending_name_unicode(self):
         gql = """
         {
-          searchUser(searchTerm: "", sort: "DESCENDING" ) {
+          usersWithTerm(searchTerm: "", sort: "DESCENDING" ) {
             name
           }
         }
         """
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         self.assertEqual([{"name": "unique name value"}, {"name": "Ájohn"}], result)
 
-    def test_resolve_search_user_if_search_value_without_results(self):
-        gql = self._get_graphql_search_user_query("asdf")
+    def test_resolve_users_with_term_if_search_value_without_results(self):
+        gql = self._get_graphql_users_with_term_query("asdf")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = []
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_name(self):
-        gql = self._get_graphql_search_user_query("unique name val")
+    def test_resolve_users_with_term_if_search_term_in_name(self):
+        gql = self._get_graphql_users_with_term_query("unique name val")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_name_is_case_insensitive(self):
-        gql = self._get_graphql_search_user_query("UNIQUE NAME VAL")
+    def test_resolve_users_with_term_if_search_term_in_name_is_case_insensitive(self):
+        gql = self._get_graphql_users_with_term_query("UNIQUE NAME VAL")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_surname(self):
-        gql = self._get_graphql_search_user_query("unique surname val")
+    def test_resolve_users_with_term_if_search_term_in_surname(self):
+        gql = self._get_graphql_users_with_term_query("unique surname val")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_emails(self):
-        gql = self._get_graphql_search_user_query("unique_mail_value@m")
+    def test_resolve_users_with_term_if_search_term_in_emails(self):
+        gql = self._get_graphql_users_with_term_query("unique_mail_value@m")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_addresses(self):
-        gql = self._get_graphql_search_user_query("unique address val")
+    def test_resolve_users_with_term_if_search_term_in_addresses(self):
+        gql = self._get_graphql_users_with_term_query("unique address val")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_word_with_accent_using_search_term_with_accent(self):
-        gql = self._get_graphql_search_user_query("camión")
+    def test_resolve_users_with_term_if_search_word_with_accent_using_search_term_with_accent(self):
+        gql = self._get_graphql_users_with_term_query("camión")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_word_without_accent_using_search_term_with_accent(self):
-        gql = self._get_graphql_search_user_query("uniqué address vál")
+    def test_resolve_users_with_term_if_search_word_without_accent_using_search_term_with_accent(self):
+        gql = self._get_graphql_users_with_term_query("uniqué address vál")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_word_with_accent_using_search_term_without_accent(self):
-        gql = self._get_graphql_search_user_query("camion")
+    def test_resolve_users_with_term_if_search_word_with_accent_using_search_term_without_accent(self):
+        gql = self._get_graphql_users_with_term_query("camion")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_discord_fields(self):
+    def test_resolve_users_with_term_if_search_term_in_discord_fields(self):
         expected_result = [{"id": 2}]
         expected_result_and_search_term_array = [
             (expected_result, "only in discord user_name"),
@@ -397,138 +397,138 @@ class TestSchemaQuery(unittest.TestCase):
         ]
         for expected_result, search_term in expected_result_and_search_term_array:
             with self.subTest(search_term=search_term):
-                gql = self._get_graphql_search_user_query(search_term)
+                gql = self._get_graphql_users_with_term_query(search_term)
                 schema_result = schema.execute(gql)
-                result = schema_result.data["searchUser"]
+                result = schema_result.data["usersWithTerm"]
                 self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_discord_is_partial_discriminator(self):
+    def test_resolve_users_with_term_if_search_term_in_discord_is_partial_discriminator(self):
         expected_result = [{"id": 2}]
         search_term = "11"
-        gql = self._get_graphql_search_user_query(search_term)
+        gql = self._get_graphql_users_with_term_query(search_term)
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_discord_is_excact_discriminator(self):
+    def test_resolve_users_with_term_if_search_term_in_discord_is_excact_discriminator(self):
         expected_result = [{"id": 2}]
         search_term = "111"
-        gql = self._get_graphql_search_user_query(search_term)
+        gql = self._get_graphql_users_with_term_query(search_term)
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_facebook(self):
-        gql = self._get_graphql_search_user_query("unique_facebook")
+    def test_resolve_users_with_term_if_search_term_in_facebook(self):
+        gql = self._get_graphql_users_with_term_query("unique_facebook")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_github(self):
-        gql = self._get_graphql_search_user_query("unique_github")
+    def test_resolve_users_with_term_if_search_term_in_github(self):
+        gql = self._get_graphql_users_with_term_query("unique_github")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_instagram(self):
-        gql = self._get_graphql_search_user_query("unique_instagram")
+    def test_resolve_users_with_term_if_search_term_in_instagram(self):
+        gql = self._get_graphql_users_with_term_query("unique_instagram")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_linkedin(self):
-        gql = self._get_graphql_search_user_query("unique_linkedin")
+    def test_resolve_users_with_term_if_search_term_in_linkedin(self):
+        gql = self._get_graphql_users_with_term_query("unique_linkedin")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_nickname(self):
-        gql = self._get_graphql_search_user_query("unique_nickname")
+    def test_resolve_users_with_term_if_search_term_in_nickname(self):
+        gql = self._get_graphql_users_with_term_query("unique_nickname")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_note(self):
-        gql = self._get_graphql_search_user_query("unique note")
+    def test_resolve_users_with_term_if_search_term_in_note(self):
+        gql = self._get_graphql_users_with_term_query("unique note")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_phone_description(self):
-        gql = self._get_graphql_search_user_query("unique phone description")
+    def test_resolve_users_with_term_if_search_term_in_phone_description(self):
+        gql = self._get_graphql_users_with_term_query("unique phone description")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_phone_is_exact_phone(self):
-        gql = self._get_graphql_search_user_query("666666666")
+    def test_resolve_users_with_term_if_search_term_in_phone_is_exact_phone(self):
+        gql = self._get_graphql_users_with_term_query("666666666")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_phone_is_partial_phone(self):
-        gql = self._get_graphql_search_user_query("66666")
+    def test_resolve_users_with_term_if_search_term_in_phone_is_partial_phone(self):
+        gql = self._get_graphql_users_with_term_query("66666")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_users_categories(self):
-        gql = self._get_graphql_search_user_query("work")
+    def test_resolve_users_with_term_if_search_term_in_users_categories(self):
+        gql = self._get_graphql_users_with_term_query("work")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_telegram(self):
-        gql = self._get_graphql_search_user_query("unique_telegram")
+    def test_resolve_users_with_term_if_search_term_in_telegram(self):
+        gql = self._get_graphql_users_with_term_query("unique_telegram")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_tiktok(self):
-        gql = self._get_graphql_search_user_query("unique_tiktok")
+    def test_resolve_users_with_term_if_search_term_in_tiktok(self):
+        gql = self._get_graphql_users_with_term_query("unique_tiktok")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_twitter(self):
-        gql = self._get_graphql_search_user_query("unique_twitter")
+    def test_resolve_users_with_term_if_search_term_in_twitter(self):
+        gql = self._get_graphql_users_with_term_query("unique_twitter")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_url(self):
-        gql = self._get_graphql_search_user_query("unique_url")
+    def test_resolve_users_with_term_if_search_term_in_url(self):
+        gql = self._get_graphql_users_with_term_query("unique_url")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_wallapop_url(self):
-        gql = self._get_graphql_search_user_query("unique_wallapop_url")
+    def test_resolve_users_with_term_if_search_term_in_wallapop_url(self):
+        gql = self._get_graphql_users_with_term_query("unique_wallapop_url")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_if_search_term_in_wallapop_note(self):
-        gql = self._get_graphql_search_user_query("unique wallapop note")
+    def test_resolve_users_with_term_if_search_term_in_wallapop_note(self):
+        gql = self._get_graphql_users_with_term_query("unique wallapop note")
         schema_result = schema.execute(gql)
-        result = schema_result.data["searchUser"]
+        result = schema_result.data["usersWithTerm"]
         expected_result = [{"id": 2}]
         self.assertEqual(expected_result, result)
 
-    def _get_graphql_search_user_query(self, search_term: str) -> str:
-        return '{ searchUser(searchTerm: "' + search_term + '") { id } }'
+    def _get_graphql_users_with_term_query(self, search_term: str) -> str:
+        return '{ usersWithTerm(searchTerm: "' + search_term + '") { id } }'

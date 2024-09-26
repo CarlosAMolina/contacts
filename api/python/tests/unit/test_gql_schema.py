@@ -288,6 +288,18 @@ class TestSchemaQuery(unittest.TestCase):
         }
         self.assertEqual(expected_result, result)
 
+    def test_resolve_search_user_sorts_results_by_ascending_name(self):
+        gql = """
+        {
+          searchUser(searchTerm: "") {
+            id
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        self.assertEqual([{"id": 1}, {"id": 2}], result)
+
     def test_resolve_search_user_if_search_value_without_results(self):
         gql = self._get_graphql_search_user_query("asdf")
         schema_result = schema.execute(gql)

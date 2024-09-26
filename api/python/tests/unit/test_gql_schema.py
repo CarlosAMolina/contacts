@@ -292,13 +292,13 @@ class TestSchemaQuery(unittest.TestCase):
         gql = """
         {
           searchUser(searchTerm: "") {
-            id
+            name
           }
         }
         """
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
-        self.assertEqual([{"id": 1}, {"id": 2}], result)
+        self.assertEqual([{"name": "John"}, {"name": "unique name value"}], result)
 
     def test_resolve_search_user_if_search_value_without_results(self):
         gql = self._get_graphql_search_user_query("asdf")

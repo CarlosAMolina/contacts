@@ -18,7 +18,9 @@ from src.utils.unicode import get_string_unicode
 class Query(ObjectType):
     email = Field(EmailObject, email_id=Int())
     user = Field(UserObject, user_id=Int())
-    search_user = List(UserObject, search_term=String())  # List field for search results
+    search_user = List(
+        UserObject, search_term=String(), sort=String(), sort_by=String()
+    )  # List field for search results
 
     @staticmethod
     def resolve_email(root, info, email_id=Int()) -> tp.Optional[models.EmailModel]:
@@ -30,13 +32,14 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_search_user(
-        root, info, search_term=String(), sort: String = "ASCENDING", sort_by: String = "name_unicode"
+        root, info, search_term=String(), sort="ASCENDING", sort_by="name_unicode"
     ) -> tp.Optional[tp.List[models.UserModel]]:
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
         search_term_unicode = get_string_unicode(search_term)
-        order_by = getattr(models.UserModel, sort_by).asc()
+        function_how_order_by_config = {"ASCENDING": "asc", "DESCENDING": "desc"}
+        order_by = getattr(getattr(models.UserModel, sort_by), function_how_order_by_config[sort])()
         return (
             db_session.query(models.UserModel)
             .filter(

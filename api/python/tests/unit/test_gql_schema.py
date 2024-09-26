@@ -288,7 +288,7 @@ class TestSchemaQuery(unittest.TestCase):
         }
         self.assertEqual(expected_result, result)
 
-    def test_resolve_search_user_sorts_results_by_ascending_name(self):
+    def test_resolve_search_user_sorts_results_by_ascending_name_unicode_using_default_args(self):
         gql = """
         {
           searchUser(searchTerm: "") {
@@ -299,6 +299,30 @@ class TestSchemaQuery(unittest.TestCase):
         schema_result = schema.execute(gql)
         result = schema_result.data["searchUser"]
         self.assertEqual([{"name": "John"}, {"name": "unique name value"}], result)
+
+    def test_resolve_search_user_sorts_results_by_ascending_name_unicode_using_arguments(self):
+        gql = """
+        {
+          searchUser(searchTerm: "", sort: "ASCENDING", sortBy: "name_unicode" ) {
+            name
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        self.assertEqual([{"name": "John"}, {"name": "unique name value"}], result)
+
+    def test_resolve_search_user_sorts_results_by_descending_name_unicode(self):
+        gql = """
+        {
+          searchUser(searchTerm: "", sort: "DESCENDING" ) {
+            name
+          }
+        }
+        """
+        schema_result = schema.execute(gql)
+        result = schema_result.data["searchUser"]
+        self.assertEqual([{"name": "unique name value"}, {"name": "John"}], result)
 
     def test_resolve_search_user_if_search_value_without_results(self):
         gql = self._get_graphql_search_user_query("asdf")

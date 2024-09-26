@@ -36,6 +36,7 @@ class Query(ObjectType):
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
         search_term_unicode = get_string_unicode(search_term)
+        order_by = getattr(models.UserModel, sort_by).asc()
         return (
             db_session.query(models.UserModel)
             .filter(
@@ -73,7 +74,7 @@ class Query(ObjectType):
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )
             )
-            .order_by(getattr(models.UserModel, sort_by).asc())
+            .order_by(order_by)
             .all()
         )
 

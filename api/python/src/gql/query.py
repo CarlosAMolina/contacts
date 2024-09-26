@@ -29,7 +29,9 @@ class Query(ObjectType):
         return db_session.query(models.UserModel).filter(models.UserModel.id == user_id).first()
 
     @staticmethod
-    def resolve_search_user(root, info, search_term=String()) -> tp.Optional[tp.List[models.UserModel]]:
+    def resolve_search_user(
+        root, info, search_term=String(), sort_by: String = "name_unicode"
+    ) -> tp.Optional[tp.List[models.UserModel]]:
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute
         """
@@ -71,7 +73,7 @@ class Query(ObjectType):
                     models.UserModel.surname_unicode.contains(search_term_unicode),
                 )
             )
-            .order_by(models.UserModel.name_unicode.asc())
+            .order_by(getattr(models.UserModel, sort_by).asc())
             .all()
         )
 

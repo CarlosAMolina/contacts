@@ -216,6 +216,7 @@ class TestTermSearch(unittest.TestCase):
         self.assertEqual(expected_result, result)
 
     def test_get_summary_from_response_dict_if_multiple_users(self):
+        # Note. Sort is done in the API.
         response_dict = {
             "data": {
                 "searchUser": [
@@ -240,58 +241,6 @@ class TestTermSearch(unittest.TestCase):
         }
         result = m_search.TermSearch()._get_summary_from_response_dict(response_dict)
         expected_result = (
-            "666666662 (work)  Jane Do. ja. Friends. ID 2\n666666661 (personal)  John Doe. j. Family. ID 1"
+            "666666661 (personal)  John Doe. j. Family. ID 1\n666666662 (work)  Jane Do. ja. Friends. ID 2"
         )
-        self.assertEqual(expected_result, result)
-
-    def test_get_users_sorted(self):
-        users = [
-            {
-                "id": 1,
-                "name": "John",
-                "surname": "Doe",
-            },
-            {
-                "id": 2,
-                "name": "Jane",
-                "surname": "Do",
-            },
-        ]
-        result = m_search.TermSearch()._get_users_sorted(users)
-        expected_result = [
-            {
-                "id": 2,
-                "name": "Jane",
-                "surname": "Do",
-            },
-            {
-                "id": 1,
-                "name": "John",
-                "surname": "Doe",
-            },
-        ]
-        self.assertEqual(expected_result, result)
-
-    def test_get_users_sorted_if_no_ascii_characters(self):
-        users = [
-            {
-                "id": 1,
-                "name": "Álvaro",
-            },
-            {
-                "id": 2,
-                "name": "John",
-            },
-        ]
-        result = m_search.TermSearch()._get_users_sorted(users)
-        expected_result = [
-            {
-                "id": 1,
-                "name": "Álvaro",
-            },
-            {
-                "id": 2,
-                "name": "John",
-            },
-        ]
         self.assertEqual(expected_result, result)

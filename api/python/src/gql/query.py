@@ -30,7 +30,7 @@ class Query(ObjectType):
 
     @staticmethod
     def resolve_search_user(
-        root, info, search_term=String(), sort_by: String = "name_unicode"
+        root, info, search_term=String(), sort: String = "ASCENDING", sort_by: String = "name_unicode"
     ) -> tp.Optional[tp.List[models.UserModel]]:
         """
         https://stackoverflow.com/questions/8561470/sqlalchemy-filtering-by-relationship-attribute

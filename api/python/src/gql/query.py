@@ -80,7 +80,3 @@ class Query(ObjectType):
             .order_by(order_by)
             .all()
         )
-
-
-# TODO add test: .order_by(models.UserModel.name_unicode.asc())
-# TODO drop sort code in the api

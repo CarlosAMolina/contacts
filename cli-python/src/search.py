@@ -39,6 +39,7 @@ class IdSearch(_Search):
 
     def run_search_value(self, search_value: str):
         print("Searching ID", search_value)
+        print()
         body = self._get_body(search_value)
         response_dict = self._get_dict_response(body)
         summary = self._get_summary_from_response_dict(response_dict)

@@ -39,11 +39,8 @@ Notas:
   asdf 1
   asdf 2
 Teléfonos:
-  Teléfono: 666666661
-  Descripción: job
-
-  Teléfono: 666666662
-  Descripción: personal
+  666666661 job
+  666666662 personal
 Telegram:
   foo
   bar

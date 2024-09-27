@@ -73,7 +73,7 @@ class IdSearch(_Search):
         ]
         result = self._get_summary_apply_section_configs(section_configs, result, user)
         if len(user["phones"]) > 0:
-            result += "\nTeléfonos:"
+            result += "\nTeléfonos:\n"
             result += "\n".join(self._get_phone_summary(phone) for phone in user["phones"])
         section_configs = [
             _SectionConfig("telegram", "Telegram", "userName"),
@@ -120,10 +120,10 @@ class IdSearch(_Search):
         return result
 
     def _get_phone_summary(self, phone: dict) -> str:
-        result = f"\n  Teléfono: {phone['phone']}"
+        result = f"  {phone['phone']}"
         # TODO check how no value is returned
         if phone["description"] is not None and len(phone["description"]) > 0:
-            result += f"\n  Descripción: {phone['description']}"
+            result += f" {phone['description']}"
         return result
 
     def _get_wallapop_summary(self, wallapop: dict) -> str:

@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from abc import ABC
+from collections import namedtuple
 
 import requests
 
@@ -26,6 +27,9 @@ class _Search(ABC):
             return response.json()
 
 
+_SectionConfig = namedtuple("SectionConfig", "section_key summary_title value_key")
+
+
 class IdSearch(_Search):
     def run_ask_input(self):
         print("Start search by ID")
@@ -40,7 +44,6 @@ class IdSearch(_Search):
         summary = self._get_summary_from_response_dict(response_dict)
         print(summary)
         print()
-        print(response_dict)  # TODO rm
 
     def _get_body(self, search_term: str) -> str:
         return constants.BODY_ID_SEARCH.replace("{SEARCH_TERM}", search_term)
@@ -51,6 +54,82 @@ class IdSearch(_Search):
         # TODO check how no value is returned
         if user["surname"] is not None and len(user["surname"]) > 0:
             result += f" {user['surname']}"
+        result = self._get_summary_add_section(_SectionConfig("addresses", "Addresses", "address"), result, user)
+        if len(user["categories"]) > 0:
+            result += "\nCategories:\n  "
+            result += "\n  ".join(address["category"]["category"] for address in user["categories"])
+        if len(user["discord"]) > 0:
+            result += "\nDiscord:"
+            result += "\n".join(self._get_discord_summary(discord) for discord in user["discord"])
+        section_configs = [
+            _SectionConfig("emails", "Emails", "email"),
+            _SectionConfig("facebook", "Facebook", "url"),
+            _SectionConfig("github", "GitHub", "url"),
+            _SectionConfig("instagram", "Instagram", "handle"),
+            _SectionConfig("linkedin", "LinkedIn", "url"),
+            _SectionConfig("nicknames", "Motes", "nickname"),
+            _SectionConfig("notes", "Notas", "note"),
+        ]
+        result = self._get_summary_apply_section_configs(section_configs, result, user)
+        if len(user["phones"]) > 0:
+            result += "\nTeléfonos:"
+            result += "\n".join(self._get_phone_summary(phone) for phone in user["phones"])
+        section_configs = [
+            _SectionConfig("telegram", "Telegram", "userName"),
+            _SectionConfig("tiktok", "TikTok", "userName"),
+            _SectionConfig("twitter", "Twitter", "handle"),
+            _SectionConfig("urls", "URLs", "url"),
+        ]
+        result = self._get_summary_apply_section_configs(section_configs, result, user)
+        if len(user["wallapop"]) > 0:
+            result += "\nWallapop:"
+            result += "\n".join(self._get_wallapop_summary(wallapop) for wallapop in user["wallapop"])
+        return result
+
+    def _get_summary_apply_section_configs(self, configs: list[_SectionConfig], summary: str, user: dict) -> str:
+        result = summary
+        for config in configs:
+            result = self._get_summary_add_section(config, result, user)
+        return result
+
+    def _get_summary_add_section(self, config: _SectionConfig, summary: str, user: dict) -> str:
+        result = summary
+        section_summary = self._get_summary_of_section(config, user)
+        # TODO check how no value is returned
+        if section_summary is not None:
+            result += section_summary
+        return result
+
+    def _get_summary_of_section(self, config: _SectionConfig, user: dict) -> str | None:
+        result = None
+        if len(user[config.section_key]) > 0:
+            result = f"\n{config.summary_title}:\n  "
+            result += self._get_summary_for_list_of_dicts(user[config.section_key], config.value_key)
+        return result
+
+    def _get_summary_for_list_of_dicts(self, list_: list, key: str) -> str:
+        return "\n  ".join(dict_[key] for dict_ in list_)
+
+    def _get_discord_summary(self, discord: dict) -> str:
+        result = f"\n  User name: {discord['userName']}"
+        result += f"\n  Discriminator: {discord['discriminator']}"
+        result += f"\n  Alias: {discord['alias']}"
+        result += f"\n  Global name: {discord['globalName']}"
+        result += f"\n  Legacy User Name: {discord['legacyUserName']}"
+        return result
+
+    def _get_phone_summary(self, phone: dict) -> str:
+        result = f"\n  Teléfono: {phone['phone']}"
+        # TODO check how no value is returned
+        if phone["description"] is not None and len(phone["description"]) > 0:
+            result += f"\n  Descripción: {phone['description']}"
+        return result
+
+    def _get_wallapop_summary(self, wallapop: dict) -> str:
+        result = f"\n  Url: {wallapop['url']}"
+        # TODO check how no value is returned
+        if wallapop["note"] is not None and len(wallapop["note"]) > 0:
+            result += f"\n  Note: {wallapop['note']}"
         return result
 
 

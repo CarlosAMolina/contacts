@@ -1,0 +1,64 @@
+John Doe Deo
+Addresses:
+  c/ 1
+  c/ 2
+Categories:
+  university
+  job
+Discord:
+  User name: foo
+  Discriminator: 3
+  Alias: bar
+  Global name: baz
+  Legacy User Name: qux
+
+  User name: foo2
+  Discriminator: 5
+  Alias: bar2
+  Global name: baz2
+  Legacy User Name: qux2
+Emails:
+  a@a.com
+  b@b.com
+Facebook:
+  https://www.facebook.com/a/
+  https://www.facebook.com/b/
+GitHub:
+  https://github.com/a/
+  https://github.com/b/
+Instagram:
+  foo
+  bar
+LinkedIn:
+  https://linkedin.com/a/
+  https://linkedin.com/b/
+Motes:
+  foo
+  bar
+Notas:
+  asdf 1
+  asdf 2
+Teléfonos:
+  Teléfono: 666666661
+  Descripción: job
+
+  Teléfono: 666666662
+  Descripción: personal
+Telegram:
+  foo
+  bar
+TikTok:
+  foo
+  bar
+Twitter:
+  foo
+  bar
+URLs:
+  url.com
+  url2.com
+Wallapop:
+  Url: https://wallapop.com/app/user/foo
+  Note: user url
+
+  Url: https://wallapop.com/app/item/foo
+  Note: car buy

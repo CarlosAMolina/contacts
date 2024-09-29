@@ -2,6 +2,12 @@
 
 Project to manage contacts
 
+## Python version
+
+### API Python
+
+Too build and run the API, see the README file in the `api/python` folder.
+
 ## Rust version
 
 ### Build

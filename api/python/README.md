@@ -2,6 +2,12 @@
 
 API created with Python code.
 
+## Build
+
+```bash
+make docker-build
+```
+
 ## Run
 
 ### Using sqlite db

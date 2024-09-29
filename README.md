@@ -2,7 +2,9 @@
 
 Project to manage contacts
 
-## Build
+## Rust version
+
+### Build
 
 Docker is installed in rootless mode.
 
@@ -15,7 +17,7 @@ make build_for_debian
 
 The executable file can be found at `contacts/target/release/`.
 
-### Docker network
+#### Docker network
 
 The network must be created before running the containers:
 
@@ -25,7 +27,7 @@ docker network create --subnet 172.20.0.0/16 contacts-network
 
 <https://dev.to/rizkyrajitha/connect-api-and-a-database-with-docker-network-299g>
 
-## Run db
+### Run db
 
 To run the Docker database, read [this file](https://github.com/CarlosAMolina/postgresql/blob/main/docker/README.md).
 
@@ -37,31 +39,25 @@ Command example:
 make -f makefile-db run-docker
 ```
 
-## VPS configuration
+### VPS configuration
 
 Rotless containers must be able to run after SSH logout.
 
 Resource: <https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh>
 
-## Run search contacts
+### Run search contacts
 
 ```bash
 make run
 ```
 
-### Search term
+### Front
 
-```bash
-make search_term
-```
-
-## Front
-
-## Configuration front
+#### Configuration front
 
 The `contacts.js` file must be edited, change the `urlPrefix` constant with it's real value.
 
-## Tests
+### Tests
 
 The integration tests require:
 

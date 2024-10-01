@@ -26,6 +26,15 @@ Too build and run the API, see the README file in the `api/python` folder.
 
 Too build and run the CLI, see the README file in the `cli-python` folder.
 
+### VPS configuration Python
+
+You can create an alias to search contacts quickly:
+
+```bash
+alias c='cd ~/contacts/cli-python/ && make docker-connect'
+# Example of use: c
+```
+
 ## Rust version
 
 ### Build
@@ -53,9 +62,7 @@ Command example:
 make -f makefile-db run-docker
 ```
 
-### VPS configuration
-
-Rotless containers must be able to run after SSH logout. [Resource](https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh).
+### VPS configuration Rust
 
 You can create an alias to search contacts quickly:
 
@@ -88,3 +95,7 @@ Run the tests with:
 ```bash
 make test
 ```
+
+## VPS configuration
+
+Rotless containers must be able to run after SSH logout. [Resource](https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh).

@@ -1,3 +1,4 @@
+import os
 from abc import abstractmethod
 from abc import ABC
 from collections import namedtuple
@@ -20,11 +21,15 @@ class _Search(ABC):
         pass
 
     def _get_dict_response(self, body: str) -> dict:
-        response = requests.post(url=constants.GRAPHQL_URL, json={"query": body})
+        response = requests.post(url=self.__graphql_url, json={"query": body})
         if response.status_code != 200 or "errors" in response.json().keys():
             raise ValueError(f"GraphQL response: {response.content}")
         else:
             return response.json()
+
+    @property
+    def __graphql_url(self) -> str:
+        return os.environ.get("GRAPHQL_URL", constants.GRAPHQL_URL)
 
 
 _SectionConfig = namedtuple("SectionConfig", "section_key summary_title value_key")

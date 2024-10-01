@@ -2,11 +2,29 @@
 
 Project to manage contacts
 
+## Docker
+
+### Initial configuration
+
+#### Docker network
+
+The network must be created before running the containers:
+
+```bash
+docker network create --subnet 172.20.0.0/16 contacts-network
+```
+
+[Resource](https://dev.to/rizkyrajitha/connect-api-and-a-database-with-docker-network-299g).
+
 ## Python version
 
 ### API Python
 
 Too build and run the API, see the README file in the `api/python` folder.
+
+### CLI Python
+
+Too build and run the CLI, see the README file in the `cli-python` folder.
 
 ## Rust version
 
@@ -22,16 +40,6 @@ make build_for_debian
 ```
 
 The executable file can be found at `contacts/target/release/`.
-
-#### Docker network
-
-The network must be created before running the containers:
-
-```bash
-docker network create --subnet 172.20.0.0/16 contacts-network
-```
-
-<https://dev.to/rizkyrajitha/connect-api-and-a-database-with-docker-network-299g>
 
 ### Run db
 
@@ -49,7 +57,7 @@ make -f makefile-db run-docker
 
 Rotless containers must be able to run after SSH logout.
 
-Resource: <https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh>
+[Resource](https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh).
 
 ### Run search contacts
 

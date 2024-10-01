@@ -31,9 +31,22 @@ Too build and run the CLI, see the README file in the `cli-python` folder.
 You can create an alias to search contacts quickly:
 
 ```bash
-alias c='cd ~/contacts/cli-python/ && make docker-connect'
-# Example of use: c
+# Contacts
+c () {
+    cd ~/contacts/cli-python/
+    make docker-search-term term="$@"
+    cd - > /dev/null
+}
+ci () {
+    cd ~/contacts/cli-python/
+    make docker-search-id term="$@"
+    cd - > /dev/null
+}
 ```
+
+Example of use, search term: `c moli`.
+
+Example of use, search ID: `ci 9`.
 
 ## Rust version
 

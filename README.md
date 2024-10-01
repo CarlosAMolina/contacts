@@ -55,9 +55,14 @@ make -f makefile-db run-docker
 
 ### VPS configuration
 
-Rotless containers must be able to run after SSH logout.
+Rotless containers must be able to run after SSH logout. [Resource](https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh).
 
-[Resource](https://stackoverflow.com/questions/71372713/rootless-mode-docker-daemon-not-running-after-logging-back-in-ssh).
+You can create an alias to search contacts quickly:
+
+```bash
+alias c='cd ~/contacts/cli/ && ./cli $1'
+# Example of use: c moli
+```
 
 ### Run search contacts
 

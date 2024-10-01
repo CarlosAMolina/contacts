@@ -33,12 +33,12 @@ You can create an alias to search contacts quickly:
 ```bash
 # Contacts
 c () {
-    cd ~/contacts/cli-python/
+    cd ~/Software/contacts/cli-python/
     make docker-search-term term="$@"
     cd - > /dev/null
 }
 ci () {
-    cd ~/contacts/cli-python/
+    cd ~/Software/contacts/cli-python/
     make docker-search-id term="$@"
     cd - > /dev/null
 }

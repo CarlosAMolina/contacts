@@ -20,6 +20,14 @@ docker-run:
 docker-connect:
 	docker exec -it $(CLI_CONTAINER_NAME) python main.py
 
+# [pass argument](https://stackoverflow.com/a/2826069)
+docker-search-term:
+	docker exec -it $(CLI_CONTAINER_NAME) python main.py $(term)
+
+# [pass argument](https://stackoverflow.com/a/2826069)
+docker-search-id:
+	docker exec -it $(CLI_CONTAINER_NAME) python main.py -i $(term)
+
 test:
 	python -m unittest discover -s tests
 

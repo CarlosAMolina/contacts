@@ -57,8 +57,7 @@ class IdSearch(_Search):
     def _get_summary_from_response_dict(self, response_dict: dict) -> str:
         user = response_dict["data"]["user"]
         result = user["name"]
-        # TODO check how no value is returned
-        if user["surname"] is not None and len(user["surname"]) > 0:
+        if user["surname"] is not None:
             result += f" {user['surname']}"
         result = self._get_summary_add_section(_SectionConfig("addresses", "Addresses", "address"), result, user)
         if len(user["categories"]) > 0:
@@ -126,15 +125,13 @@ class IdSearch(_Search):
 
     def _get_phone_summary(self, phone: dict) -> str:
         result = f"  {phone['phone']}"
-        # TODO check how no value is returned
-        if phone["description"] is not None and len(phone["description"]) > 0:
+        if phone["description"] is not None:
             result += f" {phone['description']}"
         return result
 
     def _get_wallapop_summary(self, wallapop: dict) -> str:
         result = f"\n  Url: {wallapop['url']}"
-        # TODO check how no value is returned
-        if wallapop["note"] is not None and len(wallapop["note"]) > 0:
+        if wallapop["note"] is not None:
             result += f"\n  Note: {wallapop['note']}"
         return result
 
@@ -181,8 +178,7 @@ class TermSearch(_Search):
         result = ""
         if user["name"] is not None:
             result += "{name}".format(name=user["name"])
-        # TODO modify the db to convert empty strings to nulls
-        if user["surname"] is not None and len(user["surname"]) > 0:
+        if user["surname"] is not None:
             if len(result) > 0:
                 result += " "
             result += "{surname}".format(surname=user["surname"])
@@ -200,7 +196,7 @@ class TermSearch(_Search):
         )
 
     def _get_str_summary_from_phone(self, phone: dict) -> str:
-        if len(phone["description"]) == 0:
+        if phone["description"] is None:
             return str(phone["phone"])
         return "{phone} ({description})".format(phone=phone["phone"], description=phone["description"])
 

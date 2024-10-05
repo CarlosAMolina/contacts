@@ -15,6 +15,35 @@ class TestIdSearch(unittest.TestCase):
             expected_result = f.read().rstrip()
         self.assertEqual(expected_result, result)
 
+    def test_get_discord_summary_if_all_fields_with_values(self):
+        discord_dict = {
+            "userName": "foo",
+            "discriminator": 3,
+            "alias": "bar",
+            "globalName": "baz",
+            "legacyUserName": "qux",
+        }
+        except_result = """
+  User name: foo
+  Discriminator: 3
+  Alias: bar
+  Global name: baz
+  Legacy User Name: qux"""
+        result = m_search.IdSearch()._get_discord_summary(discord_dict)
+        self.assertEqual(except_result, result)
+
+    def test_get_discord_summary_if_nullable_fields_are_null(self):
+        discord_dict = {
+            "userName": "foo",
+            "discriminator": None,
+            "alias": None,
+            "globalName": None,
+            "legacyUserName": None,
+        }
+        except_result = "\n  User name: foo"
+        result = m_search.IdSearch()._get_discord_summary(discord_dict)
+        self.assertEqual(except_result, result)
+
 
 class TestTermSearch(unittest.TestCase):
     def test_get_body(self):

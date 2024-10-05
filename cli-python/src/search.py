@@ -117,10 +117,14 @@ class IdSearch(_Search):
 
     def _get_discord_summary(self, discord: dict) -> str:
         result = f"\n  User name: {discord['userName']}"
-        result += f"\n  Discriminator: {discord['discriminator']}"
-        result += f"\n  Alias: {discord['alias']}"
-        result += f"\n  Global name: {discord['globalName']}"
-        result += f"\n  Legacy User Name: {discord['legacyUserName']}"
+        if discord["discriminator"] is not None:
+            result += f"\n  Discriminator: {discord['discriminator']}"
+        if discord["alias"] is not None:
+            result += f"\n  Alias: {discord['alias']}"
+        if discord["globalName"] is not None:
+            result += f"\n  Global name: {discord['globalName']}"
+        if discord["legacyUserName"] is not None:
+            result += f"\n  Legacy User Name: {discord['legacyUserName']}"
         return result
 
     def _get_phone_summary(self, phone: dict) -> str:

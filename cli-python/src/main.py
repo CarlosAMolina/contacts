@@ -1,9 +1,11 @@
 import sys
 
 try:
+    from src.export import Export
     from src.search import IdSearch
     from src.search import TermSearch
 except ModuleNotFoundError:
+    from export import Export
     from search import IdSearch
     from search import TermSearch
 
@@ -18,6 +20,8 @@ def run():
         run_interactive()
     elif sys.argv[1] == "-h":
         show_help()
+    elif sys.argv[1] == "-e":
+        Export().export_json()
     elif sys.argv[1] == "-i":
         IdSearch().run_search_value(sys.argv[2])
     else:
@@ -33,7 +37,9 @@ def run_interactive():
         if user_input in ("exit", "q"):
             raise SystemExit(TerminationId.SUCCESSFUL)
         else:
-            if user_input == "-i":
+            if user_input == "-e":
+                Export().export_json()
+            elif user_input == "-i":
                 IdSearch().run_ask_input()
             else:
                 TermSearch().run_ask_input()
@@ -42,6 +48,7 @@ def run_interactive():
 def show_help():
     print("Options:")
     print("- exit | q: exit the CLI")
+    print("- -e: export db to JSON")
     print("- -i: search a contact by ID. All the contact information will be shown")
     print(
         "- No input, just press Enter: search for contacts by a search term. A summary of the information will appear"

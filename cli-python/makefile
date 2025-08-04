@@ -31,3 +31,6 @@ docker-search-id:
 test:
 	python -m unittest discover -s tests
 
+run-export:
+	python src/main.py -e
+

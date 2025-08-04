@@ -211,5 +211,17 @@ class TermSearch(_Search):
         return ", ".join(category["category"]["category"] for category in categories_dict)
 
 
+class AllSearch(TermSearch):
+    def run_ask_input(self):
+        raise NotImplementedError
+
+    def run_search_value(self, search_value: str):
+        raise NotImplementedError
+
+    def get_all_db(self) -> dict:
+        body = self._get_body(search_term="")
+        return self._get_dict_response(body)
+
+
 if __name__ == "__main__":
     TermSearch().run()

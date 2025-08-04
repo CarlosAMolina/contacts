@@ -42,15 +42,12 @@ class _Json:
 
     def _get_user_to_export(self, user: dict) -> dict:
         result = dict()
-        addresses = [address["address"] for address in user.get("address", [])]
-        if addresses:
+        if addresses := [address["address"] for address in user.get("address", [])]:
             result["addresses"] = addresses
-        categories = [category["category"]["category"] for category in user.get("categories", [])]
-        if categories:
+        if categories := [category["category"]["category"] for category in user.get("categories", [])]:
             result["categories"] = categories
         result["id"] = user["id"]
-        emails = [email["email"] for email in user.get("emails", [])]
-        if emails:
+        if emails := [email["email"] for email in user.get("emails", [])]:
             result["emails"] = emails
         discord_accounts = [self._get_discord_to_export(discord) for discord in user.get("discord", [])]
         self._set_social_network(result, "discordAccounts", discord_accounts)
@@ -71,18 +68,15 @@ class _Json:
         wallapop_accounts = [self._get_wallapop_to_export(wallapop) for wallapop in user.get("wallapop", [])]
         self._set_social_network(result, "wallapopAccounts", wallapop_accounts)
         result["name"] = user["name"]
-        nicknames = [nickname["nickname"] for nickname in user.get("nickname", [])]
-        if nicknames:
+        if nicknames := [nickname["nickname"] for nickname in user.get("nickname", [])]:
             result["nicknames"] = nicknames
-        if user.get("note"):
-            result["note"] = user["note"]
-        phones = [self._get_phone_to_export(phone) for phone in user.get("phones", [])]
-        if phones:
+        if note := user.get("note"):
+            result["note"] = note
+        if phones := [self._get_phone_to_export(phone) for phone in user.get("phones", [])]:
             result["phones"] = phones
-        if user.get("surname"):
-            result["surname"] = user["surname"]
-        urls = [url["url"] for url in user.get("urls", [])]
-        if urls:
+        if surname := user.get("surname"):
+            result["surname"] = surname
+        if urls := [url["url"] for url in user.get("urls", [])]:
             result["urls"] = urls
         return result
 
@@ -95,20 +89,20 @@ class _Json:
             "legacyUserName",
             "userName",
         ]:
-            if discord.get(key):
-                result[key] = discord[key]
+            if value := discord.get(key):
+                result[key] = value
         return result
 
     def _get_wallapop_to_export(self, wallapop: dict) -> dict:
         result = {"url": wallapop["url"]}
-        if wallapop.get("note"):
-            result["note"] = wallapop["note"]
+        if note := wallapop.get("note"):
+            result["note"] = note
         return result
 
     def _get_phone_to_export(self, phone: dict) -> dict:
         result = {"phone": phone["phone"]}
-        if phone.get("description"):
-            result["description"] = phone["description"]
+        if description := phone.get("description"):
+            result["description"] = description
         return result
 
     def _set_social_network(self, dict_: dict, key: str, value: object):

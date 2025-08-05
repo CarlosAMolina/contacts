@@ -3,6 +3,7 @@ import json
 
 
 class Export:
+    # Export required json by https://github.com/CarlosAMolina/contacts-js/tree/main
     def export_json(self):
         print("Exporting JSON")
         db_json = DbAllData().get_all_db()
@@ -104,7 +105,7 @@ class _Json:
         return result
 
     def _get_phone_to_export(self, phone: dict) -> dict:
-        result = {"phone": phone["phone"]}
+        result = {"number": phone["phone"]}
         if description := phone.get("description"):
             result["description"] = description
         return result

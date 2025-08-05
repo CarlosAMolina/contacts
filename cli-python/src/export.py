@@ -1,11 +1,11 @@
-from search import AllSearch
+from search import DbAllData
 import json
 
 
 class Export:
     def export_json(self):
         print("Exporting JSON")
-        db_json = AllSearch().get_all_db()
+        db_json = DbAllData().get_all_db()
         json_ = _Json(db_json)
         self._assert_all_ids_exist(json_.get_ids())
         json_to_export = json_.get_json_to_export()

@@ -9,9 +9,13 @@ class Export:
         json_ = _Json(db_json)
         self._assert_all_ids_exist(json_.get_ids())
         json_to_export = json_.get_json_to_export()
-        with open("/tmp/contacts.json", "w") as file:
+        path_name_no_pretty = "/tmp/contacts.json"
+        print("Exporting", path_name_no_pretty)
+        with open(path_name_no_pretty, "w") as file:
             json.dump(json_to_export, file)
-        with open("/tmp/contacts-pretty.json", "w") as file:
+        path_name_pretty = "/tmp/contacts-pretty.json"
+        print("Exporting", path_name_pretty)
+        with open(path_name_pretty, "w") as file:
             json.dump(json_to_export, file, indent=2)
 
     def _assert_all_ids_exist(self, ids: list[int]):

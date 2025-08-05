@@ -219,8 +219,7 @@ class AllSearch(TermSearch):
         raise NotImplementedError
 
     def get_all_db(self) -> dict:
-        body = self._get_body(search_term="")
-        return self._get_dict_response(body)
+        return self._get_dict_response(constants.BODY_ALL_SEARCH)
 
 
 if __name__ == "__main__":

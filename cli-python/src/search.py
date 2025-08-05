@@ -25,7 +25,7 @@ class _Search(ABC):
 
 
 class _Request:
-    def _get_dict_response(self, body: str) -> dict:
+    def get_dict_response(self, body: str) -> dict:
         response = requests.post(url=self.__graphql_url, json={"query": body})
         if response.status_code != 200 or "errors" in response.json().keys():
             raise ValueError(f"GraphQL response: {response.content}")
@@ -51,7 +51,7 @@ class IdSearch(_Search):
         print("Searching ID", search_value)
         print()
         body = self._get_body(search_value)
-        response_dict = self._request._get_dict_response(body)
+        response_dict = self._request.get_dict_response(body)
         summary = self._get_summary_from_response_dict(response_dict)
         print(summary)
         print()
@@ -155,7 +155,7 @@ class TermSearch(_Search):
     def run_search_value(self, search_value: str):
         print("Searching value", search_value)
         body = self._get_body(search_value)
-        response_dict = self._request._get_dict_response(body)
+        response_dict = self._request.get_dict_response(body)
         summary = self._get_summary_from_response_dict(response_dict)
         print(summary)
         print()
@@ -216,15 +216,12 @@ class TermSearch(_Search):
         return ", ".join(category["category"]["category"] for category in categories_dict)
 
 
-class AllSearch(TermSearch):
-    def run_ask_input(self):
-        raise NotImplementedError
-
-    def run_search_value(self, search_value: str):
-        raise NotImplementedError
+class DbAllData:
+    def __init__(self):
+        self._request = _Request()
 
     def get_all_db(self) -> dict:
-        return self._get_dict_response(constants.BODY_ALL_SEARCH)
+        return self._request.get_dict_response(constants.BODY_ALL_SEARCH)
 
 
 if __name__ == "__main__":

@@ -75,8 +75,9 @@ class _Json:
         result["name"] = user["name"]
         if nicknames := [nickname["nickname"] for nickname in user.get("nickname", [])]:
             result["nicknames"] = nicknames
-        if note := user.get("note"):
-            result["note"] = note
+        if notes := [note["note"] for note in user.get("notes")]:
+            assert len(notes) == 1
+            result["note"] = notes[0]
         if phones := [self._get_phone_to_export(phone) for phone in user.get("phones", [])]:
             result["phones"] = phones
         if surname := user.get("surname"):

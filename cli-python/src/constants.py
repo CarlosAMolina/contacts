@@ -65,7 +65,7 @@ BODY_ID_SEARCH = """
 }
 """
 
-BODY_ALL_SEARCH = BODY_ID_SEARCH.replace("user(userId: {SEARCH_TERM})", "usersWithTerm(searchTerm: '')")
+BODY_ALL_SEARCH = BODY_ID_SEARCH.replace("user(userId: {SEARCH_TERM}) {", 'usersWithTerm(searchTerm: "") { id ')
 
 
 BODY_TERM_SEARCH = """

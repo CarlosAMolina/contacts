@@ -31,7 +31,8 @@ class _Json:
         self._json = json_
 
     def get_ids(self) -> list[int]:
-        return sorted([user["id"] for user in self._get_users()])
+        users = self._get_users()
+        return sorted([user["id"] for user in users])
 
     def get_json_to_export(self) -> dict:
         result = {"contacts": []}

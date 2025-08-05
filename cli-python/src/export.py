@@ -34,11 +34,10 @@ class _Json:
         return sorted([user["id"] for user in self._get_users()])
 
     def get_json_to_export(self) -> dict:
-        result = dict()
-        result["data"] = {"allContacts": []}
+        result = {"contacts": []}
         for user in self._get_users():
             user_dict = self._get_user_to_export(user)
-            result["data"]["allContacts"].append(user_dict)
+            result["contacts"].append(user_dict)
         return result
 
     def _get_users(self) -> list[dict]:

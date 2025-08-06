@@ -47,7 +47,7 @@ class _Json:
 
     def _get_user_to_export(self, user: dict) -> dict:
         result = dict()
-        if addresses := [address["address"] for address in user.get("address", [])]:
+        if addresses := [address["address"] for address in user.get("addresses", [])]:
             result["addresses"] = addresses
         if categories := [category["category"]["category"] for category in user.get("categories", [])]:
             result["categories"] = categories

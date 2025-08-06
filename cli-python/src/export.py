@@ -73,7 +73,7 @@ class _Json:
         wallapop_accounts = [self._get_wallapop_to_export(wallapop) for wallapop in user.get("wallapop", [])]
         self._set_social_network(result, "wallapopAccounts", wallapop_accounts)
         result["name"] = user["name"]
-        if nicknames := [nickname["nickname"] for nickname in user.get("nickname", [])]:
+        if nicknames := [nickname["nickname"] for nickname in user.get("nicknames", [])]:
             result["nicknames"] = nicknames
         if notes := [note["note"] for note in user.get("notes")]:
             assert len(notes) == 1

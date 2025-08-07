@@ -10,7 +10,8 @@ class Export:
         json_ = _Json(db_json)
         self._assert_all_ids_exist(json_.get_ids())
         json_to_export = json_.get_json_to_export()
-        self._export_to_file(json_to_export, "/tmp/contacts.json")
+        self._export_to_file(json_to_export, "/tmp/contacts.json", pretty=False)
+        self._export_to_file(json_to_export, "/tmp/contacts-pretty.json", pretty=True)
 
     def _assert_all_ids_exist(self, ids: list[int]):
         expected_value = 1
@@ -19,10 +20,11 @@ class Export:
                 raise ValueError(f"Lost ID: {id_}")
             expected_value += 1
 
-    def _export_to_file(self, json_: dict, path_name: str):
+    def _export_to_file(self, json_: dict, path_name: str, pretty: bool):
         print("Exporting", path_name)
         with open(path_name, "w", encoding="utf-8") as file:
-            json.dump(json_, file, ensure_ascii=False, indent=2)
+            indent = 2 if pretty else None
+            json.dump(json_, file, ensure_ascii=False, indent=indent)
 
 
 class _Json:

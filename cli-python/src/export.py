@@ -40,6 +40,7 @@ class _Json:
         for user in self._get_users():
             user_dict = self._get_user_to_export(user)
             result["contacts"].append(user_dict)
+        result["contacts"] = self._get_contacts_sorted(result["contacts"])
         return result
 
     def _get_users(self) -> list[dict]:
@@ -116,3 +117,6 @@ class _Json:
             if "socialNetwork" not in dict_:
                 dict_["socialNetwork"] = dict()
             dict_["socialNetwork"][key] = value
+
+    def _get_contacts_sorted(self, contacts: list[dict]) -> list[dict]:
+        return sorted(contacts, key=lambda contact: contact["id"])

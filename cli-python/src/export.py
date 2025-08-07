@@ -105,7 +105,7 @@ class _Json:
         return result
 
     def _get_phone_to_export(self, phone: dict) -> dict:
-        result = {"number": phone["phone"]}
+        result = {"number": str(phone["phone"])}
         if description := phone.get("description"):
             result["description"] = description
         return result

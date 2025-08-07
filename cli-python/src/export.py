@@ -22,8 +22,8 @@ class Export:
 
     def _export_to_file(self, json_: dict, path_name: str, pretty: bool):
         print("Exporting", path_name)
+        indent = 2 if pretty else None
         with open(path_name, "w", encoding="utf-8") as file:
-            indent = 2 if pretty else None
             json.dump(json_, file, ensure_ascii=False, indent=indent)
 
 

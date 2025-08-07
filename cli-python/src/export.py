@@ -11,7 +11,6 @@ class Export:
         self._assert_all_ids_exist(json_.get_ids())
         json_to_export = json_.get_json_to_export()
         self._export_to_file(json_to_export, "/tmp/contacts.json")
-        self._export_to_file(json_to_export, "/tmp/contacts-pretty.json")
 
     def _assert_all_ids_exist(self, ids: list[int]):
         expected_value = 1
@@ -22,8 +21,8 @@ class Export:
 
     def _export_to_file(self, json_: dict, path_name: str):
         print("Exporting", path_name)
-        with open(path_name, "w") as file:
-            json.dump(json_, file, indent=2)
+        with open(path_name, "w", encoding="utf-8") as file:
+            json.dump(json_, file, ensure_ascii=False, indent=2)
 
 
 class _Json:

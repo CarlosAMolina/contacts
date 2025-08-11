@@ -1,20 +1,6 @@
 ## Bash configuration
 
-Add to your ~/.bashrc file:
-
-```bash
-# Contacts
-c () {
-    cd ~/Software/contacts/cli-python/
-    make docker-search-term term="$@"
-    cd - > /dev/null
-}
-ci () {
-    cd ~/Software/contacts/cli-python/
-    make docker-search-id term="$@"
-    cd - > /dev/null
-}
-```
+See the main README.md file of this project.
 
 ## Run
 
